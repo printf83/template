@@ -1130,6 +1130,10 @@ function createPageRules(): Record<string, PageRuleItem | PageRuleItem[]> {
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
             box-sizing: border-box; 
           }
+		  .page[contenteditable="true"]:focus { 
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+          }
         `,
 			},
 			{
@@ -1193,6 +1197,10 @@ const PAGE_MARGIN_RULES: Record<string, PageRuleItem> = {
 	// Directional Presets
 	"page-mt-0": { style: "padding-top: 0;" },
 	"page-mb-0": { style: "padding-bottom: 0;" },
+	"page-ml-0": { style: "padding-left: 0;" },
+	"page-mr-0": { style: "padding-right: 0;" },
+	"page-mx-0": { style: "padding-left: 0; padding-right: 0;" },
+	"page-my-0": { style: "padding-top: 0; padding-bottom: 0;" },
 };
 
 // ============================================================================

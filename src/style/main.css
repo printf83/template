@@ -39,17 +39,7 @@
 }
 
 @media print {
-	.control-header {
+	body {
 		display: none;
-	}
-
-	.output-container {
-		width: 100%;
-	}
-
-	#iframe {
-		min-width: 100%;
-		height: calc(100svh - 1rem);
-		border: none;
 	}
 }

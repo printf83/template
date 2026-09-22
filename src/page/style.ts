@@ -57,24 +57,24 @@ function parseArbitraryClass(
 	const sign = isNeg ? "-" : "";
 
 	// 1. @page Margin Utilities (page-m-[10mm], page-mt-[15mm], page-mx-[1in])
-	if (prefix === "page-m" || prefix.startsWith("page-m-")) {
-		const dir = prefix.slice(6); // Extracts "", "-t", "-r", "-b", "-l", "-x", "-y"
+	if (prefix.startsWith("page-m")) {
+		const dir = prefix.slice(6); // Extracts "", "t", "r", "b", "l", "x", "y"
 		switch (dir) {
 			case "":
 				return { style: `padding: ${value};` };
-			case "-t":
+			case "t":
 				return { style: `padding-top: ${value};` };
-			case "-r":
+			case "r":
 				return { style: `padding-right: ${value};` };
-			case "-b":
+			case "b":
 				return { style: `padding-bottom: ${value};` };
-			case "-l":
+			case "l":
 				return { style: `padding-left: ${value};` };
-			case "-x":
+			case "x":
 				return {
 					style: `padding-left: ${value}; padding-right: ${value};`,
 				};
-			case "-y":
+			case "y":
 				return {
 					style: `padding-top: ${value}; padding-bottom: ${value};`,
 				};

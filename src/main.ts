@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	) as HTMLIFrameElement | null;
 
 	if (iframe) {
-		const [html, style, script] = render(data);
+		const { html, style, script } = render(data);
 		iframe.srcdoc = minifies(
 			`<!DOCTYPE html><html><head>${style ? `<style>${style}</style>` : ``}</head><body>${html}${script ? `<script>${script}</script>` : ``}</body></html>`,
 		);

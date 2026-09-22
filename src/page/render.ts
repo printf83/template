@@ -15,7 +15,7 @@ export function minifies(html: string): string {
 
 export function render<T extends readonly SchemaItem[], IsJson extends boolean>(
 	data: Data<T, IsJson>,
-): [html: string, style: string, script: string] {
+): { html: string; style: string; script: string } {
 	const generatedHtml = html(data);
 	const generatedStyle = style(generatedHtml);
 	const userStyle = data.style ?? "";
@@ -24,5 +24,5 @@ export function render<T extends readonly SchemaItem[], IsJson extends boolean>(
 	const finalStyle = [generatedStyle, userStyle].filter(Boolean).join("\n");
 	const script = data.script ?? "";
 
-	return [generatedHtml, finalStyle, script];
+	return { html: generatedHtml, style: finalStyle, script };
 }

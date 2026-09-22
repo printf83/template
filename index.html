@@ -12,18 +12,22 @@
 				<h1 class="text-2xl text-shadow-xs rainbow-animated">
 					template
 				</h1>
-				<div class="btn-group">
+				<div class="btn-group" id="ctlMain">
 					<button id="btnPrintAll" class="btn-secondary">
 						<i data-icon="printer"></i>
 						<span>Print</span>
 					</button>
-					<button id="btnDownloadPdf" class="btn-primary">
+					<button id="btnDownloadPdf" class="btn-secondary">
 						<i data-icon="download"></i>
-						<span>Download</span>
+						<span>PDF</span>
+					</button>
+					<button id="btnSetting" class="btn-primary">
+						<i data-icon="settings"></i>
+						<span>Setting</span>
 					</button>
 				</div>
 			</div>
-			<div class="output-container">
+			<div class="output-container" id="formMain">
 				<iframe id="iframe" class="iframe-display"></iframe>
 			</div>
 		</div>

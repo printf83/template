@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Form Field Layouts & Labels
+   ========================================================================== */
+
+.form-container {
+	@apply flex flex-col gap-3;
+}
+
+.form-field {
+	@apply flex flex-col gap-1.5 w-full;
+}
+
+.form-label {
+	@apply text-xs font-medium text-zinc-700 select-none flex items-center justify-between;
+}
+
+.form-label .required {
+	@apply text-rose-500 ml-0.5 font-bold;
+}
+
+.form-hint {
+	@apply text-[11px] leading-normal text-zinc-500 font-normal;
+}
+
+.form-error {
+	@apply text-[11px] font-medium text-rose-600 flex items-center gap-1;
+}
+
+/* ==========================================================================
+   Base Controls (Input, Select, Textarea)
+   ========================================================================== */
+
+@utility form-input {
+	@apply w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 
+           placeholder:text-zinc-400
+           hover:border-zinc-300
+           focus:border-zinc-400 focus:ring-4 focus:ring-zinc-900/5 focus:outline-none
+           disabled:cursor-not-allowed disabled:bg-zinc-50 disabled:text-zinc-400 disabled:border-zinc-200
+           transition-all duration-150 ease-in-out;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+	@apply form-input;
+}
+
+.form-textarea {
+	@apply min-h-21.25 leading-relaxed resize-y;
+}
+
+/* Sleek Dropdown Arrow */
+.form-select {
+	@apply pr-9 bg-no-repeat cursor-pointer appearance-none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+	background-position: right 0.75rem center;
+	background-size: 1rem 1rem;
+}
+
+/* Modern Dark-Pill File Input */
+.form-file {
+	@apply form-input py-1.5 px-2 text-xs text-zinc-500 cursor-pointer
+           file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0
+           file:text-xs file:font-medium file:bg-zinc-900 file:text-white
+           hover:file:bg-zinc-800 active:file:scale-[0.98] file:transition-all file:cursor-pointer;
+}
+
+/* ==========================================================================
+   Checkboxes & Radios
+   ========================================================================== */
+
+.form-check {
+	@apply inline-flex items-center gap-2.5 cursor-pointer select-none text-sm font-medium text-zinc-700 hover:text-zinc-900 transition-colors;
+}
+
+.form-checkbox {
+	@apply size-4 rounded border-zinc-300 text-zinc-900 bg-white
+           accent-zinc-900 focus:ring-2 focus:ring-zinc-900/10 focus:ring-offset-0 cursor-pointer transition-all;
+}
+
+.form-radio {
+	@apply size-4 rounded-full border-zinc-300 text-zinc-900 bg-white
+           accent-zinc-900 focus:ring-2 focus:ring-zinc-900/10 focus:ring-offset-0 cursor-pointer transition-all;
+}
+
+/* ==========================================================================
+   Icon Prefix & Suffix Support (Pure CSS via :has)
+   ========================================================================== */
+
+.input-wrapper {
+	@apply relative flex items-center w-full;
+}
+
+.input-wrapper > [data-icon],
+.input-wrapper > svg,
+.input-wrapper > i {
+	@apply absolute size-4 text-zinc-400 pointer-events-none z-10 transition-colors duration-150;
+}
+
+.input-wrapper > [data-icon]:first-child,
+.input-wrapper > svg:first-child,
+.input-wrapper > i:first-child {
+	@apply left-3;
+}
+
+.input-wrapper > [data-icon]:last-child,
+.input-wrapper > svg:last-child,
+.input-wrapper > i:last-child {
+	@apply right-3;
+}
+
+/* Dynamic Padding Adjustments */
+.input-wrapper:has(> [data-icon]:first-child) > .form-input,
+.input-wrapper:has(> svg:first-child) > .form-input,
+.input-wrapper:has(> i:first-child) > .form-input {
+	@apply pl-9.5;
+}
+
+.input-wrapper:has(> [data-icon]:last-child) > .form-input,
+.input-wrapper:has(> svg:last-child) > .form-input,
+.input-wrapper:has(> i:last-child) > .form-input {
+	@apply pr-9.5;
+}
+
+.input-wrapper:focus-within > [data-icon],
+.input-wrapper:focus-within > svg,
+.input-wrapper:focus-within > i {
+	@apply text-zinc-900;
+}
+
+/* ==========================================================================
+   Joined Groups (.join)
+   ========================================================================== */
+
+.join {
+	@apply inline-flex items-stretch w-full;
+}
+
+.join > * {
+	@apply relative focus-within:z-10 focus:z-10;
+}
+
+/* Flex sizing */
+.join > .input-wrapper,
+.join > .form-input,
+.join > .form-select {
+	@apply flex-1;
+}
+
+.join > button,
+.join > [class*="btn"],
+.join > .join-addon {
+	@apply shrink-0;
+}
+
+/* Overlap adjacent borders to prevent double borders */
+.join > *:not(:first-child) {
+	@apply -ml-px;
+}
+
+/* 1. Reset border-radius on ALL direct children, buttons, and nested inputs */
+.join > *,
+.join > button,
+.join > [class*="btn"],
+.join > .input-wrapper > .form-input,
+.join > .input-wrapper > .form-select {
+	border-radius: 0 !important;
+}
+
+/* 2. Round the far-left corners of the FIRST element */
+.join > *:first-child,
+.join > *:first-child.input-wrapper > .form-input,
+.join > *:first-child.input-wrapper > .form-select {
+	border-top-left-radius: 0.5rem !important;
+	border-bottom-left-radius: 0.5rem !important;
+}
+
+/* 3. Round the far-right corners of the LAST element */
+.join > *:last-child,
+.join > *:last-child.input-wrapper > .form-input,
+.join > *:last-child.input-wrapper > .form-select {
+	border-top-right-radius: 0.5rem !important;
+	border-bottom-right-radius: 0.5rem !important;
+}
+
+.join-addon {
+	@apply inline-flex items-center px-3 text-xs font-semibold text-zinc-500 bg-zinc-100/80
+           border border-zinc-200 select-none whitespace-nowrap;
+}

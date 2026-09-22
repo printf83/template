@@ -5,6 +5,10 @@ import {
 	LoaderCircle,
 	Settings,
 	Save,
+	FileText,
+	Box,
+	Database,
+	Search,
 } from "lucide";
 
 // Replace <i data-lucide="..."> elements with actual SVGs
@@ -17,6 +21,10 @@ export const renderIcons = () => {
 			LoaderCircle,
 			Settings,
 			Save,
+			FileText,
+			Box,
+			Database,
+			Search,
 		},
 	});
 };

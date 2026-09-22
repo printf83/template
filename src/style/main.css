@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "form.css";
+@import "tab.css";
 @import "button.css";
 @import "icon.css";
 @import "rainbow.css";
@@ -13,7 +15,7 @@
 
 .form-main,
 .form-editor {
-	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden;
+	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-sm;
 }
 
 .form-main-frame {

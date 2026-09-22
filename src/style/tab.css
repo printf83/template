@@ -1,0 +1,37 @@
+.tab-container {
+	@apply flex flex-wrap content-start h-full border border-neutral-300 bg-neutral-50 rounded-lg overflow-hidden shadow;
+}
+
+/* Hide radio inputs */
+.tab-radio {
+	@apply hidden;
+}
+
+/* Tab Header Buttons (Row 1) */
+.tab-btn {
+	@apply order-1 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium
+           text-neutral-500 border-b-2 border-transparent transition-colors duration-150
+           hover:text-neutral-800 cursor-pointer select-none;
+}
+
+/* Fix: Explicitly restrict icon sizing */
+.tab-btn [data-icon],
+.tab-btn svg,
+.tab-btn i {
+	@apply size-4 shrink-0 inline-block;
+}
+
+/* Active Tab Button */
+.tab-radio:checked + .tab-btn {
+	@apply text-neutral-900 border-neutral-900 font-semibold bg-neutral-100/50;
+}
+
+/* Tab Panels (Row 2: Hidden by default) */
+.tab-panel {
+	@apply order-2 hidden p-4 bg-white border-t border-neutral-200 overflow-y-auto;
+}
+
+/* Active Tab Panel */
+.tab-radio:checked + .tab-btn + .tab-panel {
+	@apply flex flex-col w-full grow basis-full overflow-x-auto h-[calc(100svh-140px)];
+}

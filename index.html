@@ -40,7 +40,215 @@
 			<div class="form-main" id="formMain">
 				<iframe id="iframe" class="form-main-frame"></iframe>
 			</div>
-			<div class="form-editor hidden" id="formEditor">Editor</div>
+			<div class="form-editor hidden" id="formEditor">
+				<div class="tab-container" id="tabEditor">
+					<!-- Tab 1 -->
+					<input
+						type="radio"
+						id="tab-1"
+						name="editor-tabs"
+						class="tab-radio"
+						checked
+					/>
+					<label for="tab-1" class="tab-btn">
+						<i data-icon="database"></i>
+						<span>Data</span>
+					</label>
+					<div class="tab-panel">
+						<div class="form-container">
+							<!--Input with Label, Hint & Icons (Before & After)-->
+							<div class="form-field">
+								<label class="form-label">
+									Document Title
+									<span class="required">*</span>
+								</label>
+
+								<div class="input-wrapper">
+									<i data-icon="file-text"></i>
+									<input
+										type="text"
+										class="form-input"
+										placeholder="e.g. Annual Report 2026"
+									/>
+									<i data-icon="check-circle"></i>
+								</div>
+
+								<span class="form-hint"
+									>Used as the header in exports.</span
+								>
+							</div>
+
+							<!--Joined Input + Button (Search / Action)-->
+							<div class="form-field">
+								<label class="form-label">Quick Search</label>
+
+								<div class="join">
+									<div class="input-wrapper">
+										<i data-icon="search"></i>
+										<input
+											type="text"
+											class="form-input"
+											placeholder="Search documents..."
+										/>
+									</div>
+									<button type="button" class="btn-primary">
+										Search
+									</button>
+								</div>
+							</div>
+
+							<!--Joined Prefix Addon + Input + Suffix Select-->
+							<div class="form-field">
+								<label class="form-label">Export Margin</label>
+
+								<div class="join">
+									<span class="join-addon">Size</span>
+									<input
+										type="number"
+										class="form-input"
+										value="15"
+									/>
+									<select class="form-select w-auto">
+										<option>mm</option>
+										<option>cm</option>
+										<option>in</option>
+									</select>
+								</div>
+							</div>
+
+							<!--Select-->
+							<div class="form-field">
+								<label class="form-label"
+									>Page Orientation</label
+								>
+								<select class="form-select">
+									<option value="a4">A4 Portrait</option>
+									<option value="a4-landscape">
+										A4 Landscape
+									</option>
+								</select>
+							</div>
+
+							<!--Textarea-->
+							<div class="form-field">
+								<label class="form-label">Notes</label>
+								<textarea
+									class="form-textarea"
+									placeholder="Add optional notes..."
+								></textarea>
+							</div>
+
+							<!-- File Input -->
+							<div class="form-field">
+								<label class="form-label"
+									>Attach Cover Image</label
+								>
+								<input type="file" class="form-file" />
+							</div>
+
+							<!-- Checkbox -->
+							<label class="form-check">
+								<input
+									type="checkbox"
+									class="form-checkbox"
+									checked
+								/>
+								<span>Compress images during export</span>
+							</label>
+
+							<!-- Radio Group -->
+							<div class="flex gap-4">
+								<label class="form-check">
+									<input
+										type="radio"
+										name="quality"
+										class="form-radio"
+										checked
+									/>
+									<span>JPEG (0.95)</span>
+								</label>
+								<label class="form-check">
+									<input
+										type="radio"
+										name="quality"
+										class="form-radio"
+									/>
+									<span>PNG (Lossless)</span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<!-- Tab 2 -->
+					<input
+						type="radio"
+						id="tab-2"
+						name="editor-tabs"
+						class="tab-radio"
+					/>
+					<label for="tab-2" class="tab-btn">
+						<i data-icon="file-text"></i>
+						<span>Template</span>
+					</label>
+					<div class="tab-panel">
+						<div class="form-container">
+							<div class="form-field">
+								<label class="form-label">Html</label>
+								<textarea
+									class="form-textarea field-sizing-content max-h-80 font-mono"
+									placeholder='<div class="page a4">{{prop}}</div>'
+								></textarea>
+							</div>
+
+							<div class="form-field">
+								<label class="form-label">Style</label>
+								<textarea
+									class="form-textarea field-sizing-content max-h-80 font-mono"
+									placeholder="body {}"
+								></textarea>
+							</div>
+
+							<div class="form-field">
+								<label class="form-label">Script</label>
+								<textarea
+									class="form-textarea field-sizing-content max-h-80 font-mono"
+									placeholder="const fn = () => {}"
+								></textarea>
+							</div>
+						</div>
+					</div>
+
+					<!-- Tab 3 -->
+					<input
+						type="radio"
+						id="tab-3"
+						name="editor-tabs"
+						class="tab-radio"
+					/>
+					<label for="tab-3" class="tab-btn">
+						<i data-icon="box"></i>
+						<span>Asset</span>
+					</label>
+					<div class="tab-panel">
+						<p class="text-sm text-neutral-600">Asset</p>
+					</div>
+
+					<!-- Tab 4 -->
+					<input
+						type="radio"
+						id="tab-4"
+						name="editor-tabs"
+						class="tab-radio"
+					/>
+					<label for="tab-4" class="tab-btn">
+						<i data-icon="settings"></i>
+						<span>Setting</span>
+					</label>
+					<div class="tab-panel">
+						<p class="text-sm text-neutral-600">Setting</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<script type="module" src="/src/main.ts"></script>

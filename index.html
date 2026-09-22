@@ -6,17 +6,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
 	</head>
-	<body>
+	<body class="print:hidden">
 		<div class="main">
 			<div class="control-header">
 				<h1>template</h1>
-				<div class="btn-control">
-					<button id="btnPrintAll">Print</button>
-					<button id="btnDownloadPDF">Download</button>
+				<div class="btn-group">
+					<button id="btnPrintAll" class="btn-secondary">
+						Print
+					</button>
+					<button id="btnDownloadPDF" class="btn-primary">
+						Download
+					</button>
 				</div>
 			</div>
 			<div class="output-container">
-				<div class="output-frame"><iframe id="iframe"></iframe></div>
+				<iframe id="iframe" class="iframe-display"></iframe>
 			</div>
 		</div>
 

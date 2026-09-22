@@ -42,14 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		"btnEditorSave",
 	) as HTMLButtonElement;
 
-	console.log({
-		formMain,
-		formEditor,
-		ctlMain,
-		ctlEditor,
-		btnEditor,
-		btnEditorSave,
-	});
 	if (
 		formMain &&
 		formEditor &&

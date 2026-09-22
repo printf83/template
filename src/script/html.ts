@@ -1,6 +1,6 @@
 import type { Data, SchemaItem } from "../type/data.d";
 
-export interface HtmlOptions {
+interface HtmlOptions {
 	shortDictionary?: Record<string, string>;
 	nationalityLabels?: {
 		citizen: string;
@@ -17,7 +17,7 @@ export interface HtmlOptions {
 // CONSTANTS & CONFIGURATION
 // ============================================================================
 
-export const NATIONALITY_CONFIG = {
+const NATIONALITY_CONFIG = {
 	labels: {
 		citizen: "Malaysia",
 		nonCitizen: "Bukan Warganegara",
@@ -83,7 +83,7 @@ export const NATIONALITY_CONFIG = {
 	]),
 };
 
-export const SEX_CONFIG = {
+const SEX_CONFIG = {
 	labels: {
 		male: "Lelaki",
 		female: "Perempuan",

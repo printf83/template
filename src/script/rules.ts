@@ -945,9 +945,8 @@ function createTransformRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 16. Table (single canonical definition — previously duplicated almost
-// verbatim as the standalone `TABLE_RULES` export near the top of the file)
-export const TABLE_RULES: Record<string, PageRuleItem> = Object.freeze({
+// 16. Table
+const TABLE_RULES: Record<string, PageRuleItem> = Object.freeze({
 	// Table Layout
 	"table-auto": { style: "table-layout: auto;" },
 	"table-fixed": { style: "table-layout: fixed;" },
@@ -1076,9 +1075,7 @@ function createPageRules(): Record<string, PageRuleItem | PageRuleItem[]> {
             margin: 0; 
             padding: 2.5rem; 
             display: flex; 
-            flex-direction: row; 
-            flex-wrap: wrap; 
-            justify-content: center; 
+            flex-direction: column; 
             align-items: center; 
             gap: 2.5rem; 
           }

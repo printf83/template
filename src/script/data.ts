@@ -72,6 +72,6 @@ export const data = createData({
 		{{/user}}
 		<div class="flex gap-2">Tags: {{#loop tags}}<span>{{_this}}</span>{{/loop tags}}</div>
 		{{#if user.settings.notifications}}<div class="inline-block bg-yellow text-red font-bold">[NOTIFICATION!!!]</div>{{/if user.settings.notifications}}
-
-    </div>`,
+    </div>
+	`,
 });

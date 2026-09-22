@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "button.css";
+@import "rainbow.css";
 
 .main {
 	@apply bg-neutral-100 flex flex-col justify-between h-svh;

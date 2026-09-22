@@ -18,7 +18,10 @@ const SIZES: Record<string, string> = {
 	"16": "4rem", // 64px
 };
 
-// 1. Spacing Utilities (Padding & Margin)
+// ============================================================================
+// SPACING
+// ============================================================================
+
 const SPACING_DIRECTIONS: Record<string, string[]> = {
 	p: ["padding"],
 	pt: ["padding-top"],
@@ -50,7 +53,10 @@ function createSpacingRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 2. Gap Utilities
+// ============================================================================
+// GAP
+// ============================================================================
+
 function createGapRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {};
 	for (const [sizeKey, sizeVal] of Object.entries(SIZES)) {
@@ -61,15 +67,20 @@ function createGapRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 3. Layout Utilities (display types not already covered by the flex/grid
-// rule set below — flex-direction, alignment, flex-sizing, etc. are all
+// ============================================================================
+// LAYOUT
+// ============================================================================
+
 const LAYOUT_RULES: Record<string, PageRuleItem> = {
 	block: { style: "display: block;" },
 	"inline-block": { style: "display: inline-block;" },
 	hidden: { style: "display: none;" },
 };
 
-// 4. Alignment Rules (Text & Vertical Align)
+// ============================================================================
+// ALIGMENT
+// ============================================================================
+
 const TEXT_ALIGN: Record<string, PageRuleItem> = {
 	"text-left": { style: "text-align: left;" },
 	"text-center": { style: "text-align: center;" },
@@ -77,9 +88,10 @@ const TEXT_ALIGN: Record<string, PageRuleItem> = {
 	"text-justify": { style: "text-align: justify;" },
 };
 
-// Physical paper dimensions — single source of truth, reused both for the
-// w-a4/h-a4/w-a3/h-a3 preview-sizing utilities below and for the @page
-// print rules generated later by createPageRules().
+// ============================================================================
+// WIDTH, HEIGHT, PRINT DIMENSION
+// ============================================================================
+
 interface PageDimension {
 	sizeName: string;
 	w: string;
@@ -95,7 +107,6 @@ const PAGE_DIMENSIONS: Record<string, PageDimension> = {
 	tabloid: { sizeName: "Tabloid", w: "11in", h: "17in" },
 };
 
-// 5. Widths, Heights, and Print Dimensions
 function createSizingRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {
 		"w-full": { style: "width: 100%;" },
@@ -120,7 +131,10 @@ function createSizingRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 6. Border & Rounded Utilities
+// ============================================================================
+// BORDER & ROUNDED
+// ============================================================================
+
 const BORDER_WIDTHS: Record<string, string> = {
 	"": "1px",
 	"0": "0px",
@@ -171,7 +185,6 @@ const RADIUS_CORNERS: Record<string, string[]> = {
 	bl: ["border-bottom-left-radius"],
 };
 
-/** Generates comprehensive border-width, border-style, and border-radius rules */
 function createBorderRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {};
 
@@ -221,7 +234,10 @@ function createBorderRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 7. Standard Font Families
+// ============================================================================
+// FONT
+// ============================================================================
+
 const FONT_FAMILIES: Record<string, PageRuleItem> = {
 	"font-sans": {
 		style: 'font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;',
@@ -277,7 +293,10 @@ const FONT_STYLES: Record<string, PageRuleItem> = {
 	"no-underline": { style: "text-decoration-line: none;" },
 };
 
-// 8. Base Colors
+// ============================================================================
+// COLOR
+// ============================================================================
+
 const STATIC_COLORS: Record<string, string> = {
 	transparent: "transparent",
 	current: "currentColor",
@@ -583,7 +602,10 @@ function createColorRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 10. Opacity
+// ============================================================================
+// OPACITY
+// ============================================================================
+
 const OPACITY_SCALE: Record<string, string> = {
 	"0": "0",
 	"5": "0.05",
@@ -611,7 +633,10 @@ function createOpacityRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 11. Shadow
+// ============================================================================
+// SHADOW
+// ============================================================================
+
 const SHADOW_RULES: Record<string, PageRuleItem> = {
 	"shadow-sm": {
 		style: "box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);",
@@ -639,7 +664,10 @@ const SHADOW_RULES: Record<string, PageRuleItem> = {
 	},
 };
 
-// 12. Grid Flex
+// ============================================================================
+// GRID FLEX
+// ============================================================================
+
 /** Static Flexbox and Grid alignment and structural rules */
 const STATIC_FLEX_GRID_RULES: Record<string, PageRuleItem> = {
 	// Display
@@ -727,7 +755,10 @@ function createFlexGridRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 13. Positioning & Inset Rule Generator
+// ============================================================================
+// POSITIONING, INSET, Z-INDEX
+// ============================================================================
+
 const POSITION_DISPLAY: Record<string, PageRuleItem> = {
 	static: { style: "position: static;" },
 	fixed: { style: "position: fixed;" },
@@ -786,7 +817,10 @@ function createPositionRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 14. Page Break
+// ============================================================================
+// PAGE BREAK
+// ============================================================================
+
 const PAGE_BREAK_RULES: Record<string, PageRuleItem> = {
 	// Prevent or allow breaks INSIDE an element (e.g. table rows, cards, signatures)
 	"break-inside-auto": {
@@ -840,7 +874,10 @@ const PAGE_BREAK_RULES: Record<string, PageRuleItem> = {
 	},
 };
 
-// 15. Transform
+// ============================================================================
+// TRANSFORM
+// ============================================================================
+
 const ROTATE_PRESETS: Record<string, string> = {
 	"0": "0deg",
 	"1": "1deg",
@@ -945,7 +982,10 @@ function createTransformRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// 16. Table
+// ============================================================================
+// TABLE
+// ============================================================================
+
 const TABLE_RULES: Record<string, PageRuleItem> = Object.freeze({
 	// Table Layout
 	"table-auto": { style: "table-layout: auto;" },
@@ -1005,7 +1045,10 @@ function createTableRules(): Record<string, PageRuleItem> {
 	return rules;
 }
 
-// Typography
+// ============================================================================
+// TYPOGRAPHY
+// ============================================================================
+
 const TRACKING_RULES: Record<string, PageRuleItem> = {
 	"tracking-tighter": { style: "letter-spacing: -0.05em;" },
 	"tracking-tight": { style: "letter-spacing: -0.025em;" },
@@ -1062,7 +1105,10 @@ const TRUNCATION_RULES: Record<string, PageRuleItem> = {
 	},
 };
 
-// 17. Base Page At-Rules
+// ============================================================================
+// PAGE
+// ============================================================================
+
 function createPageRules(): Record<string, PageRuleItem | PageRuleItem[]> {
 	const rules: Record<string, PageRuleItem | PageRuleItem[]> = {
 		// Base Environment Setup
@@ -1149,12 +1195,12 @@ const PAGE_MARGIN_RULES: Record<string, PageRuleItem> = {
 	"page-mb-0": { style: "padding-bottom: 0;" },
 };
 
-const pageRules = createPageRules();
+// ============================================================================
+// FINAL RULES DICTIONARY
+// ============================================================================
 
-// Final Consolidated Dictionary
 export const rules: Record<string, PageRuleItem | PageRuleItem[]> =
 	Object.freeze({
-		...pageRules,
 		...SHADOW_RULES,
 		...PAGE_BREAK_RULES,
 		...PAGE_MARGIN_RULES,
@@ -1177,7 +1223,12 @@ export const rules: Record<string, PageRuleItem | PageRuleItem[]> =
 		...createPositionRules(),
 		...createTransformRules(),
 		...createTableRules(),
+		...createPageRules(),
 	});
+
+// ============================================================================
+// ANOTHER EXPORT
+// ============================================================================
 
 /** Maps class prefixes (e.g. "p", "min-h", "gap") to standard CSS properties */
 export const ARBITRARY_PROPERTIES: Record<string, string[]> = Object.freeze({

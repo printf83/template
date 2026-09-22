@@ -242,6 +242,7 @@ function parseColorWithOpacity(className: string): PageRuleItem | null {
 	return { style: `${PROP_MAP[prefix]}: ${rgbaColor};` };
 }
 
+/** Main exported function */
 export function style(html: string): string {
 	const foundClasses = new Set<string>();
 

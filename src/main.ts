@@ -1,4 +1,4 @@
-import { icon } from "./script/icon";
+import { renderIcons } from "./script/icon";
 import { data } from "./data/test_0001";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
@@ -6,7 +6,7 @@ import "./style/main.css";
 import { attachBtnDownloadPdf } from "./script/pdf";
 
 document.addEventListener("DOMContentLoaded", () => {
-	icon();
+	renderIcons();
 
 	const iframe = document.getElementById(
 		"iframe",

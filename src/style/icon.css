@@ -1,0 +1,5 @@
+/* Spin loader icon automatically */
+[data-icon="loader-circle"],
+svg[data-icon="loader-circle"] {
+	@apply animate-spin;
+}

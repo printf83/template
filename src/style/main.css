@@ -7,14 +7,15 @@
 	@apply bg-neutral-100 flex flex-col justify-between h-svh;
 }
 
-.control-header {
+.header {
 	@apply grow-0 flex justify-between items-center px-4 pt-4;
 }
 
-.output-container {
+.form-main,
+.form-editor {
 	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden;
 }
 
-.iframe-display {
+.form-main-frame {
 	@apply min-w-full h-[calc(100svh-6rem)] border-none;
 }

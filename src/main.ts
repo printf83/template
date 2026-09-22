@@ -32,4 +32,43 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (iframe && btnDownloadPdf) {
 		attachBtnDownloadPdf(btnDownloadPdf, iframe);
 	}
+
+	const formMain = document.getElementById("formMain") as HTMLDivElement;
+	const formEditor = document.getElementById("formEditor") as HTMLDivElement;
+	const ctlMain = document.getElementById("ctlMain") as HTMLDivElement;
+	const ctlEditor = document.getElementById("ctlEditor") as HTMLDivElement;
+	const btnEditor = document.getElementById("btnEditor") as HTMLButtonElement;
+	const btnEditorSave = document.getElementById(
+		"btnEditorSave",
+	) as HTMLButtonElement;
+
+	console.log({
+		formMain,
+		formEditor,
+		ctlMain,
+		ctlEditor,
+		btnEditor,
+		btnEditorSave,
+	});
+	if (
+		formMain &&
+		formEditor &&
+		ctlMain &&
+		ctlEditor &&
+		btnEditor &&
+		btnEditorSave
+	) {
+		btnEditor.addEventListener("click", () => {
+			ctlMain.classList.add("hidden");
+			ctlEditor.classList.remove("hidden");
+			formMain.classList.add("hidden");
+			formEditor.classList.remove("hidden");
+		});
+		btnEditorSave.addEventListener("click", () => {
+			ctlEditor.classList.add("hidden");
+			ctlMain.classList.remove("hidden");
+			formEditor.classList.add("hidden");
+			formMain.classList.remove("hidden");
+		});
+	}
 });

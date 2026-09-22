@@ -1,5 +1,5 @@
 /* Button group container */
-.btn-group {
+.btn-group:not(.hidden) {
 	@apply flex items-center gap-2;
 }
 

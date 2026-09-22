@@ -1,4 +1,11 @@
-import { createIcons, Printer, Download, LoaderCircle, Settings } from "lucide";
+import {
+	createIcons,
+	Printer,
+	Download,
+	LoaderCircle,
+	Settings,
+	Save,
+} from "lucide";
 
 // Replace <i data-lucide="..."> elements with actual SVGs
 export const renderIcons = () => {
@@ -9,6 +16,7 @@ export const renderIcons = () => {
 			Download,
 			LoaderCircle,
 			Settings,
+			Save,
 		},
 	});
 };

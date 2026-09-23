@@ -187,7 +187,7 @@ export function createSizingRules(): Record<string, PageRuleItem> {
 	}
 
 	// 3. Physical Page Dimensions (w-a4, h-a4, w-a3, h-a3)
-	for (const key of ["a4", "a3", "legal"] as const) {
+	for (const key of ["a4", "a3", "letter", "legal", "tabloid"] as const) {
 		const dim = PAGE_DIMENSIONS[key];
 		rules[`w-${key}`] = { style: `width: ${dim.w};` };
 		rules[`h-${key}`] = { style: `height: ${dim.h};` };

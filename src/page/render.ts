@@ -17,12 +17,15 @@ export function render<T extends readonly SchemaItem[], IsJson extends boolean>(
 	data: Data<T, IsJson>,
 ): { html: string; style: string; script: string } {
 	const generatedHtml = html(data);
-	const generatedStyle = style(generatedHtml);
+	const generatedStyle = style(generatedHtml, data);
 	const userStyle = data.style ?? "";
 
 	// Concatenate generated atomic classes with custom user CSS
 	const finalStyle = [generatedStyle, userStyle].filter(Boolean).join("\n");
 	const script = data.script ?? "";
+
+	console.log(generatedHtml);
+	console.log(finalStyle);
 
 	return { html: generatedHtml, style: finalStyle, script };
 }

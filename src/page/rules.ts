@@ -1,21 +1,62 @@
 import type { PageRuleItem } from "../type/style.d";
 
-const SIZES: Record<string, string> = {
+const SPACING_SCALE: Record<string, string> = {
 	"0": "0px",
-	"0.5": "0.125rem", // 2px
-	"1": "0.25rem", // 4px
-	"1.5": "0.375rem", // 6px
-	"2": "0.5rem", // 8px
-	"2.5": "0.625rem", // 10px
-	"3": "0.75rem", // 12px
-	"3.5": "0.875rem", // 14px
-	"4": "1rem", // 16px
-	"5": "1.25rem", // 20px
-	"6": "1.5rem", // 24px
-	"8": "2rem", // 32px
-	"10": "2.5rem", // 40px
-	"12": "3rem", // 48px
-	"16": "4rem", // 64px
+	px: "1px",
+	"0.5": "0.125rem",
+	"1": "0.25rem",
+	"1.5": "0.375rem",
+	"2": "0.5rem",
+	"2.5": "0.625rem",
+	"3": "0.75rem",
+	"3.5": "0.875rem",
+	"4": "1rem",
+	"5": "1.25rem",
+	"6": "1.5rem",
+	"7": "1.75rem",
+	"8": "2rem",
+	"9": "2.25rem",
+	"10": "2.5rem",
+	"11": "2.75rem",
+	"12": "3rem",
+	"14": "3.5rem",
+	"16": "4rem",
+	"20": "5rem",
+	"24": "6rem",
+	"28": "7rem",
+	"32": "8rem",
+	"36": "9rem",
+	"40": "10rem",
+	"44": "11rem",
+	"48": "12rem",
+	"52": "13rem",
+	"56": "14rem",
+	"60": "15rem",
+	"64": "16rem",
+	"72": "18rem",
+	"80": "20rem",
+	"96": "24rem",
+};
+
+const FRACTION_SCALE: Record<string, string> = {
+	"1/2": "50%",
+	"1/3": "33.333333%",
+	"2/3": "66.666667%",
+	"1/4": "25%",
+	"2/4": "50%",
+	"3/4": "75%",
+	"1/5": "20%",
+	"2/5": "40%",
+	"3/5": "60%",
+	"4/5": "80%",
+	"1/6": "16.666667%",
+	"5/6": "83.333333%",
+	"1/12": "8.333333%",
+	"5/12": "41.666667%",
+	"7/12": "58.333333%",
+	"11/12": "91.666667%",
+	full: "100%",
+	auto: "auto",
 };
 
 // ============================================================================
@@ -42,7 +83,7 @@ const SPACING_DIRECTIONS: Record<string, string[]> = {
 function createSpacingRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {};
 	for (const [prefix, cssProps] of Object.entries(SPACING_DIRECTIONS)) {
-		for (const [sizeKey, sizeVal] of Object.entries(SIZES)) {
+		for (const [sizeKey, sizeVal] of Object.entries(SPACING_SCALE)) {
 			const className = `${prefix}-${sizeKey}`;
 			const style = cssProps
 				.map((prop) => `${prop}: ${sizeVal};`)
@@ -59,7 +100,7 @@ function createSpacingRules(): Record<string, PageRuleItem> {
 
 function createGapRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {};
-	for (const [sizeKey, sizeVal] of Object.entries(SIZES)) {
+	for (const [sizeKey, sizeVal] of Object.entries(SPACING_SCALE)) {
 		rules[`gap-${sizeKey}`] = { style: `gap: ${sizeVal};` };
 		rules[`gap-x-${sizeKey}`] = { style: `column-gap: ${sizeVal};` };
 		rules[`gap-y-${sizeKey}`] = { style: `row-gap: ${sizeVal};` };
@@ -107,22 +148,46 @@ const PAGE_DIMENSIONS: Record<string, PageDimension> = {
 	tabloid: { sizeName: "Tabloid", w: "11in", h: "17in" },
 };
 
-function createSizingRules(): Record<string, PageRuleItem> {
+export function createSizingRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {
+		// Base Keyword Utilities
 		"w-full": { style: "width: 100%;" },
 		"w-auto": { style: "width: auto;" },
-		"w-1/2": { style: "width: 50%;" },
-		"w-1/3": { style: "width: 33.333333%;" },
-		"w-2/3": { style: "width: 66.666667%;" },
-		"w-1/4": { style: "width: 25%;" },
-		"w-3/4": { style: "width: 75%;" },
+		"w-screen": { style: "width: 100vw;" },
+		"w-min": { style: "width: min-content;" },
+		"w-max": { style: "width: max-content;" },
+		"w-fit": { style: "width: fit-content;" },
+
 		"h-full": { style: "height: 100%;" },
 		"h-auto": { style: "height: auto;" },
+		"h-screen": { style: "height: 100vh;" },
+		"h-min": { style: "height: min-content;" },
+		"h-max": { style: "height: max-content;" },
+		"h-fit": { style: "height: fit-content;" },
 	};
 
-	// Physical page dimensions (for screen preview styling), derived from
-	// PAGE_DIMENSIONS instead of re-hardcoding the same mm/in values.
-	for (const key of ["a4", "a3"] as const) {
+	// 1. Populate Fixed Numeric Scale (w-1, h-1, w-2, h-2, etc.)
+	for (const [key, value] of Object.entries(SPACING_SCALE)) {
+		rules[`w-${key}`] = { style: `width: ${value};` };
+		rules[`min-w-${key}`] = { style: `min-width: ${value};` };
+		rules[`max-w-${key}`] = { style: `max-width: ${value};` };
+		rules[`h-${key}`] = { style: `height: ${value};` };
+		rules[`min-h-${key}`] = { style: `min-height: ${value};` };
+		rules[`max-h-${key}`] = { style: `max-height: ${value};` };
+	}
+
+	// 2. Populate Fraction Utilities (w-1/2, w-3/4, h-1/2, etc.)
+	for (const [key, value] of Object.entries(FRACTION_SCALE)) {
+		rules[`w-${key}`] = { style: `width: ${value};` };
+		rules[`min-w-${key}`] = { style: `min-width: ${value};` };
+		rules[`max-w-${key}`] = { style: `max-width: ${value};` };
+		rules[`h-${key}`] = { style: `height: ${value};` };
+		rules[`min-h-${key}`] = { style: `min-height: ${value};` };
+		rules[`max-h-${key}`] = { style: `max-height: ${value};` };
+	}
+
+	// 3. Physical Page Dimensions (w-a4, h-a4, w-a3, h-a3)
+	for (const key of ["a4", "a3", "legal"] as const) {
 		const dim = PAGE_DIMENSIONS[key];
 		rules[`w-${key}`] = { style: `width: ${dim.w};` };
 		rules[`h-${key}`] = { style: `height: ${dim.h};` };
@@ -779,17 +844,7 @@ const Z_INDEX_PRESETS: Record<string, PageRuleItem> = {
 
 // Inset spacing scale lookup (in rem/percentage)
 const INSET_SCALE: Record<string, string> = {
-	"0": "0px",
-	"0.5": "0.125rem",
-	"1": "0.25rem",
-	"2": "0.5rem",
-	"3": "0.75rem",
-	"4": "1rem",
-	"6": "1.5rem",
-	"8": "2rem",
-	"10": "2.5rem",
-	"12": "3rem",
-	"16": "4rem",
+	...SPACING_SCALE,
 	full: "100%",
 	auto: "auto",
 };
@@ -904,19 +959,8 @@ const SCALE_PRESETS: Record<string, string> = {
 };
 
 const TRANSLATE_SCALE: Record<string, string> = {
-	"0": "0px",
-	"0.5": "0.125rem",
-	"1": "0.25rem",
-	"2": "0.5rem",
-	"3": "0.75rem",
-	"4": "1rem",
-	"6": "1.5rem",
-	"8": "2rem",
-	"10": "2.5rem",
-	"12": "3rem",
-	"16": "4rem",
-	"1/2": "50%",
-	full: "100%",
+	...SPACING_SCALE,
+	...FRACTION_SCALE,
 };
 
 const TRANSFORM_ORIGINS: Record<string, PageRuleItem> = {

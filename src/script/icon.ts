@@ -9,6 +9,7 @@ import {
 	Box,
 	Database,
 	Search,
+	CheckCircle,
 } from "lucide";
 
 // Replace <i data-lucide="..."> elements with actual SVGs
@@ -25,6 +26,7 @@ export const renderIcons = () => {
 			Box,
 			Database,
 			Search,
+			CheckCircle,
 		},
 	});
 };

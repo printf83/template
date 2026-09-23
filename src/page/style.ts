@@ -1,3 +1,4 @@
+import type { Data, SchemaItem } from "../type/data";
 import type { PageRuleItem } from "../type/style";
 import { ALL_COLORS, ARBITRARY_PROPERTIES, rules } from "./rules";
 
@@ -46,8 +47,12 @@ function escapeClassName(className: string): string {
 }
 
 /** Parses arbitrary classes like "p-[25px]" or "w-[50%]" */
-function parseArbitraryClass(
+function parseArbitraryClass<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(
 	className: string,
+	data: Data<T, IsJson>,
 ): PageRuleItem | PageRuleItem[] | null {
 	const match = className.match(ARBITRARY_CLASS_REGEX);
 	if (!match) return null;
@@ -107,7 +112,18 @@ function parseArbitraryClass(
 		return { style: `font-family: '${cleanedFont}', sans-serif;` };
 	}
 
-	// 4. Standard Property Mappings
+	// 4. Asset
+	if (prefix === "asset") {
+		if (data.asset && value in data.asset) {
+			if (data.asset[value].startsWith("data:")) {
+				return {
+					style: `background-image: url("${data.asset[value]}")`,
+				};
+			}
+		}
+	}
+
+	// 5. Standard Property Mappings
 	switch (prefix) {
 		case "bg-size":
 			return { style: `background-size: ${value};` };
@@ -178,8 +194,12 @@ function parseArbitraryClass(
 }
 
 /** Parses variant-prefixed classes like "even:bg-gray-50" or "odd:bg-[#f8fafc]" */
-function parseVariantClass(
+function parseVariantClass<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(
 	className: string,
+	data: Data<T, IsJson>,
 ): { selector: string; style: string } | null {
 	const match = className.match(VARIANT_CLASS_REGEX);
 	if (!match) return null;
@@ -190,7 +210,7 @@ function parseVariantClass(
 		(rules[baseClass] as PageRuleItem | PageRuleItem[]) || null;
 
 	if (!baseRule) {
-		baseRule = parseArbitraryClass(baseClass);
+		baseRule = parseArbitraryClass(baseClass, data);
 	}
 
 	if (!baseRule) return null;
@@ -247,7 +267,10 @@ function parseColorWithOpacity(className: string): PageRuleItem | null {
 }
 
 /** Main exported function */
-export function style(html: string): string {
+export function style<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(html: string, data: Data<T, IsJson>): string {
 	const foundClasses = new Set<string>();
 
 	CLASS_ATTR_REGEX.lastIndex = 0;
@@ -312,14 +335,14 @@ export function style(html: string): string {
 			className.startsWith("even:") ||
 			className.startsWith("odd:")
 		) {
-			const variantRule = parseVariantClass(className);
+			const variantRule = parseVariantClass(className, data);
 			if (variantRule) {
 				classRulesSet.add(
 					`${variantRule.selector} { ${variantRule.style} }`,
 				);
 			}
 		} else {
-			const dynamicRule = parseArbitraryClass(className);
+			const dynamicRule = parseArbitraryClass(className, data);
 			if (dynamicRule) {
 				processItem(className, dynamicRule);
 			}

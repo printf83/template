@@ -63,9 +63,4 @@ document.addEventListener("DOMContentLoaded", () => {
 			formMain.classList.remove("hidden");
 		});
 	}
-
-	// const editorTab = document.getElementById("tabEditor") as HTMLDivElement;
-	// if (editorTab) {
-	// 	initTabs(editorTab);
-	// }
 });

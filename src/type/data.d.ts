@@ -53,11 +53,25 @@ export type Data<
 	T extends readonly SchemaItem[],
 	IsJson extends boolean = true,
 > = {
+	title: string;
+	thumb?: string;
+	lang: string;
 	isJson: IsJson;
 	schema: T;
 	template: string;
 	script?: string;
 	style?: string;
+	asset?: Record<string, string>;
+	short?: Record<string, string>;
+	nationality?: {
+		citizen: string;
+		nonCitizen: string;
+	};
+	sex?: {
+		male: string;
+		female: string;
+		unknown: string;
+	};
 	record: IsJson extends true
 		? SingleRecord<T>[] | SingleRecord<T>
 		: SingleRecord<T>[];

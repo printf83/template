@@ -1,110 +1,325 @@
 import type { Data, SchemaItem } from "../type/data.d";
 
-interface HtmlOptions {
-	shortDictionary?: Record<string, string>;
-	nationalityLabels?: {
-		citizen: string;
-		nonCitizen: string;
-	};
-	sexLabels?: {
-		male: string;
-		female: string;
-		unknown: string;
-	};
+// ============================================================================
+// LOCALE CONFIGURATIONS
+// ============================================================================
+
+const STATECODE_CONFIG = new Set([
+	"01",
+	"02",
+	"03",
+	"04",
+	"05",
+	"06",
+	"07",
+	"08",
+	"09",
+	"10",
+	"11",
+	"12",
+	"13",
+	"14",
+	"15",
+	"16",
+	"21",
+	"22",
+	"23",
+	"24",
+	"25",
+	"26",
+	"27",
+	"28",
+	"29",
+	"30",
+	"31",
+	"32",
+	"33",
+	"34",
+	"35",
+	"36",
+	"37",
+	"38",
+	"39",
+	"40",
+	"41",
+	"42",
+	"43",
+	"44",
+	"45",
+	"46",
+	"47",
+	"48",
+	"49",
+	"50",
+	"51",
+	"52",
+	"53",
+	"54",
+	"55",
+	"56",
+	"57",
+	"58",
+	"59",
+	"82",
+]);
+
+export type SupportedLang = "EN" | "MY";
+
+/** Resolves lang string to a supported key, defaulting to "MY" */
+function getLangKey(lang?: string): SupportedLang {
+	const key = lang?.toUpperCase();
+	return key === "EN" ? "EN" : "MY";
 }
 
-// ============================================================================
-// CONSTANTS & CONFIGURATION
-// ============================================================================
+const MONTH_CONFIG = {
+	EN: [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	],
+	MY: [
+		"Januari",
+		"Februari",
+		"Mac",
+		"April",
+		"Mei",
+		"Jun",
+		"Julai",
+		"Ogos",
+		"September",
+		"Oktober",
+		"November",
+		"Disember",
+	],
+};
 
-const NATIONALITY_CONFIG = {
-	labels: {
-		citizen: "Malaysia",
-		nonCitizen: "Bukan Warganegara",
-	},
-	// Valid Malaysian state/citizen codes for NRIC digits 7 & 8
-	malaysianStateCodes: new Set([
-		"01",
-		"02",
-		"03",
-		"04",
-		"05",
-		"06",
-		"07",
-		"08",
-		"09",
-		"10",
-		"11",
-		"12",
-		"13",
-		"14",
-		"15",
-		"16",
-		"21",
-		"22",
-		"23",
-		"24",
-		"25",
-		"26",
-		"27",
-		"28",
-		"29",
-		"30",
-		"31",
-		"32",
-		"33",
-		"34",
-		"35",
-		"36",
-		"37",
-		"38",
-		"39",
-		"40",
-		"41",
-		"42",
-		"43",
-		"44",
-		"45",
-		"46",
-		"47",
-		"48",
-		"49",
-		"50",
-		"51",
-		"52",
-		"53",
-		"54",
-		"55",
-		"56",
-		"57",
-		"58",
-		"59",
-		"82",
-	]),
+const SHORT_MONTH_CONFIG = {
+	EN: [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"June",
+		"Jul",
+		"Aug",
+		"Sept",
+		"Oct",
+		"Nov",
+		"Dec",
+	],
+	MY: [
+		"Jan",
+		"Feb",
+		"Mac",
+		"Apr",
+		"Mei",
+		"Jun",
+		"Jul",
+		"Ogs",
+		"Sept",
+		"Okt",
+		"Nov",
+		"Dis",
+	],
 };
 
 const SEX_CONFIG = {
-	labels: {
+	EN: {
+		male: "Male",
+		female: "Female",
+		unknown: "Unknown",
+	},
+	MY: {
 		male: "Lelaki",
 		female: "Perempuan",
-		unknown: "Unknown",
+		unknown: "Tidak Diketahui",
 	},
 };
 
-const MALAY_MONTHS = [
-	"Januari",
-	"Februari",
-	"Mac",
-	"April",
-	"Mei",
-	"Jun",
-	"Julai",
-	"Ogos",
-	"September",
-	"Oktober",
-	"November",
-	"Disember",
-];
+const NATIONALITY_CONFIG = {
+	EN: {
+		citizen: "Malaysian",
+		nonCitizen: "Non-Malaysian",
+	},
+	MY: {
+		citizen: "Malaysia",
+		nonCitizen: "Bukan Warganegara",
+	},
+};
+
+const numberToWords = {
+	EN: (num: number): string => {
+		if (num === 0) return "Zero";
+
+		const units = [
+			"",
+			"One",
+			"Two",
+			"Three",
+			"Four",
+			"Five",
+			"Six",
+			"Seven",
+			"Eight",
+			"Nine",
+		];
+		const teens = [
+			"Ten",
+			"Eleven",
+			"Twelve",
+			"Thirteen",
+			"Fourteen",
+			"Fifteen",
+			"Sixteen",
+			"Seventeen",
+			"Eighteen",
+			"Nineteen",
+		];
+		const tens = [
+			"",
+			"",
+			"Twenty",
+			"Thirty",
+			"Forty",
+			"Fifty",
+			"Sixty",
+			"Seventy",
+			"Eighty",
+			"Ninety",
+		];
+
+		function convertGroup(n: number): string {
+			let res = "";
+			if (n >= 100) {
+				res += `${units[Math.floor(n / 100)]} Hundred `;
+				n %= 100;
+			}
+			if (n >= 20) {
+				res += `${tens[Math.floor(n / 10)]} `;
+				n %= 10;
+			} else if (n >= 10) {
+				res += `${teens[n - 10]} `;
+				n = 0;
+			}
+			if (n > 0) {
+				res += `${units[n]} `;
+			}
+			return res.trim();
+		}
+
+		if (num < 1000) return convertGroup(num);
+
+		const thousands = Math.floor(num / 1000);
+		const remainder = num % 1000;
+
+		let result = `${convertGroup(thousands)} Thousand`;
+		if (remainder > 0) {
+			result += ` ${convertGroup(remainder)}`;
+		}
+		return result.trim();
+	},
+	MY: (num: number): string => {
+		if (num === 0) return "Kosong";
+
+		const units = [
+			"",
+			"Satu",
+			"Dua",
+			"Tiga",
+			"Empat",
+			"Lima",
+			"Enam",
+			"Tujuh",
+			"Lapan",
+			"Sembilan",
+		];
+
+		function convertGroup(n: number): string {
+			let res = "";
+			if (n >= 100) {
+				const hundred = Math.floor(n / 100);
+				res += `${units[hundred]} Ratus `;
+				n %= 100;
+			}
+			if (n >= 20) {
+				const ten = Math.floor(n / 10);
+				res += `${units[ten]} Puluh `;
+				n %= 10;
+			} else if (n >= 11) {
+				res += `${units[n - 10]} Belas `;
+				n = 0;
+			} else if (n === 10) {
+				res += "Sepuluh ";
+				n = 0;
+			}
+			if (n > 0) {
+				res += `${units[n]} `;
+			}
+			return res.trim();
+		}
+
+		if (num < 1000) return convertGroup(num);
+
+		const thousands = Math.floor(num / 1000);
+		const remainder = num % 1000;
+
+		let result = `${convertGroup(thousands)} Ribu`;
+		if (remainder > 0) {
+			result += ` ${convertGroup(remainder)}`;
+		}
+		return result.trim();
+	},
+};
+
+/** Formats currency to text based on language */
+function formatMoneyText(val: unknown, lang: SupportedLang): string {
+	const num = typeof val === "number" ? val : parseFloat(String(val));
+	if (isNaN(num)) return String(val ?? "");
+
+	const intPart = Math.floor(Math.abs(num));
+	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
+
+	const intWords = numberToWords[lang](intPart);
+
+	if (fracPart > 0) {
+		const fracWords = numberToWords[lang](fracPart);
+		return lang === "EN"
+			? `${intWords} and Cents ${fracWords}`
+			: `${intWords} dan Sen ${fracWords}`;
+	}
+
+	return intWords;
+}
+
+/** Formats number to text based on language */
+function formatNumberText(val: unknown, langKey: SupportedLang): string {
+	const num = typeof val === "number" ? val : parseFloat(String(val));
+	if (isNaN(num)) return String(val ?? "");
+
+	const intPart = Math.floor(Math.abs(num));
+	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
+
+	const intWords = numberToWords[langKey](intPart);
+
+	if (fracPart > 0) {
+		const fracWords = numberToWords[langKey](fracPart);
+		return langKey === "EN"
+			? `${intWords} point ${fracWords}`
+			: `${intWords} perpuluhan ${fracWords}`;
+	}
+
+	return intWords;
+}
 
 // ============================================================================
 // HELPER FUNCTIONS & FORMATTERS
@@ -126,93 +341,6 @@ function buildDefaultMap(
 		}
 	}
 	return defaultsMap;
-}
-
-/** Converts integer numbers into Malay words */
-function numberToMalayWords(num: number): string {
-	if (num === 0) return "Kosong";
-
-	const units = [
-		"",
-		"Satu",
-		"Dua",
-		"Tiga",
-		"Empat",
-		"Lima",
-		"Enam",
-		"Tujuh",
-		"Lapan",
-		"Sembilan",
-	];
-
-	function convertGroup(n: number): string {
-		let res = "";
-		if (n >= 100) {
-			const hundred = Math.floor(n / 100);
-			res += `${units[hundred]} Ratus `;
-			n %= 100;
-		}
-		if (n >= 20) {
-			const ten = Math.floor(n / 10);
-			res += `${units[ten]} Puluh `;
-			n %= 10;
-		} else if (n >= 11) {
-			res += `${units[n - 10]} Belas `;
-			n = 0;
-		} else if (n === 10) {
-			res += "Sepuluh ";
-			n = 0;
-		}
-		if (n > 0) {
-			res += `${units[n]} `;
-		}
-		return res.trim();
-	}
-
-	if (num < 1000) return convertGroup(num);
-
-	const thousands = Math.floor(num / 1000);
-	const remainder = num % 1000;
-
-	let result = `${convertGroup(thousands)} Ribu`;
-	if (remainder > 0) {
-		result += ` ${convertGroup(remainder)}`;
-	}
-	return result.trim();
-}
-
-/** Formats money amount into Malay word representation */
-function formatMoneyText(val: unknown): string {
-	const num = typeof val === "number" ? val : parseFloat(String(val));
-	if (isNaN(num)) return String(val ?? "");
-
-	const intPart = Math.floor(Math.abs(num));
-	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
-
-	const intWords = numberToMalayWords(intPart);
-	if (fracPart > 0) {
-		const fracWords = numberToMalayWords(fracPart);
-		return `${intWords} dan sen ${fracWords}`;
-	}
-
-	return intWords;
-}
-
-/** Formats number into Malay word representation */
-function formatNumberText(val: unknown): string {
-	const num = typeof val === "number" ? val : parseFloat(String(val));
-	if (isNaN(num)) return String(val ?? "");
-
-	const intPart = Math.floor(Math.abs(num));
-	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
-
-	const intWords = numberToMalayWords(intPart);
-	if (fracPart > 0) {
-		const fracWords = numberToMalayWords(fracPart);
-		return `${intWords} perpuluhan ${fracWords}`;
-	}
-
-	return intWords;
 }
 
 /** Native Date parsing helper */
@@ -261,12 +389,13 @@ function parseDateOrNric(val: unknown): Date | null {
 }
 
 /** Resolves built-in helper functions (%fn) */
-function executeHelper(
-	fnName: string,
-	val: unknown,
-	options?: HtmlOptions,
-): string {
+function executeHelper<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(fnName: string, val: unknown, data: Data<T, IsJson>): string {
 	if (val === undefined || val === null) return "";
+
+	const lang = getLangKey(data.lang?.toUpperCase());
 
 	switch (fnName.toLowerCase()) {
 		// Date Functions
@@ -292,7 +421,11 @@ function executeHelper(
 		}
 		case "mmmm": {
 			const d = parseDateOrNric(val);
-			return d ? MALAY_MONTHS[d.getMonth()] : String(val);
+			return d ? MONTH_CONFIG[lang][d.getMonth()] : String(val);
+		}
+		case "mmm": {
+			const d = parseDateOrNric(val);
+			return d ? SHORT_MONTH_CONFIG[lang][d.getMonth()] : String(val);
 		}
 		case "mm": {
 			const d = parseDateOrNric(val);
@@ -326,10 +459,10 @@ function executeHelper(
 			return isNaN(num) ? String(val) : num.toFixed(2);
 		}
 		case "money_text": {
-			return formatMoneyText(val);
+			return formatMoneyText(val, lang);
 		}
 		case "number_text": {
-			return formatNumberText(val);
+			return formatNumberText(val, lang);
 		}
 
 		// Strings & Identification
@@ -341,41 +474,40 @@ function executeHelper(
 			return String(val);
 		}
 		case "nationality": {
-			const labels =
-				options?.nationalityLabels || NATIONALITY_CONFIG.labels;
+			const labels = data.nationality || NATIONALITY_CONFIG[lang];
 
 			// 1. Verify that the first 6 digits form a valid date (and has a valid 12-digit structure)
 			const isBirthDateValid = parseDateNric(val) !== null;
-			if (!isBirthDateValid) {
-				return labels.nonCitizen;
-			}
+			if (!isBirthDateValid) return labels.nonCitizen;
 
 			// 2. Extract state code (digits 7 & 8) and check against Malaysian state codes
 			const clean = String(val).replace(/\D/g, "");
+			if (clean.length !== 12) return labels.nonCitizen;
+
 			const stateCode = clean.slice(6, 8);
 
-			return NATIONALITY_CONFIG.malaysianStateCodes.has(stateCode)
+			return STATECODE_CONFIG.has(stateCode)
 				? labels.citizen
 				: labels.nonCitizen;
 		}
 		case "sex": {
-			const labels = options?.sexLabels || SEX_CONFIG.labels;
-
 			// 1. Verify valid NRIC date and structure (12 digits)
-			if (!parseDateNric(val)) {
-				return labels.unknown;
-			}
+			if (!parseDateNric(val)) return SEX_CONFIG[lang].unknown;
 
 			// 2. Extract the last digit
 			const clean = String(val).replace(/\D/g, "");
+			if (clean.length !== 12) return SEX_CONFIG[lang].unknown;
+
 			const lastDigit = parseInt(clean.slice(-1), 10);
 
 			// 3. Odd = Male (1, 3, 5, 7, 9), Even = Female (0, 2, 4, 6, 8)
-			return lastDigit % 2 !== 0 ? labels.male : labels.female;
+			return lastDigit % 2 !== 0
+				? SEX_CONFIG[lang].male
+				: SEX_CONFIG[lang].female;
 		}
 		case "short": {
 			const str = String(val);
-			const dict = options?.shortDictionary;
+			const dict = data.short;
 			if (!dict) return str;
 
 			// Replace whole words based on dictionary lookup
@@ -411,7 +543,7 @@ interface Token {
 }
 
 interface ASTNode {
-	type: "TEXT" | "VAR" | "FUNC" | "SCOPE" | "LOOP" | "IF" | "IFNOT";
+	type: "TEXT" | "VAR" | "FUNC" | "SCOPE" | "LOOP" | "IF" | "IFNOT" | "ASSET";
 	key?: string;
 	fnName?: string;
 	value?: string;
@@ -446,7 +578,7 @@ function tokenize(template: string): Token[] {
 	return tokens;
 }
 
-/** Builds an Abstract Syntax Tree (AST) with strict closing tag validation */
+/** AST Builder with #asset single-tag handling */
 function buildAST(tokens: Token[]): ASTNode[] {
 	const rootNodes: ASTNode[] = [];
 	const stack: { node: ASTNode; closeTagTarget: string }[] = [];
@@ -463,15 +595,14 @@ function buildAST(tokens: Token[]): ASTNode[] {
 
 		const content = token.value;
 
-		// 1. Closing Tags: /key, /loop key, /if key, /ifnot key
+		// 1. Closing Tags
 		if (content.startsWith("/")) {
-			if (stack.length === 0) {
+			if (stack.length === 0)
 				throw new Error(`Unexpected closing tag: {{ ${content} }}`);
-			}
 			const top = stack[stack.length - 1];
 			if (top.closeTagTarget !== content) {
 				throw new Error(
-					`Mismatched closing tag. Expected {{ ${top.closeTagTarget} }} but found {{ ${content} }}`,
+					`Mismatched closing tag: expected {{ ${top.closeTagTarget} }} but found {{ ${content} }}`,
 				);
 			}
 			stack.pop();
@@ -483,42 +614,49 @@ function buildAST(tokens: Token[]): ASTNode[] {
 				? stack[stack.length - 1].node.children!
 				: rootNodes;
 
-		// 2. Loop Block: #loop key
-		if (content.startsWith("#loop ")) {
+		// 2. Asset Block: #asset key (Single Tag - No Closing Tag Required)
+		if (content.startsWith("#asset ")) {
+			const key = content.replace(/^#asset\s+/, "").trim();
+			targetContainer.push({ type: "ASSET", key });
+		}
+		// 3. Loop Block: #loop key
+		else if (content.startsWith("#loop ")) {
 			const key = content.replace(/^#loop\s+/, "").trim();
 			const node: ASTNode = { type: "LOOP", key, children: [] };
 			targetContainer.push(node);
 			stack.push({ node, closeTagTarget: `/loop ${key}` });
 		}
-		// 3. If Block: #if key
+		// 4. If Block: #if key
 		else if (content.startsWith("#if ")) {
 			const key = content.replace(/^#if\s+/, "").trim();
 			const node: ASTNode = { type: "IF", key, children: [] };
 			targetContainer.push(node);
 			stack.push({ node, closeTagTarget: `/if ${key}` });
 		}
-		// 4. IfNot Block: #ifnot key
+		// 5. IfNot Block: #ifnot key
 		else if (content.startsWith("#ifnot ")) {
 			const key = content.replace(/^#ifnot\s+/, "").trim();
 			const node: ASTNode = { type: "IFNOT", key, children: [] };
 			targetContainer.push(node);
 			stack.push({ node, closeTagTarget: `/ifnot ${key}` });
 		}
-		// 5. Scope Block: #key
+		// 6. Scope Block: #key
 		else if (content.startsWith("#")) {
 			const key = content.slice(1).trim();
 			const node: ASTNode = { type: "SCOPE", key, children: [] };
 			targetContainer.push(node);
 			stack.push({ node, closeTagTarget: `/${key}` });
 		}
-		// 6. Function Helper: %fn key
+		// 7. Function Helper: %fn key
 		else if (content.startsWith("%")) {
 			const parts = content.slice(1).trim().split(/\s+/);
-			const fnName = parts[0];
-			const key = parts.slice(1).join(" ");
-			targetContainer.push({ type: "FUNC", fnName, key });
+			targetContainer.push({
+				type: "FUNC",
+				fnName: parts[0],
+				key: parts.slice(1).join(" "),
+			});
 		}
-		// 7. Standard Variable Placeholder: prop or key[0].prop
+		// 8. Standard Variable Placeholder
 		else {
 			targetContainer.push({ type: "VAR", key: content });
 		}
@@ -595,12 +733,15 @@ function isTruthy(val: unknown): boolean {
 }
 
 /** Evaluates AST nodes recursively against dataset */
-function evaluateAST(
+function evaluateAST<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(
 	ast: ASTNode[],
 	scopeStack: Record<string, unknown>[],
 	rootRecord: unknown,
 	defaultsMap: Map<string, unknown>,
-	options?: HtmlOptions,
+	data: Data<T, IsJson>,
 ): string {
 	let output = "";
 
@@ -609,6 +750,11 @@ function evaluateAST(
 			case "TEXT":
 				output += node.value;
 				break;
+
+			case "ASSET": {
+				output += data.asset ? (data.asset[node.key!] ?? "") : "";
+				break;
+			}
 
 			case "VAR": {
 				const val = resolveValue(
@@ -633,7 +779,7 @@ function evaluateAST(
 					rootRecord,
 					defaultsMap,
 				);
-				output += executeHelper(node.fnName!, val, options);
+				output += executeHelper(node.fnName!, val, data);
 				break;
 			}
 
@@ -654,7 +800,7 @@ function evaluateAST(
 						[...scopeStack, targetObj as Record<string, unknown>],
 						rootRecord,
 						defaultsMap,
-						options,
+						data,
 					);
 				}
 				break;
@@ -675,7 +821,6 @@ function evaluateAST(
 							? (item as Record<string, unknown>)
 							: {};
 
-						// Clean loop metadata
 						const loopScope: Record<string, unknown> = {
 							...baseObj,
 							_index: index,
@@ -688,7 +833,7 @@ function evaluateAST(
 							[...scopeStack, loopScope],
 							rootRecord,
 							defaultsMap,
-							options,
+							data,
 						);
 					});
 				}
@@ -708,7 +853,7 @@ function evaluateAST(
 						scopeStack,
 						rootRecord,
 						defaultsMap,
-						options,
+						data,
 					);
 				}
 				break;
@@ -727,7 +872,7 @@ function evaluateAST(
 						scopeStack,
 						rootRecord,
 						defaultsMap,
-						options,
+						data,
 					);
 				}
 				break;
@@ -742,10 +887,10 @@ function evaluateAST(
 // EXPORTED HTML ENGINE ENTRYPOINT
 // ============================================================================
 
-export function html<T extends readonly SchemaItem[], IsJson extends boolean>(
-	data: Data<T, IsJson>,
-	options?: HtmlOptions,
-): string {
+export function html<
+	T extends readonly SchemaItem[],
+	IsJson extends boolean = true,
+>(data: Data<T, IsJson>): string {
 	const defaultsMap = buildDefaultMap(data.schema);
 	const tokens = tokenize(data.template);
 	const ast = buildAST(tokens);
@@ -755,7 +900,7 @@ export function html<T extends readonly SchemaItem[], IsJson extends boolean>(
 			typeof record === "object" && record !== null
 				? (record as Record<string, unknown>)
 				: {};
-		return evaluateAST(ast, [rootScope], record, defaultsMap, options);
+		return evaluateAST(ast, [rootScope], record, defaultsMap, data);
 	};
 
 	if (Array.isArray(data.record)) {

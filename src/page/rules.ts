@@ -1106,6 +1106,51 @@ const TRUNCATION_RULES: Record<string, PageRuleItem> = {
 };
 
 // ============================================================================
+// BACKGROUND
+// ============================================================================
+const BACKGROUND_RULES: Record<string, PageRuleItem> = {
+	// attachment
+	"bg-fixed": { style: "background-attachment: fixed;" },
+	"bg-local": { style: "background-attachment: local;" },
+	"bg-scroll": { style: "background-attachment: scroll;" },
+
+	// clip
+	"bg-clip-border": { style: "background-clip: border-box;" },
+	"bg-clip-padding": { style: "background-clip: padding-box;" },
+	"bg-clip-content": { style: "background-clip: content-box;" },
+	"bg-clip-text": { style: "background-clip: text;" },
+
+	// origin
+	"bg-origin-border": { style: "background-origin: border-box;" },
+	"bg-origin-padding": { style: "background-origin: padding-box;" },
+	"bg-origin-content": { style: "background-origin: content-box;" },
+
+	// position
+	"bg-top-left": { style: "background-position: top left;" },
+	"bg-top": { style: "background-position: top;" },
+	"bg-top-right": { style: "background-position: top right;" },
+	"bg-left": { style: "background-position: left;" },
+	"bg-center": { style: "background-position: center;" },
+	"bg-right": { style: "background-position: right;" },
+	"bg-bottom-left": { style: "background-position: bottom left;" },
+	"bg-bottom": { style: "background-position: bottom;" },
+	"bg-bottom-right": { style: "background-position: bottom right;" },
+
+	// repeat
+	"bg-repeat": { style: "background-repeat: repeat;" },
+	"bg-repeat-x": { style: "background-repeat: repeat-x;" },
+	"bg-repeat-y": { style: "background-repeat: repeat-y;" },
+	"bg-repeat-space": { style: "background-repeat: space;" },
+	"bg-repeat-round": { style: "background-repeat: round;" },
+	"bg-no-repeat": { style: "background-repeat: no-repeat;" },
+
+	// size
+	"bg-auto": { style: "background-size: auto;" },
+	"bg-cover": { style: "background-size: cover;" },
+	"bg-contain": { style: "background-size: contain;" },
+};
+
+// ============================================================================
 // PAGE
 // ============================================================================
 
@@ -1210,6 +1255,7 @@ const PAGE_MARGIN_RULES: Record<string, PageRuleItem> = {
 export const rules: Record<string, PageRuleItem | PageRuleItem[]> =
 	Object.freeze({
 		...SHADOW_RULES,
+		...BACKGROUND_RULES,
 		...PAGE_BREAK_RULES,
 		...PAGE_MARGIN_RULES,
 		...FONT_FAMILIES,

@@ -109,6 +109,10 @@ function parseArbitraryClass(
 
 	// 4. Standard Property Mappings
 	switch (prefix) {
+		case "bg-size":
+			return { style: `background-size: ${value};` };
+		case "bg-position":
+			return { style: `background-position: ${value};` };
 		case "tracking":
 			return { style: `letter-spacing: ${value};` };
 		case "leading":

@@ -65,12 +65,12 @@ export const data = createData({
 		},
 	],
 	asset: {
-		"file-1": "HELLO WORLD",
+		"file-1": `HELLO <span class="font-semibold">WORLD</span>`,
 		"file-2":
 			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
 	},
 	template: `
-	<div class="page a4 page-mx-[10mm] page-mb-[10mm] page-mt-[20mm]" contenteditable="true">
+	<div class="page a4 page-mx-[10mm] font-sans page-mb-[10mm] page-mt-[20mm]" contenteditable="true">
         <div>User <span class="text-red font-bold text-sm bg-yellow d-inline px-2 rounded-lg">{{%uppercase user.firstName}}</span> has ID {{%number_text id}}.</div>
 		{{#user}}
 		<div>Sex: {{%sex nric}}</div>

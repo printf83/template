@@ -56,57 +56,10 @@
 					</label>
 					<div class="tab-panel">
 						<div class="form-container">
-							<div class="form-field">
-								<label class="form-label">List</label>
-								<ul class="form-list">
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="plus"></i>
-									</li>
-								</ul>
-							</div>
-
-							<h2 class="-mb-2">New Data</h2>
-
-							<div class="form-field">
-								<label class="form-label"
-									>Column 1
-									<div class="flex gap-3">
-										<div
-											class="hover:text-blue-400 cursor-pointer"
-										>
-											<i
-												class="size-3"
-												data-icon="download"
-											></i>
-										</div>
-										<div
-											class="hover:text-blue-400 cursor-pointer"
-										>
-											<i
-												class="size-3"
-												data-icon="upload"
-											></i>
-										</div>
-									</div>
-								</label>
-								<input type="text" class="form-input" />
-							</div>
-
-							<div class="form-field">
-								<label class="form-label">Column 2</label>
-								<input type="text" class="form-input" />
-							</div>
-
-							<div class="form-field">
-								<label class="form-label">Column 3</label>
-								<input type="text" class="form-input" />
-							</div>
+							<div
+								id="data-editor"
+								class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)] flex-1 overflow-hidden text-sm"
+							></div>
 						</div>
 					</div>
 
@@ -125,26 +78,26 @@
 						<div class="form-container">
 							<div class="form-field">
 								<label class="form-label">Html</label>
-								<textarea
-									class="form-textarea field-sizing-content min-h-56! max-h-80 font-mono"
-									placeholder='<div class="page a4">{{prop}}</div>'
-								></textarea>
+								<div
+									id="html-editor"
+									class="form-code min-h-[calc(100svh-460px)] max-h-[calc(100svh-460px)] flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 
 							<div class="form-field">
 								<label class="form-label">Style</label>
-								<textarea
-									class="form-textarea field-sizing-content max-h-80 font-mono"
-									placeholder="body {}"
-								></textarea>
+								<div
+									id="style-editor"
+									class="form-code min-h-24 max-h-24 flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 
 							<div class="form-field">
 								<label class="form-label">Script</label>
-								<textarea
-									class="form-textarea field-sizing-content max-h-80 font-mono"
-									placeholder="const fn = () => {}"
-								></textarea>
+								<div
+									id="script-editor"
+									class="form-code min-h-24 max-h-24 flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 						</div>
 					</div>
@@ -163,53 +116,10 @@
 					<div class="tab-panel">
 						<div class="form-container">
 							<div class="form-field">
-								<label class="form-label">List</label>
-								<ul class="form-list">
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="plus"></i>
-									</li>
-								</ul>
-							</div>
-
-							<h2 class="-mb-2">New Asset</h2>
-
-							<div class="form-field">
-								<label class="form-label"> Key </label>
-								<input type="text" class="form-input" />
-							</div>
-
-							<div class="form-field">
-								<label class="form-label"
-									>Value
-
-									<div class="flex gap-3">
-										<div
-											class="hover:text-blue-400 cursor-pointer"
-										>
-											<i
-												class="size-3"
-												data-icon="download"
-											></i>
-										</div>
-										<div
-											class="hover:text-blue-400 cursor-pointer"
-										>
-											<i
-												class="size-3"
-												data-icon="upload"
-											></i>
-										</div>
-									</div>
-								</label>
-								<textarea
-									class="form-textarea field-sizing-content max-h-80 font-mono"
-								></textarea>
+								<div
+									id="asset-editor"
+									class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)] flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 						</div>
 					</div>
@@ -228,41 +138,10 @@
 					<div class="tab-panel">
 						<div class="form-container">
 							<div class="form-field">
-								<label class="form-label">List</label>
-								<ul class="form-list">
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="plus"></i>
-									</li>
-								</ul>
-							</div>
-
-							<h2 class="-mb-2">New Schema</h2>
-
-							<div class="form-field">
-								<label class="form-label">Key</label>
-								<input type="text" class="form-input" />
-							</div>
-
-							<div class="form-field">
-								<label class="form-label">Type</label>
-								<select class="form-select">
-									<option value="string">String</option>
-									<option value="number">Number</option>
-									<option value="boolean">Boolean</option>
-									<option value="array">Array</option>
-									<option value="object">Object</option>
-								</select>
-							</div>
-
-							<div class="form-field">
-								<label class="form-label">Default</label>
-								<input type="text" class="form-input" />
+								<div
+									id="schema-editor"
+									class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)] flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 						</div>
 					</div>
@@ -287,7 +166,11 @@
 
 							<div class="form-field">
 								<label class="form-label">Thumbnail</label>
-								<input type="file" class="form-file" />
+								<input
+									type="text"
+									class="form-input"
+									placeholder="data:image/png;base64,"
+								/>
 							</div>
 
 							<div class="form-field">
@@ -358,166 +241,10 @@
 
 							<h2 class="text-sm -mb-2">Short Dictionary</h2>
 							<div class="form-field">
-								<label class="form-label">List</label>
-								<ul class="form-list">
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="file"></i>
-									</li>
-									<li>
-										<i data-icon="plus"></i>
-									</li>
-								</ul>
-							</div>
-
-							<div class="grid grid-cols-2 gap-2">
-								<div class="form-field col-span-1">
-									<label class="form-label">Long</label>
-									<input type="text" class="form-input" />
-								</div>
-
-								<div class="form-field col-span-1">
-									<label class="form-label">Short</label>
-									<input type="text" class="form-input" />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Tab 6 : Test -->
-					<input
-						type="radio"
-						id="tab-6"
-						name="editor-tabs"
-						class="tab-radio"
-					/>
-					<label for="tab-6" class="tab-btn">
-						<i data-icon="flask-conical"></i>
-						<span>Testing</span>
-					</label>
-					<div class="tab-panel">
-						<div class="form-container">
-							<!--Input with Label, Hint & Icons (Before & After)-->
-							<div class="form-field">
-								<label class="form-label">
-									Document Title
-									<span class="required">*</span>
-								</label>
-
-								<div class="input-wrapper">
-									<i data-icon="file-text"></i>
-									<input
-										type="text"
-										class="form-input"
-										placeholder="e.g. Annual Report 2026"
-									/>
-									<i data-icon="check-circle"></i>
-								</div>
-
-								<span class="form-hint"
-									>Used as the header in exports.</span
-								>
-							</div>
-
-							<!--Joined Input + Button (Search / Action)-->
-							<div class="form-field">
-								<label class="form-label">Quick Search</label>
-
-								<div class="join">
-									<div class="input-wrapper">
-										<i data-icon="search"></i>
-										<input
-											type="text"
-											class="form-input"
-											placeholder="Search documents..."
-										/>
-									</div>
-									<button type="button" class="btn-primary">
-										Search
-									</button>
-								</div>
-							</div>
-
-							<!--Joined Prefix Addon + Input + Suffix Select-->
-							<div class="form-field">
-								<label class="form-label">Export Margin</label>
-
-								<div class="join">
-									<span class="join-addon">Size</span>
-									<input
-										type="number"
-										class="form-input"
-										value="15"
-									/>
-									<select class="form-select w-auto">
-										<option>mm</option>
-										<option>cm</option>
-										<option>in</option>
-									</select>
-								</div>
-							</div>
-
-							<!--Select-->
-							<div class="form-field">
-								<label class="form-label"
-									>Page Orientation</label
-								>
-								<select class="form-select">
-									<option value="a4">A4 Portrait</option>
-									<option value="a4-landscape">
-										A4 Landscape
-									</option>
-								</select>
-							</div>
-
-							<!--Textarea-->
-							<div class="form-field">
-								<label class="form-label">Notes</label>
-								<textarea
-									class="form-textarea"
-									placeholder="Add optional notes..."
-								></textarea>
-							</div>
-
-							<!-- File Input -->
-							<div class="form-field">
-								<label class="form-label"
-									>Attach Cover Image</label
-								>
-								<input type="file" class="form-file" />
-							</div>
-
-							<!-- Checkbox -->
-							<label class="form-check">
-								<input
-									type="checkbox"
-									class="form-checkbox"
-									checked
-								/>
-								<span>Compress images during export</span>
-							</label>
-
-							<!-- Radio Group -->
-							<div class="flex gap-4">
-								<label class="form-check">
-									<input
-										type="radio"
-										name="quality"
-										class="form-radio"
-										checked
-									/>
-									<span>JPEG (0.95)</span>
-								</label>
-								<label class="form-check">
-									<input
-										type="radio"
-										name="quality"
-										class="form-radio"
-									/>
-									<span>PNG (Lossless)</span>
-								</label>
+								<div
+									id="short-editor"
+									class="form-code min-h-[calc(100svh-605px)] max-h-[calc(100svh-605px)] flex-1 overflow-hidden text-sm"
+								></div>
 							</div>
 						</div>
 					</div>

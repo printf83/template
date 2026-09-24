@@ -41,12 +41,17 @@
 
 .form-input,
 .form-select,
-.form-textarea {
+.form-textarea,
+.form-code {
 	@apply form-input;
 }
 
+.form-code {
+	@apply p-0 overflow-hidden;
+}
+
 .form-textarea {
-	@apply min-h-21.25 leading-relaxed resize-y;
+	@apply leading-relaxed resize-y;
 }
 
 /* Sleek Dropdown Arrow */

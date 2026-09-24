@@ -14,6 +14,8 @@ import {
 	SlidersHorizontal,
 	Trash,
 	FlaskConical,
+	Plus,
+	File,
 } from "lucide";
 
 // Replace <i data-lucide="..."> elements with actual SVGs
@@ -35,6 +37,8 @@ export const renderIcons = () => {
 			SlidersHorizontal,
 			Trash,
 			FlaskConical,
+			Plus,
+			File,
 		},
 	});
 };

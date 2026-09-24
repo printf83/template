@@ -14,7 +14,7 @@
 }
 
 .form-main,
-.form-editor {
+.form-edit {
 	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-sm;
 }
 

@@ -150,10 +150,12 @@ const NATIONALITY_CONFIG = {
 	EN: {
 		citizen: "Malaysian",
 		nonCitizen: "Non-Malaysian",
+		unknown: "Unknown",
 	},
 	MY: {
 		citizen: "Malaysia",
 		nonCitizen: "Bukan Warganegara",
+		unknown: "Tidak Diketahui",
 	},
 };
 

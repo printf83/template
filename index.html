@@ -40,7 +40,7 @@
 			<div class="form-main" id="formMain">
 				<iframe id="iframe" class="form-main-frame"></iframe>
 			</div>
-			<div class="form-editor hidden" id="formEditor">
+			<div class="form-edit hidden" id="formEditor">
 				<div class="tab-container" id="tabEditor">
 					<!-- Tab 1 : Data -->
 					<input
@@ -160,8 +160,12 @@
 					<div class="tab-panel">
 						<div class="form-container">
 							<div class="form-field">
-								<label class="form-label"> Title </label>
-								<input type="text" class="form-input" />
+								<label class="form-label">Title</label>
+								<input
+									type="text"
+									class="form-input"
+									id="title-editor"
+								/>
 							</div>
 
 							<div class="form-field">
@@ -169,13 +173,14 @@
 								<input
 									type="text"
 									class="form-input"
+									id="thumb-editor"
 									placeholder="data:image/png;base64,"
 								/>
 							</div>
 
 							<div class="form-field">
 								<label class="form-label">Language</label>
-								<select class="form-select">
+								<select class="form-select" id="lang-editor">
 									<option value="EN">English</option>
 									<option value="MY">Bahasa Melayu</option>
 								</select>
@@ -188,6 +193,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="nationality-citizen-editor"
 										placeholder="Malaysian"
 									/>
 								</div>
@@ -198,6 +204,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="nationality-noncitizen-editor"
 										placeholder="Non-Malaysian"
 									/>
 								</div>
@@ -206,6 +213,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="nationality-unknown-editor"
 										placeholder="Unknown"
 									/>
 								</div>
@@ -218,6 +226,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="sex-male-editor"
 										placeholder="Male"
 									/>
 								</div>
@@ -226,6 +235,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="sex-female-editor"
 										placeholder="Female"
 									/>
 								</div>
@@ -234,6 +244,7 @@
 									<input
 										type="text"
 										class="form-input"
+										id="sex-unknown-editor"
 										placeholder="Unknown"
 									/>
 								</div>

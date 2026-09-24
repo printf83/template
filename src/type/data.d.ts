@@ -66,6 +66,7 @@ export type Data<
 	nationality?: {
 		citizen: string;
 		nonCitizen: string;
+		unknown: string;
 	};
 	sex?: {
 		male: string;

@@ -64,6 +64,9 @@ export const data = createData({
 			tags: ["typescript", "schema", "xxx"],
 		},
 	],
+	short: {
+		"sekolah kebangsaan": "sk",
+	},
 	asset: {
 		"file-1": `HELLO <span class="font-semibold">WORLD</span>`,
 		"file-2":

@@ -4,6 +4,7 @@
 }
 
 /* Base button styles */
+
 .btn,
 .btn-primary,
 .btn-secondary,
@@ -25,6 +26,10 @@
 .btn-danger [data-icon],
 .btn-danger svg {
 	@apply size-4 shrink-0 inline-block;
+}
+
+.btn-square {
+	@apply px-2;
 }
 
 /* Color Variants */

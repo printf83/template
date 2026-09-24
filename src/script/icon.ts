@@ -2,6 +2,7 @@ import {
 	createIcons,
 	Printer,
 	Download,
+	Upload,
 	LoaderCircle,
 	Settings,
 	Save,
@@ -10,6 +11,9 @@ import {
 	Database,
 	Search,
 	CheckCircle,
+	SlidersHorizontal,
+	Trash,
+	FlaskConical,
 } from "lucide";
 
 // Replace <i data-lucide="..."> elements with actual SVGs
@@ -19,6 +23,7 @@ export const renderIcons = () => {
 		icons: {
 			Printer,
 			Download,
+			Upload,
 			LoaderCircle,
 			Settings,
 			Save,
@@ -27,6 +32,9 @@ export const renderIcons = () => {
 			Database,
 			Search,
 			CheckCircle,
+			SlidersHorizontal,
+			Trash,
+			FlaskConical,
 		},
 	});
 };

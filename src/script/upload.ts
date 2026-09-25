@@ -16,7 +16,7 @@ function isStringRecord(val: unknown): boolean {
  */
 export function isValidDataPayload<T extends readonly SchemaItem[]>(
 	obj: unknown,
-): obj is Omit<Data<T>, "schema"> {
+): obj is Data<T> {
 	if (!isObject(obj)) return false;
 
 	// 1. Required string fields
@@ -72,7 +72,7 @@ export function isValidDataPayload<T extends readonly SchemaItem[]>(
  */
 export async function uploadData<
 	T extends readonly SchemaItem[],
->(): Promise<Omit<Data<T>, "schema"> | null> {
+>(): Promise<Data<T> | null> {
 	return new Promise((resolve, reject) => {
 		const input = document.createElement("input");
 		input.type = "file";

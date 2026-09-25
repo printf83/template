@@ -1,4 +1,4 @@
-import type { Data, SchemaItem } from "../type/data";
+import type { Data, DataWithSchema, SchemaItem } from "../type/data";
 
 let currentData: Data<readonly SchemaItem[]> | null = null;
 
@@ -30,7 +30,7 @@ export function getCurrentData<
  * Identity helper function to enforce const generic type inference on SchemaItem arrays.
  */
 export function createData<const T extends readonly SchemaItem[]>(
-	data: Data<T>,
+	data: DataWithSchema<T>,
 ): Data<T> {
 	return data;
 }

@@ -49,11 +49,15 @@ type SingleRecord<T extends readonly SchemaItem[]> = {
 	[Item in T[number] as Item["key"]]?: ResolveType<Item>;
 };
 
+// type/data.ts
+
+/**
+ * Base template data as serialized on disk or transferred over the network.
+ */
 export type Data<T extends readonly SchemaItem[]> = {
 	title: string;
 	thumb?: string;
 	lang: string;
-	schema: T;
 	template: string;
 	script?: string;
 	style?: string;
@@ -70,4 +74,11 @@ export type Data<T extends readonly SchemaItem[]> = {
 		unknown: string;
 	};
 	data: SingleRecord<T>[] | SingleRecord<T>;
+};
+
+/**
+ * Active runtime data used within the engine/editor, bound with schema types.
+ */
+export type DataWithSchema<T extends readonly SchemaItem[]> = Data<T> & {
+	schema: T;
 };

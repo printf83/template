@@ -1,6 +1,7 @@
 import type { Data, SchemaItem } from "../type/data";
 import { setEditData } from "./edit";
 import { Modal } from "./modal";
+import { Toast } from "./toast";
 import { selectFile } from "./utils";
 
 export interface UploadFileResult<T extends readonly SchemaItem[]> {
@@ -140,17 +141,15 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 			setEditData(result.content);
 
 			// Success
-			await Modal.alert(
+			Toast.success(
 				`Successfully load <strong>${result.fileName}</strong> into editor.`,
-				"Success",
-				"success",
 			);
 		} catch (error) {
 			const message =
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			await Modal.alert(
+			Modal.alert(
 				`Failed to process file: ${message}`,
 				"Load Failed",
 				"error",

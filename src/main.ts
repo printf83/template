@@ -8,6 +8,7 @@ import { getEditData, initEditor, setEditData } from "./script/edit";
 import { attachCopyFile } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
+import { attachEditorNew } from "./script/new";
 
 document.addEventListener("DOMContentLoaded", () => {
 	renderIcons();
@@ -56,6 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	) as HTMLButtonElement;
 	if (btnEditorUploadFile) {
 		attachUploadFile(btnEditorUploadFile);
+	}
+
+	const btnEditorNew = document.getElementById(
+		"btnEditorNew",
+	) as HTMLButtonElement;
+	if (btnEditorUploadFile) {
+		attachEditorNew(btnEditorNew);
 	}
 
 	const formMain = document.getElementById("formMain") as HTMLDivElement;

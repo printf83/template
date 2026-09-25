@@ -4,11 +4,12 @@ export type ModalType = "info" | "warning" | "error" | "success" | "question";
 
 export interface ModalOptions {
 	type?: ModalType;
-	title: string;
+	title?: string;
 	body?: string | HTMLElement;
 	confirmText?: string;
 	cancelText?: string;
 	showCancel?: boolean;
+	size?: string;
 }
 
 export class Modal {
@@ -38,7 +39,8 @@ export class Modal {
 						break;
 					case "info":
 						modalIconData = "info";
-						modalIconClass = "text-sky-400 bg-sky-100 rounded-full";
+						modalIconClass =
+							"text-blue-400 bg-blue-100 rounded-full";
 						break;
 					case "warning":
 						modalIconData = "circle-alert";
@@ -63,7 +65,7 @@ export class Modal {
 					: "";
 
 			const dialog = document.createElement("dialog");
-			dialog.className = "modal";
+			dialog.className = `modal ${options.size ? `${options.size}` : ""}`;
 			dialog.innerHTML = `
                 <div class="modal-content">
                     ${modalHeader}

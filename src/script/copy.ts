@@ -1,4 +1,5 @@
 import { Modal } from "./modal";
+import { Toast } from "./toast";
 import { selectFile } from "./utils";
 
 export interface PickedFileResult {
@@ -90,17 +91,15 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 			// User cancelled file selection dialog -> exit silently
 			if (!result) return;
 
-			await Modal.alert(
+			Toast.success(
 				`Successfully copied <strong>${result.fileName}</strong> to your clipboard.`,
-				"Success",
-				"success",
 			);
 		} catch (error) {
 			const message =
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			await Modal.alert(
+			Modal.alert(
 				`Failed to process file: ${message}`,
 				"Copy Failed",
 				"error",

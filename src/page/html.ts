@@ -66,7 +66,7 @@ const STATECODE_CONFIG = new Set([
 export type SupportedLang = "EN" | "MY";
 
 /** Resolves lang string to a supported key, defaulting to "MY" */
-function getLangKey(lang?: string): SupportedLang {
+export function getLangKey(lang?: string): SupportedLang {
 	const key = lang?.toUpperCase();
 	return key === "EN" ? "EN" : "MY";
 }
@@ -133,7 +133,7 @@ const SHORT_MONTH_CONFIG = {
 	],
 };
 
-const SEX_CONFIG = {
+export const SEX_CONFIG = {
 	EN: {
 		male: "Male",
 		female: "Female",
@@ -146,7 +146,7 @@ const SEX_CONFIG = {
 	},
 };
 
-const NATIONALITY_CONFIG = {
+export const NATIONALITY_CONFIG = {
 	EN: {
 		citizen: "Malaysian",
 		nonCitizen: "Non-Malaysian",
@@ -391,10 +391,11 @@ function parseDateOrNric(val: unknown): Date | null {
 }
 
 /** Resolves built-in helper functions (%fn) */
-function executeHelper<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(fnName: string, val: unknown, data: Data<T, IsJson>): string {
+function executeHelper<T extends readonly SchemaItem[]>(
+	fnName: string,
+	val: unknown,
+	data: Data<T>,
+): string {
 	if (val === undefined || val === null) return "";
 
 	const lang = getLangKey(data.lang?.toUpperCase());
@@ -476,36 +477,40 @@ function executeHelper<
 			return String(val);
 		}
 		case "nationality": {
-			const labels = data.nationality || NATIONALITY_CONFIG[lang];
-
 			// 1. Verify that the first 6 digits form a valid date (and has a valid 12-digit structure)
 			const isBirthDateValid = parseDateNric(val) !== null;
-			if (!isBirthDateValid) return labels.nonCitizen;
+			if (!isBirthDateValid)
+				return (data.nationality || NATIONALITY_CONFIG[lang])
+					.nonCitizen;
 
 			// 2. Extract state code (digits 7 & 8) and check against Malaysian state codes
 			const clean = String(val).replace(/\D/g, "");
-			if (clean.length !== 12) return labels.nonCitizen;
+			if (clean.length !== 12)
+				return (data.nationality || NATIONALITY_CONFIG[lang])
+					.nonCitizen;
 
 			const stateCode = clean.slice(6, 8);
 
 			return STATECODE_CONFIG.has(stateCode)
-				? labels.citizen
-				: labels.nonCitizen;
+				? (data.nationality || NATIONALITY_CONFIG[lang]).citizen
+				: (data.nationality || NATIONALITY_CONFIG[lang]).nonCitizen;
 		}
 		case "sex": {
 			// 1. Verify valid NRIC date and structure (12 digits)
-			if (!parseDateNric(val)) return SEX_CONFIG[lang].unknown;
+			if (!parseDateNric(val))
+				return (data.sex || SEX_CONFIG[lang]).unknown;
 
 			// 2. Extract the last digit
 			const clean = String(val).replace(/\D/g, "");
-			if (clean.length !== 12) return SEX_CONFIG[lang].unknown;
+			if (clean.length !== 12)
+				return (data.sex || SEX_CONFIG[lang]).unknown;
 
 			const lastDigit = parseInt(clean.slice(-1), 10);
 
 			// 3. Odd = Male (1, 3, 5, 7, 9), Even = Female (0, 2, 4, 6, 8)
 			return lastDigit % 2 !== 0
-				? SEX_CONFIG[lang].male
-				: SEX_CONFIG[lang].female;
+				? (data.sex || SEX_CONFIG[lang]).male
+				: (data.sex || SEX_CONFIG[lang]).female;
 		}
 		case "short": {
 			const str = String(val);
@@ -735,15 +740,12 @@ function isTruthy(val: unknown): boolean {
 }
 
 /** Evaluates AST nodes recursively against dataset */
-function evaluateAST<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(
+function evaluateAST<T extends readonly SchemaItem[]>(
 	ast: ASTNode[],
 	scopeStack: Record<string, unknown>[],
 	rootRecord: unknown,
 	defaultsMap: Map<string, unknown>,
-	data: Data<T, IsJson>,
+	data: Data<T>,
 ): string {
 	let output = "";
 
@@ -889,10 +891,7 @@ function evaluateAST<
 // EXPORTED HTML ENGINE ENTRYPOINT
 // ============================================================================
 
-export function html<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(data: Data<T, IsJson>): string {
+export function html<T extends readonly SchemaItem[]>(data: Data<T>): string {
 	const defaultsMap = buildDefaultMap(data.schema);
 	const tokens = tokenize(data.template);
 	const ast = buildAST(tokens);

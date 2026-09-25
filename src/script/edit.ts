@@ -1,16 +1,10 @@
+import { getLangKey, NATIONALITY_CONFIG, SEX_CONFIG } from "../page/html";
 import type { Data, SchemaItem } from "../type/data";
 import { createCodeEditor, type EditorLanguage } from "./editor";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
 
-type EditorKey =
-	| "data"
-	| "html"
-	| "style"
-	| "script"
-	| "asset"
-	| "schema"
-	| "short";
+type EditorKey = "data" | "html" | "style" | "script" | "asset" | "short";
 
 const editorState: Partial<Record<EditorKey, CodeEditor>> = {};
 
@@ -38,7 +32,6 @@ export function initEditor() {
 			{ key: "style", id: "style-editor", language: "css" },
 			{ key: "script", id: "script-editor", language: "javascript" },
 			{ key: "asset", id: "asset-editor", language: "json" },
-			{ key: "schema", id: "schema-editor", language: "json" },
 			{ key: "short", id: "short-editor", language: "json" },
 		];
 
@@ -48,6 +41,38 @@ export function initEditor() {
 			editorState[key] = createCodeEditor({ container, language });
 		}
 	});
+
+	// Set nationality placeholder base on lang
+	function setPlaceholderBaseOnLang() {
+		const lang = getValue("lang-editor");
+		if (lang) {
+			const langKey = getLangKey(lang);
+
+			setPlaceholder(
+				"nationality-citizen-editor",
+				NATIONALITY_CONFIG[langKey].citizen,
+			);
+			setPlaceholder(
+				"nationality-noncitizen-editor",
+				NATIONALITY_CONFIG[langKey].nonCitizen,
+			);
+			setPlaceholder(
+				"nationality-unknown-editor",
+				NATIONALITY_CONFIG[langKey].unknown,
+			);
+			setPlaceholder("sex-male-editor", SEX_CONFIG[langKey].male);
+			setPlaceholder("sex-female-editor", SEX_CONFIG[langKey].female);
+			setPlaceholder("sex-unknown-editor", SEX_CONFIG[langKey].unknown);
+		}
+	}
+
+	const langEditor = document.getElementById(
+		"lang-editor",
+	) as HTMLSelectElement;
+	if (langEditor) {
+		langEditor.addEventListener("change", () => setPlaceholderBaseOnLang());
+		setPlaceholderBaseOnLang();
+	}
 }
 
 function setValue<
@@ -59,6 +84,16 @@ function setValue<
 	}
 }
 
+function setPlaceholder<T extends HTMLInputElement | HTMLTextAreaElement>(
+	id: string,
+	value?: string,
+) {
+	const elem = document.getElementById(id) as T | null;
+	if (elem) {
+		elem.placeholder = value || "";
+	}
+}
+
 function getValue<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
 >(id: string): string | undefined {
@@ -67,10 +102,7 @@ function getValue<
 }
 
 /** Populates all initialized editors with data */
-export function setEditData<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(data: Data<T, IsJson>) {
+export function setEditData<T extends readonly SchemaItem[]>(data: Data<T>) {
 	// Raw Text Editors
 	editorState.html?.setValue(data.template ?? "");
 	editorState.style?.setValue(data.style ?? "");
@@ -79,7 +111,6 @@ export function setEditData<
 	// JSON Editors
 	editorState.data?.setValue(formatJson(data.record));
 	editorState.asset?.setValue(formatJson(data.asset ?? {}));
-	editorState.schema?.setValue(formatJson(data.schema ?? []));
 
 	if ("short" in data) {
 		editorState.short?.setValue(formatJson((data as any).short));
@@ -97,12 +128,8 @@ export function setEditData<
 	setValue("sex-unknown-editor", data.sex?.unknown);
 }
 
-export function getEditData<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(): Data<T, IsJson> {
+export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 	return {
-		isJson: true,
 		title: getValue("title-editor"),
 		thumb: getValue("thumb-editor"),
 		lang: getValue("lang-editor"),
@@ -123,10 +150,9 @@ export function getEditData<
 
 		// JSON parsed fields
 		short: parseString(editorState.short?.getValue()),
-		schema: parseString(editorState.schema?.getValue()),
 		asset: parseString(editorState.asset?.getValue()),
 		record: parseString(editorState.data?.getValue()),
-	} as Data<T, IsJson>;
+	} as Data<T>;
 }
 
 export { editorState };

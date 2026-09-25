@@ -47,12 +47,9 @@ function escapeClassName(className: string): string {
 }
 
 /** Parses arbitrary classes like "p-[25px]" or "w-[50%]" */
-function parseArbitraryClass<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(
+function parseArbitraryClass<T extends readonly SchemaItem[]>(
 	className: string,
-	data: Data<T, IsJson>,
+	data: Data<T>,
 ): PageRuleItem | PageRuleItem[] | null {
 	const match = className.match(ARBITRARY_CLASS_REGEX);
 	if (!match) return null;
@@ -194,12 +191,9 @@ function parseArbitraryClass<
 }
 
 /** Parses variant-prefixed classes like "even:bg-gray-50" or "odd:bg-[#f8fafc]" */
-function parseVariantClass<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(
+function parseVariantClass<T extends readonly SchemaItem[]>(
 	className: string,
-	data: Data<T, IsJson>,
+	data: Data<T>,
 ): { selector: string; style: string } | null {
 	const match = className.match(VARIANT_CLASS_REGEX);
 	if (!match) return null;
@@ -267,10 +261,10 @@ function parseColorWithOpacity(className: string): PageRuleItem | null {
 }
 
 /** Main exported function */
-export function style<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
->(html: string, data: Data<T, IsJson>): string {
+export function style<T extends readonly SchemaItem[]>(
+	html: string,
+	data: Data<T>,
+): string {
 	const foundClasses = new Set<string>();
 
 	CLASS_ATTR_REGEX.lastIndex = 0;

@@ -49,14 +49,10 @@ type SingleRecord<T extends readonly SchemaItem[]> = {
 	[Item in T[number] as Item["key"]]?: ResolveType<Item>;
 };
 
-export type Data<
-	T extends readonly SchemaItem[],
-	IsJson extends boolean = true,
-> = {
+export type Data<T extends readonly SchemaItem[]> = {
 	title: string;
 	thumb?: string;
 	lang: string;
-	isJson: IsJson;
 	schema: T;
 	template: string;
 	script?: string;
@@ -73,7 +69,5 @@ export type Data<
 		female: string;
 		unknown: string;
 	};
-	record: IsJson extends true
-		? SingleRecord<T>[] | SingleRecord<T>
-		: SingleRecord<T>[];
+	record: SingleRecord<T>[] | SingleRecord<T>;
 };

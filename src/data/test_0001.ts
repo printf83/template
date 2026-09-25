@@ -3,7 +3,6 @@ import { createData } from "./data";
 export const data = createData({
 	title: "Test_0001",
 	lang: "MY",
-	isJson: true,
 	schema: [
 		{ key: "id", type: "number" },
 		{

@@ -13,8 +13,8 @@ export function minifies(html: string): string {
 		.trim(); // 4. Trim leading and trailing whitespace
 }
 
-export function render<T extends readonly SchemaItem[], IsJson extends boolean>(
-	data: Data<T, IsJson>,
+export function render<T extends readonly SchemaItem[]>(
+	data: Data<T>,
 ): { html: string; style: string; script: string } {
 	const generatedHtml = html(data);
 	const generatedStyle = style(generatedHtml, data);

@@ -101,6 +101,179 @@ function getValue<
 	return elem ? elem.value : undefined;
 }
 
+/**
+ * Smartly parses a string that could be JSON or CSV.
+ * 1. Tries JSON.parse first.
+ * 2. Fallbacks to CSV parsing (using first row as keys).
+ */
+function parseDataContent(raw: string | undefined): any {
+	if (!raw || !raw.trim()) return [];
+
+	const trimmed = raw.trim();
+
+	// 1. Attempt JSON parse
+	try {
+		return JSON.parse(trimmed);
+	} catch {
+		// Not valid JSON, proceed to parse as CSV
+	}
+
+	// 2. CSV Parser
+	const lines = trimmed
+		.split(/\r?\n/)
+		.filter((line) => line.trim().length > 0);
+	if (lines.length < 2) return []; // Needs at least 1 header row + 1 data row
+
+	// Splits CSV line handling quoted values (e.g. "Doe, John")
+	const parseCsvRow = (row: string): string[] => {
+		const regex = /(?:^|,)(?:"([^"]*)"|'([^']*)'|([^,]*))/g;
+		const values: string[] = [];
+		let match: RegExpExecArray | null;
+
+		while ((match = regex.exec(row)) !== null) {
+			const val = match[1] ?? match[2] ?? match[3] ?? "";
+			values.push(val.trim());
+		}
+		return values;
+	};
+
+	const headers = parseCsvRow(lines[0]);
+	if (headers.length === 0) return [];
+
+	return lines.slice(1).map((line) => {
+		const values = parseCsvRow(line);
+		const rowObj: Record<string, string> = {};
+
+		headers.forEach((header, idx) => {
+			rowObj[header] = values[idx] ?? "";
+		});
+
+		return rowObj;
+	});
+}
+
+/**
+ * Escapes a single value according to RFC 4180 CSV specifications.
+ */
+function escapeCsvField(val: unknown): string {
+	if (val === null || val === undefined) return "";
+
+	const str = typeof val === "object" ? JSON.stringify(val) : String(val);
+
+	// Wrap in quotes if value contains commas, quotes, or newlines
+	if (/[",\r\n]/.test(str)) {
+		return `"${str.replace(/"/g, '""')}"`;
+	}
+	return str;
+}
+
+/**
+ * Detects whether data should be rendered as JSON or CSV in the editor.
+ * - Handles raw strings (attempts JSON parse).
+ * - Handles JS objects/arrays (checks for nested objects that require JSON).
+ */
+export function detectIsJson(
+	val: Record<string, any> | Record<string, any>[],
+): boolean {
+	// 1. Single plain object -> must be JSON
+	if (!Array.isArray(val)) {
+		return true;
+	}
+
+	// 2. Empty array -> default to JSON
+	if (val.length === 0) {
+		return true;
+	}
+
+	const firstItem = val[0];
+	if (
+		!firstItem ||
+		typeof firstItem !== "object" ||
+		Array.isArray(firstItem)
+	) {
+		return true;
+	}
+
+	// 3. Get reference key set from the first item
+	const firstKeys = Object.keys(firstItem);
+	if (firstKeys.length === 0) {
+		return true;
+	}
+
+	const referenceKeysSignature = firstKeys.slice().sort().join(",");
+
+	// 4. Verify every object in the array:
+	//    a) Has the exact same set of properties
+	//    b) DOES NOT contain nested objects or arrays (which CSV cannot flatten)
+	const isFlatCsvCompatible = val.every((item) => {
+		if (!item || typeof item !== "object" || Array.isArray(item)) {
+			return false;
+		}
+
+		const keys = Object.keys(item);
+		if (keys.length !== firstKeys.length) {
+			return false;
+		}
+
+		// Key signature mismatch -> not CSV
+		if (keys.sort().join(",") !== referenceKeysSignature) {
+			return false;
+		}
+
+		// Check if ANY property value is a nested Object or Array
+		const hasNestedStructures = Object.values(item).some(
+			(v) => v !== null && typeof v === "object",
+		);
+
+		// Fail CSV compatibility if nested structures are present
+		return !hasNestedStructures;
+	});
+
+	// If it is flat & CSV compatible, return false (isJson = false -> CSV)
+	// Otherwise return true (isJson = true -> JSON)
+	return !isFlatCsvCompatible;
+}
+
+/**
+ * Converts an array of objects or raw string to a formatted CSV string.
+ */
+export function formatCSV(data: unknown): string {
+	// If it's already a CSV string, return as-is
+	if (typeof data === "string") {
+		return data;
+	}
+
+	if (!Array.isArray(data) || data.length === 0) {
+		return "";
+	}
+
+	// 1. Extract all unique key names across all objects for headers
+	const headers = Array.from(
+		new Set(
+			data.flatMap((row) =>
+				row && typeof row === "object" ? Object.keys(row) : [],
+			),
+		),
+	);
+
+	if (headers.length === 0) return "";
+
+	// 2. Build header row
+	const headerRow = headers.map(escapeCsvField).join(",");
+
+	// 3. Build data rows
+	const dataRows = data.map((row) => {
+		if (!row || typeof row !== "object") return "";
+		return headers
+			.map((header) =>
+				escapeCsvField((row as Record<string, any>)[header]),
+			)
+			.join(",");
+	});
+
+	return [headerRow, ...dataRows].join("\n");
+}
+
 /** Populates all initialized editors with data */
 export function setEditData<T extends readonly SchemaItem[]>(data: Data<T>) {
 	// Raw Text Editors
@@ -109,11 +282,20 @@ export function setEditData<T extends readonly SchemaItem[]>(data: Data<T>) {
 	editorState.script?.setValue(data.script ?? "");
 
 	// JSON Editors
-	editorState.data?.setValue(formatJson(data.record));
 	editorState.asset?.setValue(formatJson(data.asset ?? {}));
 
 	if ("short" in data) {
 		editorState.short?.setValue(formatJson((data as any).short));
+	}
+
+	// Data Editor
+	const isJson = detectIsJson(data.data);
+	if (isJson) {
+		editorState.data?.setLanguage("json");
+		editorState.data?.setValue(formatJson(data.data));
+	} else {
+		editorState.data?.setLanguage("csv");
+		editorState.data?.setValue(formatCSV(data.data));
 	}
 
 	// Input Fields
@@ -129,6 +311,8 @@ export function setEditData<T extends readonly SchemaItem[]>(data: Data<T>) {
 }
 
 export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
+	const dataValue = editorState.data?.getValue();
+
 	return {
 		title: getValue("title-editor"),
 		thumb: getValue("thumb-editor"),
@@ -151,7 +335,9 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 		// JSON parsed fields
 		short: parseString(editorState.short?.getValue()),
 		asset: parseString(editorState.asset?.getValue()),
-		record: parseString(editorState.data?.getValue()),
+
+		// Auto-detects and converts JSON or CSV data
+		data: parseDataContent(dataValue),
 	} as Data<T>;
 }
 

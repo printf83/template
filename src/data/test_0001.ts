@@ -25,7 +25,7 @@ export const data = createData({
 			items: { key: "tag", type: "string" },
 		},
 	],
-	record: [
+	data: [
 		{
 			id: 101,
 			user: {

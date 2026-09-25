@@ -44,7 +44,7 @@ type ResolveType<T extends SchemaItem> = T extends {
 			? PrimitiveTypeMap[T["type"]]
 			: unknown;
 
-// Deeply partial record typing so properties with `default` values in schema can be omitted in `record`
+// Deeply partial data typing so properties with `default` values in schema can be omitted in `data`
 type SingleRecord<T extends readonly SchemaItem[]> = {
 	[Item in T[number] as Item["key"]]?: ResolveType<Item>;
 };
@@ -69,5 +69,5 @@ export type Data<T extends readonly SchemaItem[]> = {
 		female: string;
 		unknown: string;
 	};
-	record: SingleRecord<T>[] | SingleRecord<T>;
+	data: SingleRecord<T>[] | SingleRecord<T>;
 };

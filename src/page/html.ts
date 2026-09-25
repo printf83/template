@@ -1,4 +1,4 @@
-import type { Data, SchemaItem } from "../type/data.d";
+import type { Data, SchemaItem, SingleRecord } from "../type/data.d";
 
 // ============================================================================
 // LOCALE CONFIGURATIONS
@@ -477,40 +477,42 @@ function executeHelper<T extends readonly SchemaItem[]>(
 			return String(val);
 		}
 		case "nationality": {
-			// 1. Verify that the first 6 digits form a valid date (and has a valid 12-digit structure)
-			const isBirthDateValid = parseDateNric(val) !== null;
-			if (!isBirthDateValid)
-				return (data.nationality || NATIONALITY_CONFIG[lang])
-					.nonCitizen;
+			const l = getLangKey(lang);
+			const citizenLabel =
+				data.nationality?.citizen || NATIONALITY_CONFIG[l].citizen;
+			const nonCitizenLabel =
+				data.nationality?.nonCitizen ||
+				NATIONALITY_CONFIG[l].nonCitizen;
 
-			// 2. Extract state code (digits 7 & 8) and check against Malaysian state codes
-			const clean = String(val).replace(/\D/g, "");
-			if (clean.length !== 12)
-				return (data.nationality || NATIONALITY_CONFIG[lang])
-					.nonCitizen;
+			const clean = String(val ?? "").replace(/\D/g, "");
+
+			// Validate 12-digit length and birth date validity in one step
+			if (clean.length !== 12 || !parseDateNric(clean)) {
+				return nonCitizenLabel;
+			}
 
 			const stateCode = clean.slice(6, 8);
-
 			return STATECODE_CONFIG.has(stateCode)
-				? (data.nationality || NATIONALITY_CONFIG[lang]).citizen
-				: (data.nationality || NATIONALITY_CONFIG[lang]).nonCitizen;
+				? citizenLabel
+				: nonCitizenLabel;
 		}
 		case "sex": {
-			// 1. Verify valid NRIC date and structure (12 digits)
-			if (!parseDateNric(val))
-				return (data.sex || SEX_CONFIG[lang]).unknown;
+			const l = getLangKey(lang);
+			const maleLabel = data.sex?.male || SEX_CONFIG[l].male;
+			const femaleLabel = data.sex?.female || SEX_CONFIG[l].female;
+			const unknownLabel = data.sex?.unknown || SEX_CONFIG[l].unknown;
 
-			// 2. Extract the last digit
-			const clean = String(val).replace(/\D/g, "");
-			if (clean.length !== 12)
-				return (data.sex || SEX_CONFIG[lang]).unknown;
+			const clean = String(val ?? "").replace(/\D/g, "");
+
+			// Validate 12-digit length and birth date validity in one step			const clean = String(val ?? "").replace(/\D/g, "");
+			if (clean.length !== 12 || !parseDateNric(clean)) {
+				return unknownLabel;
+			}
 
 			const lastDigit = parseInt(clean.slice(-1), 10);
 
 			// 3. Odd = Male (1, 3, 5, 7, 9), Even = Female (0, 2, 4, 6, 8)
-			return lastDigit % 2 !== 0
-				? (data.sex || SEX_CONFIG[lang]).male
-				: (data.sex || SEX_CONFIG[lang]).female;
+			return lastDigit % 2 !== 0 ? maleLabel : femaleLabel;
 		}
 		case "short": {
 			const str = String(val);
@@ -896,17 +898,19 @@ export function html<T extends readonly SchemaItem[]>(data: Data<T>): string {
 	const tokens = tokenize(data.template);
 	const ast = buildAST(tokens);
 
-	const renderSingle = (record: unknown) => {
+	const renderSingle = <T extends readonly SchemaItem[]>(
+		d: SingleRecord<T>,
+	) => {
 		const rootScope =
-			typeof record === "object" && record !== null
-				? (record as Record<string, unknown>)
+			typeof d === "object" && d !== null
+				? (d as Record<string, unknown>)
 				: {};
-		return evaluateAST(ast, [rootScope], record, defaultsMap, data);
+		return evaluateAST(ast, [rootScope], d, defaultsMap, data);
 	};
 
-	if (Array.isArray(data.record)) {
-		return data.record.map((rec) => renderSingle(rec)).join("\n");
+	if (Array.isArray(data.data)) {
+		return data.data.map((rec) => renderSingle(rec)).join("\n");
 	} else {
-		return renderSingle(data.record);
+		return renderSingle(data.data);
 	}
 }

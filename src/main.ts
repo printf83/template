@@ -1,5 +1,5 @@
 import { renderIcons } from "./script/icon";
-import { data } from "./data/test_0001";
+import { data } from "./data/test_0002";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
 import "./style/main.css";

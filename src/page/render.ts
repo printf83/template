@@ -24,8 +24,5 @@ export function render<T extends readonly SchemaItem[]>(
 	const finalStyle = [generatedStyle, userStyle].filter(Boolean).join("\n");
 	const script = data.script ?? "";
 
-	console.log(generatedHtml);
-	console.log(finalStyle);
-
 	return { html: generatedHtml, style: finalStyle, script };
 }

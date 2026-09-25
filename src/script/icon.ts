@@ -17,6 +17,11 @@ import {
 	Plus,
 	File,
 	ClipboardCopy,
+	Info,
+	CircleQuestionMark,
+	CircleX,
+	CircleCheck,
+	TriangleAlert,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -41,6 +46,11 @@ export const renderIcons = () => {
 			Plus,
 			File,
 			ClipboardCopy,
+			Info,
+			CircleQuestionMark,
+			CircleX,
+			CircleCheck,
+			TriangleAlert,
 		},
 	});
 };

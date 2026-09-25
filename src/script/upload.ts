@@ -1,5 +1,15 @@
 import type { Data, SchemaItem } from "../type/data";
 import { setEditData } from "./edit";
+import { Modal } from "./modal";
+import { selectFile } from "./utils";
+
+export interface UploadFileResult<T extends readonly SchemaItem[]> {
+	fileName: string;
+	fileType: string;
+	content: Data<T>;
+}
+
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
 function isObject(val: unknown): val is Record<string, unknown> {
 	return typeof val === "object" && val !== null && !Array.isArray(val);
@@ -71,102 +81,80 @@ export function isValidDataPayload<T extends readonly SchemaItem[]>(
  */
 export async function uploadData<
 	T extends readonly SchemaItem[],
->(): Promise<Data<T> | null> {
-	return new Promise((resolve, reject) => {
-		const input = document.createElement("input");
-		input.type = "file";
-		input.accept = ".json,application/json";
-		input.style.display = "none";
-		document.body.appendChild(input);
+>(): Promise<UploadFileResult<T> | null> {
+	const file = await selectFile(".json,application/json");
+	if (!file) return null;
 
-		const cleanup = () => {
-			if (document.body.contains(input)) {
-				input.remove();
-			}
+	// 1. Enforce file size limit to avoid tab freeze
+	if (file.size > MAX_FILE_SIZE_BYTES) {
+		throw new Error(
+			`File size exceeds limit (${(MAX_FILE_SIZE_BYTES / 1024 / 1024).toFixed(0)}MB)`,
+		);
+	}
+
+	// 2. File type / extension pre-validation
+	const isJsonExt = file.name.toLowerCase().endsWith(".json");
+	const isJsonMime = file.type === "application/json" || file.type === "";
+
+	if (!isJsonExt && !isJsonMime) {
+		throw new Error("Invalid file type. Please upload a .json file.");
+	}
+
+	try {
+		// 3. Read and parse JSON content
+		const rawText = await file.text();
+		const parsed = JSON.parse(rawText);
+
+		// 4. Structural validation check
+		if (!isValidDataPayload<T>(parsed)) {
+			throw new Error(
+				"Invalid file structure. Required fields (title, lang, template, data) are missing or improperly formatted.",
+			);
+		}
+
+		// 4. Optionally strip 'schema' key if present
+		if ("schema" in parsed) {
+			delete (parsed as Record<string, unknown>).schema;
+		}
+
+		return {
+			fileName: file.name,
+			fileType: file.type,
+			content: parsed as Data<T>,
 		};
-
-		input.addEventListener(
-			"change",
-			async () => {
-				const file = input.files?.[0];
-				if (!file) {
-					cleanup();
-					resolve(null);
-					return;
-				}
-
-				// 1. File type / extension pre-validation
-				const isJsonExt = file.name.toLowerCase().endsWith(".json");
-				const isJsonMime =
-					file.type === "application/json" || file.type === "";
-
-				if (!isJsonExt && !isJsonMime) {
-					cleanup();
-					reject(
-						new Error(
-							"Invalid file type. Please upload a .json file.",
-						),
-					);
-					return;
-				}
-
-				try {
-					// 2. Read and parse JSON content
-					const rawText = await file.text();
-					const parsed = JSON.parse(rawText);
-
-					// 3. Structural validation check
-					if (!isValidDataPayload<T>(parsed)) {
-						throw new Error(
-							"Invalid file structure. Required fields (title, lang, template, data) are missing or improperly formatted.",
-						);
-					}
-
-					// 4. Optionally strip 'schema' key if present
-					if ("schema" in parsed) {
-						delete (parsed as Record<string, unknown>).schema;
-					}
-
-					cleanup();
-					resolve(parsed);
-				} catch (error) {
-					cleanup();
-					if (error instanceof SyntaxError) {
-						reject(
-							new Error(
-								"Malformed JSON file. Failed to parse text.",
-							),
-						);
-					} else {
-						reject(error);
-					}
-				}
-			},
-			{ once: true },
-		);
-
-		input.addEventListener(
-			"cancel",
-			() => {
-				cleanup();
-				resolve(null);
-			},
-			{ once: true },
-		);
-
-		input.click();
-	});
+	} catch (error) {
+		throw error;
+	}
 }
 export function attachUploadFile(btn: HTMLButtonElement) {
-	if (btn) {
-		btn.addEventListener("click", async () => {
-			try {
-				const loadedData = await uploadData();
-				if (!loadedData) return; // User cancelled file selection
-				setEditData(loadedData);
-			} catch (error) {
-				console.error(error);
-			}
-		});
-	}
+	if (!btn) return;
+
+	btn.addEventListener("click", async () => {
+		try {
+			const result = await uploadData();
+
+			// User cancelled file selection dialog -> exit silently
+			if (!result) return;
+
+			// Set editor data
+			setEditData(result.content);
+
+			// Success
+			await Modal.alert(
+				`Successfully load <strong>${result.fileName}</strong> into editor.`,
+				"Success",
+				"circle-check",
+			);
+		} catch (error) {
+			const message =
+				error instanceof Error
+					? error.message
+					: "An unexpected error occurred.";
+			await Modal.alert(
+				`Failed to process file: ${message}`,
+				"Load Failed",
+				"triangle-alert",
+			);
+		}
+	});
 }

@@ -23,7 +23,7 @@
 
 /* Active Tab Button */
 .tab-radio:checked + .tab-btn {
-	@apply text-neutral-900 border-neutral-900 font-semibold bg-neutral-100/50;
+	@apply text-neutral-900 border-neutral-900 font-semibold bg-neutral-200/30;
 }
 
 /* Tab Panels (Row 2: Hidden by default) */

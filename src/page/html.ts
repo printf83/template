@@ -327,24 +327,6 @@ function formatNumberText(val: unknown, langKey: SupportedLang): string {
 // HELPER FUNCTIONS & FORMATTERS
 // ============================================================================
 
-function buildDefaultMap(
-	schema: readonly SchemaItem[],
-	prefix = "",
-): Map<string, unknown> {
-	const defaultsMap = new Map<string, unknown>();
-	for (const item of schema) {
-		const currentPath = prefix ? `${prefix}.${item.key}` : item.key;
-		if ("default" in item && item.default !== undefined) {
-			defaultsMap.set(currentPath, item.default);
-		}
-		if (item.type === "object" && item.children) {
-			const childDefaults = buildDefaultMap(item.children, currentPath);
-			childDefaults.forEach((val, key) => defaultsMap.set(key, val));
-		}
-	}
-	return defaultsMap;
-}
-
 /** Native Date parsing helper */
 function parseDate(val: unknown): Date | null {
 	if (!val) return null;
@@ -689,12 +671,11 @@ function resolveValue(
 	path: string,
 	scopeStack: Record<string, unknown>[],
 	rootRecord: unknown,
-	defaultsMap: Map<string, unknown>,
 ): unknown {
 	// 1. Root-level direct access
 	if (path.startsWith("root.")) {
 		const realPath = path.slice(5);
-		return getByPath(rootRecord, realPath) ?? defaultsMap.get(realPath);
+		return getByPath(rootRecord, realPath) ?? "";
 	}
 
 	// 2. Search local scope stack top-down
@@ -705,8 +686,8 @@ function resolveValue(
 		}
 	}
 
-	// 3. Fallback to schema default or empty string
-	return defaultsMap.get(path);
+	// 3. Fallback to empty string
+	return "";
 }
 
 /** Dot-path navigator with array index support (e.g. "items[0].name") */
@@ -746,7 +727,6 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 	ast: ASTNode[],
 	scopeStack: Record<string, unknown>[],
 	rootRecord: unknown,
-	defaultsMap: Map<string, unknown>,
 	data: Data<T>,
 ): string {
 	let output = "";
@@ -763,12 +743,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "VAR": {
-				const val = resolveValue(
-					node.key!,
-					scopeStack,
-					rootRecord,
-					defaultsMap,
-				);
+				const val = resolveValue(node.key!, scopeStack, rootRecord);
 				if (val !== undefined && val !== null) {
 					output +=
 						typeof val === "object"
@@ -779,12 +754,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "FUNC": {
-				const val = resolveValue(
-					node.key!,
-					scopeStack,
-					rootRecord,
-					defaultsMap,
-				);
+				const val = resolveValue(node.key!, scopeStack, rootRecord);
 				output += executeHelper(node.fnName!, val, data);
 				break;
 			}
@@ -794,7 +764,6 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 					node.key!,
 					scopeStack,
 					rootRecord,
-					defaultsMap,
 				);
 				if (
 					targetObj &&
@@ -805,7 +774,6 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 						node.children!,
 						[...scopeStack, targetObj as Record<string, unknown>],
 						rootRecord,
-						defaultsMap,
 						data,
 					);
 				}
@@ -813,12 +781,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "LOOP": {
-				const list = resolveValue(
-					node.key!,
-					scopeStack,
-					rootRecord,
-					defaultsMap,
-				);
+				const list = resolveValue(node.key!, scopeStack, rootRecord);
 				if (Array.isArray(list)) {
 					list.forEach((item, index) => {
 						const isObject =
@@ -838,7 +801,6 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 							node.children!,
 							[...scopeStack, loopScope],
 							rootRecord,
-							defaultsMap,
 							data,
 						);
 					});
@@ -847,18 +809,12 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "IF": {
-				const val = resolveValue(
-					node.key!,
-					scopeStack,
-					rootRecord,
-					defaultsMap,
-				);
+				const val = resolveValue(node.key!, scopeStack, rootRecord);
 				if (isTruthy(val)) {
 					output += evaluateAST(
 						node.children!,
 						scopeStack,
 						rootRecord,
-						defaultsMap,
 						data,
 					);
 				}
@@ -866,18 +822,12 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "IFNOT": {
-				const val = resolveValue(
-					node.key!,
-					scopeStack,
-					rootRecord,
-					defaultsMap,
-				);
+				const val = resolveValue(node.key!, scopeStack, rootRecord);
 				if (!isTruthy(val)) {
 					output += evaluateAST(
 						node.children!,
 						scopeStack,
 						rootRecord,
-						defaultsMap,
 						data,
 					);
 				}
@@ -894,7 +844,6 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 // ============================================================================
 
 export function html<T extends readonly SchemaItem[]>(data: Data<T>): string {
-	const defaultsMap = buildDefaultMap(data.schema);
 	const tokens = tokenize(data.template);
 	const ast = buildAST(tokens);
 
@@ -905,7 +854,7 @@ export function html<T extends readonly SchemaItem[]>(data: Data<T>): string {
 			typeof d === "object" && d !== null
 				? (d as Record<string, unknown>)
 				: {};
-		return evaluateAST(ast, [rootScope], d, defaultsMap, data);
+		return evaluateAST(ast, [rootScope], d, data);
 	};
 
 	if (Array.isArray(data.data)) {

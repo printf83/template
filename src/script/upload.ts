@@ -1,4 +1,3 @@
-import { setCurrentData } from "../data/data";
 import type { Data, SchemaItem } from "../type/data";
 import { setEditData } from "./edit";
 
@@ -164,7 +163,6 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 			try {
 				const loadedData = await uploadData();
 				if (!loadedData) return; // User cancelled file selection
-				setCurrentData(loadedData);
 				setEditData(loadedData);
 			} catch (error) {
 				console.error(error);

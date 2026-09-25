@@ -6,13 +6,10 @@ import "./style/main.css";
 import { attachBtnDownloadPdf } from "./script/pdf";
 import { getEditData, initEditor, setEditData } from "./script/edit";
 import { attachCopyFile } from "./script/copy";
-import { setCurrentData } from "./data/data";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
 
 document.addEventListener("DOMContentLoaded", () => {
-	setCurrentData(data);
-
 	renderIcons();
 
 	const iframe = document.getElementById(
@@ -93,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			const d = getEditData();
 			if (d) {
 				Object.assign(data, d);
-				setCurrentData(data);
 
 				const { html, style, script } = render(data);
 				if (iframe) {

@@ -6,26 +6,21 @@ type PrimitiveTypeMap = {
 	any: unknown;
 };
 
-// Recursive Schema Item with optional `default` fields
+// Recursive Schema Item without `default` fields
 export type SchemaItem =
 	| {
-			[K in keyof PrimitiveTypeMap]: {
-				key: string;
-				type: K;
-				default?: PrimitiveTypeMap[K];
-			};
-	  }[keyof PrimitiveTypeMap]
+			key: string;
+			type: keyof PrimitiveTypeMap;
+	  }
 	| {
 			key: string;
 			type: "object";
 			children: readonly SchemaItem[];
-			default?: Record<string, unknown>;
 	  }
 	| {
 			key: string;
 			type: "array";
 			items: SchemaItem;
-			default?: unknown[];
 	  };
 
 // Resolver types
@@ -44,12 +39,14 @@ type ResolveType<T extends SchemaItem> = T extends {
 			? PrimitiveTypeMap[T["type"]]
 			: unknown;
 
-// Deeply partial data typing so properties with `default` values in schema can be omitted in `data`
-type SingleRecord<T extends readonly SchemaItem[]> = {
+// Deeply partial record typing derived from schema items
+export type SingleRecord<T extends readonly SchemaItem[]> = {
 	[Item in T[number] as Item["key"]]?: ResolveType<Item>;
 };
 
-// type/data.ts
+// ============================================================================
+// DATA TYPES
+// ============================================================================
 
 /**
  * Base template data as serialized on disk or transferred over the network.

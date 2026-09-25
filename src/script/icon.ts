@@ -21,7 +21,8 @@ import {
 	CircleQuestionMark,
 	CircleX,
 	CircleCheck,
-	TriangleAlert,
+	CircleAlert,
+	Sparkles,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -50,7 +51,8 @@ export const renderIcons = () => {
 			CircleQuestionMark,
 			CircleX,
 			CircleCheck,
-			TriangleAlert,
+			CircleAlert,
+			Sparkles,
 		},
 	});
 };

@@ -143,8 +143,7 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 			await Modal.alert(
 				`Successfully load <strong>${result.fileName}</strong> into editor.`,
 				"Success",
-				"circle-check",
-				"text-emerald-400 bg-emerald-100 rounded-full",
+				"success",
 			);
 		} catch (error) {
 			const message =
@@ -154,8 +153,7 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 			await Modal.alert(
 				`Failed to process file: ${message}`,
 				"Load Failed",
-				"circle-x",
-				"text-red-400 bg-red-100 rounded-full",
+				"error",
 			);
 		}
 	});

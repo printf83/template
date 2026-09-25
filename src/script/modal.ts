@@ -1,8 +1,9 @@
 import { renderIcons } from "./icon";
 
+export type ModalType = "info" | "warning" | "error" | "success" | "question";
+
 export interface ModalOptions {
-	icon?: string;
-	iconClass?: string;
+	type?: ModalType;
 	title: string;
 	body?: string | HTMLElement;
 	confirmText?: string;
@@ -17,11 +18,41 @@ export class Modal {
 	 */
 	static show<T = boolean>(options: ModalOptions): Promise<T | null> {
 		return new Promise((resolve) => {
-			const modalIcon = options.icon
-				? `<i ${options.iconClass ? `class="${options.iconClass}"` : ""} data-icon="${options.icon}"></i>`
+			let modalIconData: string | null = null;
+			let modalIconClass: string | null = null;
+			if (options.type) {
+				switch (options.type) {
+					case "error":
+						modalIconData = "circle-x";
+						modalIconClass = "text-red-400 bg-red-100 rounded-full";
+						break;
+					case "success":
+						modalIconData = "circle-check";
+						modalIconClass =
+							"text-emerald-400 bg-emerald-100 rounded-full";
+						break;
+					case "question":
+						modalIconData = "circle-question-mark";
+						modalIconClass =
+							"text-emerald-400 bg-emerald-100 rounded-full";
+						break;
+					case "info":
+						modalIconData = "info";
+						modalIconClass = "text-sky-400 bg-sky-100 rounded-full";
+						break;
+					case "warning":
+						modalIconData = "circle-alert";
+						modalIconClass =
+							"text-amber-400 bg-amber-100 rounded-full";
+						break;
+				}
+			}
+
+			const modalIcon = modalIconData
+				? `<i ${modalIconClass ? `class="${modalIconClass}"` : ""} data-icon="${modalIconData}"></i>`
 				: "";
 			const modalHeader =
-				options.title || options.icon
+				options.title || modalIconData
 					? `<header class="modal-header">
                         <h3 class="modal-title">
 							${modalIcon}
@@ -102,12 +133,10 @@ export class Modal {
 	static confirm(
 		message: string,
 		title = "Confirm Action",
-		icon = "circle-question-mark",
-		iconClass?: string,
+		type: ModalType = "question",
 	): Promise<boolean> {
 		return this.show({
-			icon,
-			iconClass,
+			type,
 			title,
 			body: `<p>${message}</p>`,
 			showCancel: true,
@@ -119,12 +148,10 @@ export class Modal {
 	static alert(
 		message: string,
 		title = "Notice",
-		icon = "info",
-		iconClass?: string,
+		type: ModalType = "info",
 	): Promise<void> {
 		return this.show({
-			icon,
-			iconClass,
+			type,
 			title,
 			body: `<p>${message}</p>`,
 			showCancel: false,

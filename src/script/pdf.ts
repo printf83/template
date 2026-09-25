@@ -1,4 +1,4 @@
-import { toCanvas } from "html-to-image";
+import { toCanvas, toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
 import { renderIcons } from "./icon";
 
@@ -109,14 +109,18 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 		// Parse format (a4, a3, letter...) and orientation per page
 		const { format, orientation } = parsePageConfig(pageElement);
 
-		// Convert page element to Canvas with high resolution (pixelRatio: 2)
-		const canvas = await toCanvas(pageElement, {
-			pixelRatio: 2,
-			cacheBust: true,
-		});
+		let imgDataUrl: string | null = null;
 
-		// Best balance of razor-sharp text and small PDF file size
-		const imgData = canvas.toDataURL("image/jpeg", 0.95);
+		try {
+			// 1. Render as JPEG with 80% quality and 1.5x pixel ratio
+			imgDataUrl = await toJpeg(pageElement, {
+				quality: 0.8,
+				pixelRatio: 1.5,
+				cacheBust: true,
+			});
+		} catch (e) {
+			console.error("Failed to convert page to Image. Skipping page.", e);
+		}
 
 		if (i === 0) {
 			pdf = new jsPDF({
@@ -128,12 +132,12 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 			pdf.addPage(format, orientation);
 		}
 
-		if (pdf) {
+		if (pdf && imgDataUrl) {
 			const pdfWidth = pdf.internal.pageSize.getWidth();
 			const pdfHeight = pdf.internal.pageSize.getHeight();
 
 			pdf.addImage(
-				imgData,
+				imgDataUrl,
 				"JPEG",
 				0,
 				0,
@@ -143,10 +147,6 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 				"FAST",
 			);
 		}
-
-		// Clean up memory
-		canvas.width = 0;
-		canvas.height = 0;
 	}
 
 	if (pdf) {

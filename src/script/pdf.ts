@@ -1,4 +1,4 @@
-import { toCanvas, toJpeg } from "html-to-image";
+import { toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
 import { renderIcons } from "./icon";
 

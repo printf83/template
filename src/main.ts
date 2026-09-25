@@ -1,12 +1,18 @@
 import { renderIcons } from "./script/icon";
-import { data } from "./data/test_0002";
+import { data } from "./data/test_0001";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
 import "./style/main.css";
 import { attachBtnDownloadPdf } from "./script/pdf";
 import { getEditData, initEditor, setEditData } from "./script/edit";
+import { attachCopyFile } from "./script/copy";
+import { setCurrentData } from "./data/data";
+import { attachDownloadFile } from "./script/download";
+import { attachUploadFile } from "./script/upload";
 
 document.addEventListener("DOMContentLoaded", () => {
+	setCurrentData(data);
+
 	renderIcons();
 
 	const iframe = document.getElementById(
@@ -32,6 +38,27 @@ document.addEventListener("DOMContentLoaded", () => {
 	) as HTMLButtonElement;
 	if (iframe && btnDownloadPdf) {
 		attachBtnDownloadPdf(btnDownloadPdf, iframe);
+	}
+
+	const btnEditorReadFile = document.getElementById(
+		"btnEditorReadFile",
+	) as HTMLButtonElement;
+	if (btnEditorReadFile) {
+		attachCopyFile(btnEditorReadFile);
+	}
+
+	const btnEditorDownloadFile = document.getElementById(
+		"btnEditorDownloadFile",
+	) as HTMLButtonElement;
+	if (btnEditorDownloadFile) {
+		attachDownloadFile(btnEditorDownloadFile);
+	}
+
+	const btnEditorUploadFile = document.getElementById(
+		"btnEditorUploadFile",
+	) as HTMLButtonElement;
+	if (btnEditorUploadFile) {
+		attachUploadFile(btnEditorUploadFile);
 	}
 
 	const formMain = document.getElementById("formMain") as HTMLDivElement;
@@ -66,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const d = getEditData();
 			if (d) {
 				Object.assign(data, d);
+				setCurrentData(data);
 
 				const { html, style, script } = render(data);
 				if (iframe) {

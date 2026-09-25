@@ -16,9 +16,10 @@ import {
 	FlaskConical,
 	Plus,
 	File,
+	ClipboardCopy,
 } from "lucide";
 
-// Replace <i data-lucide="..."> elements with actual SVGs
+// Replace <i data-icon="..."> elements with actual SVGs
 export const renderIcons = () => {
 	createIcons({
 		nameAttr: "data-icon",
@@ -39,6 +40,7 @@ export const renderIcons = () => {
 			FlaskConical,
 			Plus,
 			File,
+			ClipboardCopy,
 		},
 	});
 };

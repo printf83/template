@@ -29,7 +29,7 @@
 }
 
 .btn-square {
-	@apply px-2;
+	@apply p-2.5;
 }
 
 /* Color Variants */

@@ -2,6 +2,7 @@ import { renderIcons } from "./icon";
 
 export interface ModalOptions {
 	icon?: string;
+	iconClass?: string;
 	title: string;
 	body?: string | HTMLElement;
 	confirmText?: string;
@@ -16,17 +17,25 @@ export class Modal {
 	 */
 	static show<T = boolean>(options: ModalOptions): Promise<T | null> {
 		return new Promise((resolve) => {
+			const modalIcon = options.icon
+				? `<i ${options.iconClass ? `class="${options.iconClass}"` : ""} data-icon="${options.icon}"></i>`
+				: "";
+			const modalHeader =
+				options.title || options.icon
+					? `<header class="modal-header">
+                        <h3 class="modal-title">
+							${modalIcon}
+							<span>${options.title}</span>
+						</h3>
+                        <button type="button" class="modal-close " aria-label="Close">&times;</button>
+                    </header>`
+					: "";
+
 			const dialog = document.createElement("dialog");
 			dialog.className = "modal";
 			dialog.innerHTML = `
                 <div class="modal-content">
-                    <header class="modal-header">
-                        <h3 class="modal-title">
-							${options.icon ? `<i data-icon="${options.icon}"></i>` : ""}
-							<span>${options.title}</span>
-						</h3>
-                        <button type="button" class="modal-close " aria-label="Close">&times;</button>
-                    </header>
+                    ${modalHeader}
                     <div class="modal-body"></div>
                     <footer class="modal-footer">
                         ${
@@ -54,9 +63,7 @@ export class Modal {
 			document.body.appendChild(dialog);
 			dialog.showModal();
 
-			setTimeout(() => {
-				renderIcons();
-			}, 100);
+			renderIcons();
 
 			// Safe cleanup helper
 			const cleanup = (value: T | null) => {
@@ -96,9 +103,11 @@ export class Modal {
 		message: string,
 		title = "Confirm Action",
 		icon = "circle-question-mark",
+		iconClass?: string,
 	): Promise<boolean> {
 		return this.show({
 			icon,
+			iconClass,
 			title,
 			body: `<p>${message}</p>`,
 			showCancel: true,
@@ -111,9 +120,11 @@ export class Modal {
 		message: string,
 		title = "Notice",
 		icon = "info",
+		iconClass?: string,
 	): Promise<void> {
 		return this.show({
 			icon,
+			iconClass,
 			title,
 			body: `<p>${message}</p>`,
 			showCancel: false,

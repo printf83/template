@@ -25,13 +25,9 @@ export function render<T extends readonly SchemaItem[]>(
 	const systemStyle = `
 	@media screen {
 		body {
-			/* tan(atan2(100vw, 1200px)) calculates (100vw / 1200px) as a unitless number */
-			--scale: clamp(0.5, tan(atan2(100vw, 1200px)), 1);
-
+			--scale: clamp(0.5, tan(atan2(100vw, 900px)), 1);
 			transform: scale(var(--scale));
 			transform-origin: top center;
-
-			/* Now calc() can safely subtract unitless numbers */
 			margin-bottom: calc((1 - var(--scale)) * -100%);
 		}
 	}

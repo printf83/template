@@ -114,8 +114,8 @@ function parseDataContent(raw: string | undefined): any {
 	// 1. Attempt JSON parse
 	try {
 		return JSON.parse(trimmed);
-	} catch {
-		// Not valid JSON, proceed to parse as CSV
+	} catch (ex) {
+		console.warn("Failed attempt to parse JSON string:", ex);
 	}
 
 	// 2. CSV Parser

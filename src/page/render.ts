@@ -33,25 +33,27 @@ export function render<T extends readonly SchemaItem[]>(
 	}
 	`;
 
-	const systemScript = `
-	document.addEventListener("DOMContentLoaded", () => {
-        document.addEventListener("mouseover", (event) => {
-            const page = event.target.closest(".page");
-            if (page && !page.contains(event.relatedTarget)) {
-                page.classList.add("page-hovered");
-                console.log("Hover ENTER .page");
-            }
-        });
+	// const systemScript = `
+	// document.addEventListener("DOMContentLoaded", () => {
+	//     document.addEventListener("mouseover", (event) => {
+	//         const page = event.target.closest(".page");
+	//         if (page && !page.contains(event.relatedTarget)) {
+	//             page.classList.add("page-hovered");
+	//             console.log("Hover ENTER .page");
+	//         }
+	//     });
 
-        document.addEventListener("mouseout", (event) => {
-            const page = event.target.closest(".page");
-            if (page && !page.contains(event.relatedTarget)) {
-                page.classList.remove("page-hovered");
-                console.log("Hover LEAVE .page", page);
-            }
-        });
-	});
-	`;
+	//     document.addEventListener("mouseout", (event) => {
+	//         const page = event.target.closest(".page");
+	//         if (page && !page.contains(event.relatedTarget)) {
+	//             page.classList.remove("page-hovered");
+	//             console.log("Hover LEAVE .page", page);
+	//         }
+	//     });
+	// });
+	// `;
+
+	const systemScript = "";
 
 	const systemHtml = ``;
 

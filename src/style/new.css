@@ -1,10 +1,12 @@
 .new-list {
-	@apply h-[calc(100svh-360px)] mt-2 -mb-3 flex flex-row flex-wrap gap-2 p-2 justify-items-start overflow-y-auto inset-shadow-sm
+	@apply h-[calc(100svh-360px)] mt-2 -mb-3 
+	flex flex-wrap justify-start place-content-start
+	gap-2 p-2 overflow-y-auto inset-shadow-sm
     rounded-lg border border-zinc-200 bg-white;
 }
 
 .new-list > label {
-	@apply flex flex-col justify-end items-center w-28 h-36 rounded-sm cursor-pointer pb-1
+	@apply flex flex-col justify-end items-center w-26 h-32 rounded-sm cursor-pointer pb-1
     bg-center bg-no-repeat
 	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-100 hover:text-neutral-900 shadow-xs
 	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;

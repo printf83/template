@@ -118,8 +118,8 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 		try {
 			// 1. Render as JPEG with 80% quality and 1.5x pixel ratio
 			imgDataUrl = await toJpeg(pageElement, {
-				quality: 0.8,
-				pixelRatio: 1.5,
+				quality: 1,
+				pixelRatio: 2,
 				cacheBust: true,
 			});
 		} catch (e) {

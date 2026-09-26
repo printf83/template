@@ -96,9 +96,9 @@ export const data = createData({
 
 	{{#if lang}}
 	<div>Language : 
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col">
 		{{#loop lang}}
-			<div class="flex gap-2">
+			<div class="flex gap-1">
 				<span>{{%short title}}</span>
 				<span>(Level #{{level}})</span>
 			</div>
@@ -111,7 +111,7 @@ export const data = createData({
 	<div>Hobby : 
 		<div class="flex gap-2">
 		{{#loop hobby}}
-			<span class="bg-gray-200">{{_this}}</span>
+			<span class="bg-gray-200 px-2 py-1 rounded">{{_this}}</span>
 		{{/loop hobby}}
 		</div>
 	</div>

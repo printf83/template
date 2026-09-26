@@ -47,11 +47,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const currentData = setCurrentData(data);
 	genPage(currentData);
 
-	const btnPrint = document.getElementById(
+	const btnPrintAll = document.getElementById(
 		"btnPrintAll",
 	) as HTMLButtonElement;
-	if (iframe && btnPrint) {
-		attachBtnPrintAll(btnPrint, iframe);
+	if (iframe && btnPrintAll) {
+		attachBtnPrintAll(btnPrintAll, iframe);
 	}
 
 	const btnDownloadPdf = document.getElementById(

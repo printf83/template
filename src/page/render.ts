@@ -31,31 +31,74 @@ export function render<T extends readonly SchemaItem[]>(
 			margin-bottom: calc((1 - var(--scale)) * -100%);
 		}
 	}
+	
+	@meida print {
+		#pageControlContainer {
+			display: none !important;
+		}
+	}
 	`;
+	// PAGE CONTROL CSS
+	// #pageControlContainer {
+	// 	display: none;
+	// 	position: fixed;
+	// 	z-index: 9999;
+	// 	display: none;
+	// 	pointer-events: auto;
+	// }
 
+	// #pageControlContainer .page-control-body {
+	// 	padding: 0.25rem 0.5rem;
+	// 	display: flex;
+	// 	flex: col;
+	// 	gap: 0.25rem;
+	// }
+
+	const systemScript = "";
 	// const systemScript = `
 	// document.addEventListener("DOMContentLoaded", () => {
-	//     document.addEventListener("mouseover", (event) => {
-	//         const page = event.target.closest(".page");
-	//         if (page && !page.contains(event.relatedTarget)) {
-	//             page.classList.add("page-hovered");
-	//             console.log("Hover ENTER .page");
-	//         }
-	//     });
+	// 	const pageControlContainer = document.getElementById("pageControlContainer");
+	// 	if (!pageControlContainer) return;
 
-	//     document.addEventListener("mouseout", (event) => {
-	//         const page = event.target.closest(".page");
-	//         if (page && !page.contains(event.relatedTarget)) {
-	//             page.classList.remove("page-hovered");
-	//             console.log("Hover LEAVE .page", page);
-	//         }
-	//     });
+	// 	pageControlContainer.addEventListener("mouseenter", () => {
+	// 		pageControlContainer.style.display = "inline-block";
+	// 	});
+
+	// 	document.addEventListener("mouseover", (event) => {
+	// 		const page = event.target.closest(".page");
+
+	// 		if (page && !page.contains(event.relatedTarget)) {
+	// 			page.classList.add("page-hovered");
+
+	// 			const rect = page.getBoundingClientRect();
+
+	// 			pageControlContainer.style.top = (rect.top + window.pageYOffset) + "px";
+	// 			pageControlContainer.style.left = (rect.left + window.pageXOffset) + "px";
+	// 			pageControlContainer.style.display = "inline-block";
+	// 		}
+	// 	});
+
+	// 	document.addEventListener("mouseout", (event) => {
+	// 		const page = event.target.closest(".page");
+
+	// 		if (page && !page.contains(event.relatedTarget)) {
+	// 			if (!pageControlContainer.contains(event.relatedTarget)) {
+	// 				page.classList.remove("page-hovered");
+	// 				pageControlContainer.style.display = null;
+	// 			}
+	// 		}
+	// 	});
 	// });
 	// `;
 
-	const systemScript = "";
-
 	const systemHtml = ``;
+	// const systemHtml = `
+	// <div id="pageControlContainer">
+	// 	<div class="page-control-body">
+	// 		<div>Print</div> | <div>PDF</div>
+	// 	</div>
+	// </div>
+	// `;
 
 	const generatedHtml = html(data);
 	const finalHtml = [generatedHtml, systemHtml].filter(Boolean).join("\n");

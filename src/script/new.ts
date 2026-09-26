@@ -56,7 +56,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 				import("../data/template_command"),
 				import("../data/template_picture"),
 				import("../data/template_asset"),
-				import("../data/template_5K"),
+				import("../data/template_1K"),
 			]);
 
 			templateMap = {

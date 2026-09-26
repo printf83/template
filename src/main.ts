@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 		data: Data<T> | null,
 	) => {
 		if (iframe) {
+			console.time("Build Template");
+
 			const { html, style, script } = render(data);
 			iframe.srcdoc = minifies(
 				`<!DOCTYPE html>
@@ -36,6 +38,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 					</body>
 				</html>`,
 			);
+
+			console.timeEnd("Build Template");
 		}
 	};
 

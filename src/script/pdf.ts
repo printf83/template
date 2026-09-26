@@ -105,6 +105,8 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 		import("html-to-image"),
 	]);
 
+	console.time("Generate PDF");
+
 	let pdf: jsPDF | null = null;
 
 	for (let i = 0; i < pages.length; i++) {
@@ -152,6 +154,8 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 			);
 		}
 	}
+
+	console.timeEnd("Generate PDF");
 
 	if (pdf) {
 		pdf.save(filename);

@@ -30,9 +30,8 @@ export const data = createData({
 		},
 	],
 	short: {
-		executive: "exc",
-		manager: "mgr",
-		engineer: "eng",
+		bin: "b",
+		binti: "bt",
 	},
 	asset: {
 		company: "COMPANY <span class='italic underline'>NAME</span>",
@@ -40,7 +39,7 @@ export const data = createData({
 	},
 	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
 	<div>ID : <span class="font-semibold">{{id}}</span></div>
-	<div>Name : <span class="font-semibold">{{name}}</span></div>
+	<div>Name : <span class="font-semibold">{{%short name}}</span></div>
 	<div>Company : <span class="font-semibold">{{#asset company}}</span></div>
 	<div>Company Logo :
 		<div class="asset-[logo] w-24 h-24 bg-cover bg-center bg-no-repeat"></div>

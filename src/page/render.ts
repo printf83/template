@@ -53,7 +53,10 @@ export function render<T extends readonly SchemaItem[]>(
 	});
 	`;
 
+	const systemHtml = ``;
+
 	const generatedHtml = html(data);
+	const finalHtml = [generatedHtml, systemHtml].filter(Boolean).join("\n");
 
 	const generatedStyle = style(generatedHtml, data);
 	const userStyle = data.style ?? "";
@@ -67,7 +70,7 @@ export function render<T extends readonly SchemaItem[]>(
 	const finalScript = [userScript, systemScript].filter(Boolean).join("\n");
 
 	return {
-		html: generatedHtml,
+		html: finalHtml,
 		style: finalStyle,
 		script: finalScript,
 	};

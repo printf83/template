@@ -1,4 +1,4 @@
-import { renderIcons } from "./icon";
+import { initIcons } from "./utils";
 
 export type ToastType = "success" | "error" | "warning" | "info";
 
@@ -90,7 +90,7 @@ export class Toast {
         `;
 
 		container.appendChild(toast);
-		renderIcons();
+		initIcons();
 
 		// Animate in
 		requestAnimationFrame(() => {

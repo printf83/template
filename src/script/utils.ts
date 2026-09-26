@@ -35,3 +35,15 @@ export function selectFile(accept: string): Promise<File | null> {
 		input.click();
 	});
 }
+
+// Dynamic load icon
+export async function initIcons() {
+	const { renderIcons } = await import("./icon");
+	renderIcons();
+}
+
+// Dynamic load default data
+export async function initData() {
+	const { data } = await import("../data/template_csv");
+	return data;
+}

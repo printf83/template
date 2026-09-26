@@ -1,5 +1,3 @@
-import { renderIcons } from "./script/icon";
-import { data } from "./data/template_csv";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
 import "./style/main.css";
@@ -11,9 +9,10 @@ import { attachUploadFile } from "./script/upload";
 import { attachEditorNew } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
 import type { Data, SchemaItem } from "./type/data";
+import { initData, initIcons } from "./script/utils";
 
-document.addEventListener("DOMContentLoaded", () => {
-	renderIcons();
+document.addEventListener("DOMContentLoaded", async () => {
+	initIcons();
 	initEditor();
 
 	const iframe = document.getElementById(
@@ -40,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	};
 
+	const data = await initData();
 	const currentData = setCurrentData(data);
 	genPage(currentData);
 

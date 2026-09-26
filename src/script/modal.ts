@@ -1,4 +1,4 @@
-import { renderIcons } from "./icon";
+import { initIcons } from "./utils";
 
 export type ModalType = "info" | "warning" | "error" | "success" | "question";
 
@@ -96,7 +96,7 @@ export class Modal {
 			document.body.appendChild(dialog);
 			dialog.showModal();
 
-			renderIcons();
+			initIcons();
 
 			// Animate in
 			requestAnimationFrame(() => {

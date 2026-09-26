@@ -1,6 +1,5 @@
-import { toJpeg } from "html-to-image";
-import jsPDF from "jspdf";
-import { renderIcons } from "./icon";
+import type { jsPDF } from "jspdf";
+import { initIcons } from "./utils";
 
 function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
 	const iconEl = btn.querySelector("[data-icon]");
@@ -10,7 +9,7 @@ function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
 	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
 
 	// Re-render Lucide icons to swap SVG
-	renderIcons();
+	initIcons();
 }
 
 export function attachBtnDownloadPdf(
@@ -101,6 +100,11 @@ function parsePageConfig(element: HTMLElement) {
 }
 
 async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
+	const [{ jsPDF: JS_PDF }, { toJpeg }] = await Promise.all([
+		import("jspdf"),
+		import("html-to-image"),
+	]);
+
 	let pdf: jsPDF | null = null;
 
 	for (let i = 0; i < pages.length; i++) {
@@ -123,7 +127,7 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 		}
 
 		if (i === 0) {
-			pdf = new jsPDF({
+			pdf = new JS_PDF({
 				orientation: orientation,
 				unit: "mm",
 				format: format,

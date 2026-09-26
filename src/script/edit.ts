@@ -275,7 +275,11 @@ export function formatCSV(data: unknown): string {
 }
 
 /** Populates all initialized editors with data */
-export function setEditData<T extends readonly SchemaItem[]>(data: Data<T>) {
+export function setEditData<T extends readonly SchemaItem[]>(
+	data: Data<T> | null,
+) {
+	if (!data) return;
+
 	// Raw Text Editors
 	editorState.html?.setValue(data.template ?? "");
 	editorState.style?.setValue(data.style ?? "");

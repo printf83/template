@@ -9,20 +9,39 @@ import { attachCopyFile } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
 import { attachEditorNew } from "./script/new";
+import { getCurrentData, setCurrentData } from "./data/data";
+import type { Data, SchemaItem } from "./type/data";
 
 document.addEventListener("DOMContentLoaded", () => {
 	renderIcons();
+	initEditor();
 
 	const iframe = document.getElementById(
 		"iframe",
 	) as HTMLIFrameElement | null;
 
-	if (iframe) {
-		const { html, style, script } = render(data);
-		iframe.srcdoc = minifies(
-			`<!DOCTYPE html><html><head>${style ? `<style>${style}</style>` : ``}</head><body>${html}${script ? `<script>${script}</script>` : ``}</body></html>`,
-		);
-	}
+	const genPage = <const T extends readonly SchemaItem[]>(
+		data: Data<T> | null,
+	) => {
+		if (iframe) {
+			const { html, style, script } = render(data);
+			iframe.srcdoc = minifies(
+				`<!DOCTYPE html>
+				<html>
+					<head>
+						${style ? `<style>${style}</style>` : ``}
+					</head>
+					<body>
+						${html}
+						${script ? `<script>${script}</script>` : ``}
+					</body>
+				</html>`,
+			);
+		}
+	};
+
+	const currentData = setCurrentData(data);
+	genPage(currentData);
 
 	const btnPrint = document.getElementById(
 		"btnPrintAll",
@@ -71,6 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	const ctlMain = document.getElementById("ctlMain") as HTMLDivElement;
 	const ctlEditor = document.getElementById("ctlEditor") as HTMLDivElement;
 	const btnEditor = document.getElementById("btnEditor") as HTMLButtonElement;
+	const btnEditorCancel = document.getElementById(
+		"btnEditorCancel",
+	) as HTMLButtonElement;
 	const btnEditorSave = document.getElementById(
 		"btnEditorSave",
 	) as HTMLButtonElement;
@@ -81,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		ctlMain &&
 		ctlEditor &&
 		btnEditor &&
+		btnEditorCancel &&
 		btnEditorSave
 	) {
 		btnEditor.addEventListener("click", () => {
@@ -88,27 +111,28 @@ document.addEventListener("DOMContentLoaded", () => {
 			ctlEditor.classList.remove("hidden");
 			formMain.classList.add("hidden");
 			formEditor.classList.remove("hidden");
+
+			setEditData(getCurrentData());
 		});
+
+		btnEditorCancel.addEventListener("click", () => {
+			ctlEditor.classList.add("hidden");
+			ctlMain.classList.remove("hidden");
+			formEditor.classList.add("hidden");
+			formMain.classList.remove("hidden");
+		});
+
 		btnEditorSave.addEventListener("click", () => {
 			ctlEditor.classList.add("hidden");
 			ctlMain.classList.remove("hidden");
 			formEditor.classList.add("hidden");
 			formMain.classList.remove("hidden");
 
-			const d = getEditData();
-			if (d) {
-				Object.assign(data, d);
-
-				const { html, style, script } = render(data);
-				if (iframe) {
-					iframe.srcdoc = minifies(
-						`<!DOCTYPE html><html><head>${style ? `<style>${style}</style>` : ``}</head><body>${html}${script ? `<script>${script}</script>` : ``}</body></html>`,
-					);
-				}
+			const editedData = getEditData();
+			if (editedData) {
+				setCurrentData(editedData);
+				genPage(editedData);
 			}
 		});
 	}
-
-	initEditor();
-	setEditData(data);
 });

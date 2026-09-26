@@ -14,15 +14,65 @@ export function minifies(html: string): string {
 }
 
 export function render<T extends readonly SchemaItem[]>(
-	data: Data<T>,
-): { html: string; style: string; script: string } {
+	data: Data<T> | null,
+): {
+	html?: string;
+	style?: string;
+	script?: string;
+} {
+	if (!data) return {};
+
+	const systemStyle = `
+	@media screen {
+		body {
+			/* tan(atan2(100vw, 1200px)) calculates (100vw / 1200px) as a unitless number */
+			--scale: clamp(0.5, tan(atan2(100vw, 1200px)), 1);
+
+			transform: scale(var(--scale));
+			transform-origin: top center;
+
+			/* Now calc() can safely subtract unitless numbers */
+			margin-bottom: calc((1 - var(--scale)) * -100%);
+		}
+	}
+	`;
+
+	const systemScript = `
+	document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("mouseover", (event) => {
+            const page = event.target.closest(".page");
+            if (page && !page.contains(event.relatedTarget)) {
+                page.classList.add("page-hovered");
+                console.log("Hover ENTER .page");
+            }
+        });
+
+        document.addEventListener("mouseout", (event) => {
+            const page = event.target.closest(".page");
+            if (page && !page.contains(event.relatedTarget)) {
+                page.classList.remove("page-hovered");
+                console.log("Hover LEAVE .page", page);
+            }
+        });
+	});
+	`;
+
 	const generatedHtml = html(data);
+
 	const generatedStyle = style(generatedHtml, data);
 	const userStyle = data.style ?? "";
 
 	// Concatenate generated atomic classes with custom user CSS
-	const finalStyle = [generatedStyle, userStyle].filter(Boolean).join("\n");
-	const script = data.script ?? "";
+	const finalStyle = [generatedStyle, userStyle, systemStyle]
+		.filter(Boolean)
+		.join("\n");
 
-	return { html: generatedHtml, style: finalStyle, script };
+	const userScript = data.script ?? "";
+	const finalScript = [userScript, systemScript].filter(Boolean).join("\n");
+
+	return {
+		html: generatedHtml,
+		style: finalStyle,
+		script: finalScript,
+	};
 }

@@ -159,11 +159,28 @@ export const NATIONALITY_CONFIG = {
 	},
 };
 
-const numberToWords = {
-	EN: (num: number): string => {
-		if (num === 0) return "Zero";
+// ============================================================================
+// NUMBER & CURRENCY CONFIGURATION
+// ============================================================================
 
-		const units = [
+export const NUMBER_CONFIG = {
+	EN: {
+		zero: "Zero",
+		point: "point",
+		andCents: "and Cents",
+		digits: [
+			"Zero",
+			"One",
+			"Two",
+			"Three",
+			"Four",
+			"Five",
+			"Six",
+			"Seven",
+			"Eight",
+			"Nine",
+		],
+		units: [
 			"",
 			"One",
 			"Two",
@@ -174,8 +191,8 @@ const numberToWords = {
 			"Seven",
 			"Eight",
 			"Nine",
-		];
-		const teens = [
+		],
+		teens: [
 			"Ten",
 			"Eleven",
 			"Twelve",
@@ -186,8 +203,8 @@ const numberToWords = {
 			"Seventeen",
 			"Eighteen",
 			"Nineteen",
-		];
-		const tens = [
+		],
+		tens: [
 			"",
 			"",
 			"Twenty",
@@ -198,42 +215,27 @@ const numberToWords = {
 			"Seventy",
 			"Eighty",
 			"Ninety",
-		];
-
-		function convertGroup(n: number): string {
-			let res = "";
-			if (n >= 100) {
-				res += `${units[Math.floor(n / 100)]} Hundred `;
-				n %= 100;
-			}
-			if (n >= 20) {
-				res += `${tens[Math.floor(n / 10)]} `;
-				n %= 10;
-			} else if (n >= 10) {
-				res += `${teens[n - 10]} `;
-				n = 0;
-			}
-			if (n > 0) {
-				res += `${units[n]} `;
-			}
-			return res.trim();
-		}
-
-		if (num < 1000) return convertGroup(num);
-
-		const thousands = Math.floor(num / 1000);
-		const remainder = num % 1000;
-
-		let result = `${convertGroup(thousands)} Thousand`;
-		if (remainder > 0) {
-			result += ` ${convertGroup(remainder)}`;
-		}
-		return result.trim();
+		],
+		hundred: "Hundred",
+		thousand: "Thousand",
 	},
-	MY: (num: number): string => {
-		if (num === 0) return "Kosong";
-
-		const units = [
+	MY: {
+		zero: "Kosong",
+		point: "perpuluhan",
+		andCents: "dan Sen",
+		digits: [
+			"Kosong",
+			"Satu",
+			"Dua",
+			"Tiga",
+			"Empat",
+			"Lima",
+			"Enam",
+			"Tujuh",
+			"Lapan",
+			"Sembilan",
+		],
+		units: [
 			"",
 			"Satu",
 			"Dua",
@@ -244,28 +246,47 @@ const numberToWords = {
 			"Tujuh",
 			"Lapan",
 			"Sembilan",
-		];
+		],
+		tens: [
+			"",
+			"",
+			"Dua Puluh",
+			"Tiga Puluh",
+			"Empat Puluh",
+			"Lima Puluh",
+			"Enam Puluh",
+			"Tujuh Puluh",
+			"Lapan Puluh",
+			"Sembilan Puluh",
+		],
+		hundred: "Ratus",
+		puluh: "Puluh",
+		belas: "Belas",
+		sepuluh: "Sepuluh",
+		thousand: "Ribu",
+	},
+};
+
+const numberToWords = {
+	EN: (num: number): string => {
+		const cfg = NUMBER_CONFIG.EN;
+		if (num === 0) return cfg.zero;
 
 		function convertGroup(n: number): string {
 			let res = "";
 			if (n >= 100) {
-				const hundred = Math.floor(n / 100);
-				res += `${units[hundred]} Ratus `;
+				res += `${cfg.units[Math.floor(n / 100)]} ${cfg.hundred} `;
 				n %= 100;
 			}
 			if (n >= 20) {
-				const ten = Math.floor(n / 10);
-				res += `${units[ten]} Puluh `;
+				res += `${cfg.tens[Math.floor(n / 10)]} `;
 				n %= 10;
-			} else if (n >= 11) {
-				res += `${units[n - 10]} Belas `;
-				n = 0;
-			} else if (n === 10) {
-				res += "Sepuluh ";
+			} else if (n >= 10) {
+				res += `${cfg.teens[n - 10]} `;
 				n = 0;
 			}
 			if (n > 0) {
-				res += `${units[n]} `;
+				res += `${cfg.units[n]} `;
 			}
 			return res.trim();
 		}
@@ -275,7 +296,46 @@ const numberToWords = {
 		const thousands = Math.floor(num / 1000);
 		const remainder = num % 1000;
 
-		let result = `${convertGroup(thousands)} Ribu`;
+		let result = `${convertGroup(thousands)} ${cfg.thousand}`;
+		if (remainder > 0) {
+			result += ` ${convertGroup(remainder)}`;
+		}
+		return result.trim();
+	},
+	MY: (num: number): string => {
+		const cfg = NUMBER_CONFIG.MY;
+		if (num === 0) return cfg.zero;
+
+		function convertGroup(n: number): string {
+			let res = "";
+			if (n >= 100) {
+				const hundred = Math.floor(n / 100);
+				res += `${cfg.units[hundred]} ${cfg.hundred} `;
+				n %= 100;
+			}
+			if (n >= 20) {
+				const ten = Math.floor(n / 10);
+				res += `${cfg.units[ten]} ${cfg.puluh} `;
+				n %= 10;
+			} else if (n >= 11) {
+				res += `${cfg.units[n - 10]} ${cfg.belas} `;
+				n = 0;
+			} else if (n === 10) {
+				res += `${cfg.sepuluh} `;
+				n = 0;
+			}
+			if (n > 0) {
+				res += `${cfg.units[n]} `;
+			}
+			return res.trim();
+		}
+
+		if (num < 1000) return convertGroup(num);
+
+		const thousands = Math.floor(num / 1000);
+		const remainder = num % 1000;
+
+		let result = `${convertGroup(thousands)} ${cfg.thousand}`;
 		if (remainder > 0) {
 			result += ` ${convertGroup(remainder)}`;
 		}
@@ -285,19 +345,23 @@ const numberToWords = {
 
 /** Formats currency to text based on language */
 function formatMoneyText(val: unknown, lang: SupportedLang): string {
-	const num = typeof val === "number" ? val : parseFloat(String(val));
-	if (isNaN(num)) return String(val ?? "");
+	const rawStr = String(val ?? "").trim();
+	const num = parseFloat(rawStr);
+	if (isNaN(num)) return rawStr;
 
-	const intPart = Math.floor(Math.abs(num));
-	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
+	// Use fixed string formatting to prevent float precision rounding bugs
+	const fixedStr = Math.abs(num).toFixed(2);
+	const [intStr, fracStr] = fixedStr.split(".");
 
+	const intPart = parseInt(intStr, 10);
+	const fracPart = parseInt(fracStr, 10);
+
+	const cfg = NUMBER_CONFIG[lang];
 	const intWords = numberToWords[lang](intPart);
 
 	if (fracPart > 0) {
 		const fracWords = numberToWords[lang](fracPart);
-		return lang === "EN"
-			? `${intWords} and Cents ${fracWords}`
-			: `${intWords} dan Sen ${fracWords}`;
+		return `${intWords} ${cfg.andCents} ${fracWords}`;
 	}
 
 	return intWords;
@@ -305,19 +369,29 @@ function formatMoneyText(val: unknown, lang: SupportedLang): string {
 
 /** Formats number to text based on language */
 function formatNumberText(val: unknown, langKey: SupportedLang): string {
-	const num = typeof val === "number" ? val : parseFloat(String(val));
-	if (isNaN(num)) return String(val ?? "");
+	const strVal = String(val ?? "").trim();
+	const num = parseFloat(strVal);
+	if (isNaN(num)) return strVal;
 
-	const intPart = Math.floor(Math.abs(num));
-	const fracPart = Math.round((Math.abs(num) - intPart) * 100);
-
+	const cfg = NUMBER_CONFIG[langKey];
+	const parts = strVal.split(".");
+	const intPart = Math.abs(parseInt(parts[0], 10) || 0);
 	const intWords = numberToWords[langKey](intPart);
 
-	if (fracPart > 0) {
-		const fracWords = numberToWords[langKey](fracPart);
-		return langKey === "EN"
-			? `${intWords} point ${fracWords}`
-			: `${intWords} perpuluhan ${fracWords}`;
+	// Decimals are pronounced digit-by-digit (e.g. 1.02 -> One point Zero Two)
+	if (parts.length > 1 && parts[1].length > 0) {
+		const fracWords = parts[1]
+			.split("")
+			.map((char) => {
+				const digit = parseInt(char, 10);
+				return isNaN(digit) ? "" : cfg.digits[digit];
+			})
+			.filter(Boolean)
+			.join(" ");
+
+		if (fracWords) {
+			return `${intWords} ${cfg.point} ${fracWords}`;
+		}
 	}
 
 	return intWords;
@@ -501,11 +575,32 @@ function executeHelper<T extends readonly SchemaItem[]>(
 			const dict = data.short;
 			if (!dict) return str;
 
-			// Replace whole words based on dictionary lookup
-			return str
-				.split(" ")
-				.map((word) => dict[word] || word)
-				.join(" ");
+			return str.replace(/\b[A-Za-z0-9_]+\b/g, (word) => {
+				// 1. Look up using lowercase key
+				const key = word.toLowerCase();
+				const replacement = dict[key];
+
+				if (!replacement) return word;
+
+				// 2. ALL UPPERCASE (e.g., "DARIPADA" -> "DPD")
+				if (word === word.toUpperCase()) {
+					return replacement.toUpperCase();
+				}
+
+				// 3. Title Case (e.g., "Daripada" -> "Dpd")
+				if (
+					word[0] === word[0].toUpperCase() &&
+					word.slice(1) === word.slice(1).toLowerCase()
+				) {
+					return (
+						replacement.charAt(0).toUpperCase() +
+						replacement.slice(1).toLowerCase()
+					);
+				}
+
+				// 4. Default / Lowercase (e.g., "daripada" -> "dpd")
+				return replacement.toLowerCase();
+			});
 		}
 		case "uppercase":
 			return String(val).toUpperCase();
@@ -524,6 +619,19 @@ function executeHelper<T extends readonly SchemaItem[]>(
 	}
 }
 
+/** Chain-executes multiple helper functions right-to-left */
+function executeHelpers<T extends readonly SchemaItem[]>(
+	fnNames: string[],
+	val: unknown,
+	data: Data<T>,
+): string {
+	// Right-to-left execution: %uppercase %short %money_text amount
+	// equals uppercase(short(money_text(amount)))
+	return fnNames.reduceRight((currentVal: unknown, fnName) => {
+		return executeHelper(fnName, currentVal, data);
+	}, val) as string;
+}
+
 // ============================================================================
 // TOKENIZER & AST PARSER
 // ============================================================================
@@ -537,6 +645,7 @@ interface ASTNode {
 	type: "TEXT" | "VAR" | "FUNC" | "SCOPE" | "LOOP" | "IF" | "IFNOT" | "ASSET";
 	key?: string;
 	fnName?: string;
+	fnNames?: string[];
 	value?: string;
 	children?: ASTNode[];
 }
@@ -640,11 +749,22 @@ function buildAST(tokens: Token[]): ASTNode[] {
 		}
 		// 7. Function Helper: %fn key
 		else if (content.startsWith("%")) {
-			const parts = content.slice(1).trim().split(/\s+/);
+			const parts = content.trim().split(/\s+/);
+			const fnNames: string[] = [];
+			const keyParts: string[] = [];
+
+			for (const part of parts) {
+				if (part.startsWith("%")) {
+					fnNames.push(part.slice(1));
+				} else {
+					keyParts.push(part);
+				}
+			}
+
 			targetContainer.push({
 				type: "FUNC",
-				fnName: parts[0],
-				key: parts.slice(1).join(" "),
+				fnNames,
+				key: keyParts.join(" "),
 			});
 		}
 		// 8. Standard Variable Placeholder
@@ -755,7 +875,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 
 			case "FUNC": {
 				const val = resolveValue(node.key!, scopeStack, rootRecord);
-				output += executeHelper(node.fnName!, val, data);
+				output += executeHelpers(node.fnNames!, val, data);
 				break;
 			}
 

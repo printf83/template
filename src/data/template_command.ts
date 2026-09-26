@@ -61,24 +61,26 @@ export const data = createData({
 	asset: {
 		"file-1": "",
 	},
-	template: `
-	<div class="page a4 page-m-[15mm]" contenteditable="true">
-        <div>ID : <span class="font-semibold">{{id}}</span></div>
-		<div>Name : <span class="font-semibold">{{name}}</span></div>
-		<div>Nric : <span class="font-semibold">{{%nric nric}}</span></div>
-		<div>Age : <span class="font-semibold">{{%age nric}} Years Old</span></div>
-		<div>Sex : <span class="font-semibold">{{%sex nric}}</span></div>
-		<div>Nationality : <span class="font-semibold">{{%nationality nric}}</span></div>
-		<div>Job : <span class="font-semibold">{{%short job}}</span></div>
-		<div class="flex gap-2">Salary : 
-			<span class="font-semibold">MYR {{%money salary}}</span>
-			<span class="font-semibold">(Malaysian Ringgit {{%money_text salary}} Only)</span>
-		</div>
-		<div class="flex gap-2">Weight : 
-			<span class="font-semibold">{{%number weight}} Kg</span>
-			<span class="font-semibold">({{%number_text weight}} Kilogram)</span>
-		</div>
-    </div>
+	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
+	<div>ID : <span class="font-semibold">{{id}}</span></div>
+	<div>Name : <span class="font-semibold">{{name}}</span></div>
+	<div>Nric : <span class="font-semibold">{{%nric nric}}</span></div>
+	<div class="flex gap-2">Age : 
+		<span class="font-semibold">{{%age nric}} yo</span>
+		<span class="italic">({{%titlecase %number_text %age nric}} Years Old)</span>
+	</div>	
+	<div>Sex : <span class="font-semibold">{{%sex nric}}</span></div>
+	<div>Nationality : <span class="font-semibold">{{%nationality nric}}</span></div>
+	<div>Job : <span class="font-semibold">{{%short job}}</span></div>
+	<div class="flex gap-2">Salary : 
+		<span class="font-semibold">MYR {{%money salary}}</span>
+		<span class="italic">(Malaysian Ringgit {{%titlecase %money_text salary}} Only)</span>
+	</div>
+	<div class="flex gap-2">Weight : 
+		<span class="font-semibold">{{%number weight}} Kg</span>
+		<span class="italic">({{%titlecase %number_text weight}} Kilogram)</span>
+	</div>
+</div>
 	`,
 	thumb: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAABYlQAAWJUB2W030wAAAAd0SU1FB+oJGgkXMRIz+O0AAAGRSURBVDjLndSxSlthFAfwX24SzB0MRRAko0JDKH0Bhw4S6GAhQ0aH7q5CnsEnUHDr4AMIdmgGAxl8gVLCLdQlGAQ71Cpc5SZ8HXq5NCkI8ZzpnO//5/vO/5zzQV1PIvOgr23R2voeZBI9dag7lgm5X+vOwbuui7PMsTo9mWDgwKGxILFVwLckgrFDBwaCTI9EMLABOu4E+wVhX3CnAzYMBElkE+duwIURmgWhiZELcOMcm5EnrOeAqRTVglBFappH63iKXGJPx6pYrIyKmlispoKyWGxVxx4uS9o+afhtJFX21isT35UQvNbwy1czsZa6iY9/pUsK6Z7zRJdSLt97TVUVuxq+GeavfueNic+mMokvfix2tWYgOCriI8FA7V9INEco5Tc+k4ssafOEIPyHWMi9qOglZV26cX3BOB+NNUPBSTEaJ4KhtXw0xoJ+ZBunztxLpWaYepRKPZpiJpW6d+YU25EV3OZFVsTICkkyxCp59BMrkSt8yBdoRwtJQUjQspMv0C6uXrCiS38CS34zfwD6q+Ip5c11jAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNi0wOS0yNlQwOToyMzo0OSswMDowMAKfG48AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjYtMDktMjZUMDk6MjM6NDkrMDA6MDBzwqMzAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI2LTA5LTI2VDA5OjIzOjQ5KzAwOjAwJNeC7AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=",
 });

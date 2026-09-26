@@ -31,12 +31,11 @@ export const data = createData({
 	asset: {
 		"file-1": "",
 	},
-	template: `
-	<div class="page a4 page-m-[15mm]" contenteditable="true">
-        <div>Col1 : <span class="font-semibold">{{col1}}</span></div>
-		<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
-		<div>Col3 : <span class="font-semibold">{{col3}}</span></div>
-    </div>
+	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
+	<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
+	<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
+	<div>Col3 : <span class="font-semibold">{{col3}}</span></div>
+</div>
 	`,
 	thumb: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAAd0SU1FB+oJGgkXMRIz+O0AAAHASURBVDjLjdI/SJRxHMfx13OexqWmNVg4BQWFIkHXUjpk2VogBSURETRIU0REDg022OAQGNEStjUUDQ3REAX9nW4Si5AGlwyKHk7FzPN8Gu4577zuur7Dw/Pj93n/Pp/v7/sLIE3glAGRygrk3DUNGZCMNzodM2nxLyDvuAnDPpOWKQOaZX2o4sBe+4245VMBKQIRGqxmKtRpGj0z67qxApJQr37qkfXFHV38+g/grSknBGZctSW1Hql2LZkELW5rNV9yCKqpy3oKrIlIpgvLFVmrpOsaFiJttcuM/qrXSs5HYTmwybgzIoGESCQQxGgkQOSh4eJhCbTplbJZwjcLUnLm/LZkRSr+9movAkni8767Zsoel436od+q0E0XnHS+PGrplp56b8Ko0DtHnNXjjZemdVVrGr7qcEBShyseWHRJk/t2694IlBzSZt1wT8aanabssM8LRzVXcwgwYMxr220T6nZai4s6DVYONYllIZoMGQLj8V6fvvgvtFyEksgaMaix5nBznpjXWh7plWmHPaox6Y1Nx8+r3UEN9eUk1l9kXv6fynyh+eIcFrU5ZKGmPNKh0VIJmPPcuTppHgv5AzVMfDbh3LrSAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI2LTA5LTI2VDA5OjIzOjQ5KzAwOjAwAp8bjwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNi0wOS0yNlQwOToyMzo0OSswMDowMHPCozMAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjYtMDktMjZUMDk6MjM6NDkrMDA6MDAk14LsAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg==",
 });

@@ -5,7 +5,7 @@
 
 .new-list > label {
 	@apply flex flex-col justify-end items-center w-28 h-36 rounded-sm cursor-pointer pb-1
-    bg-contain bg-center bg-no-repeat
+    bg-center bg-no-repeat
 	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-100 hover:text-neutral-900 shadow-xs
 	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;
 }

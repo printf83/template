@@ -65,7 +65,7 @@ export class Modal {
 					: "";
 
 			const dialog = document.createElement("dialog");
-			dialog.className = `modal ${options.size ? `${options.size}` : ""}`;
+			dialog.className = `modal ${options.size} translate-y-4 opacity-0 scale-95`;
 			dialog.innerHTML = `
                 <div class="modal-content">
                     ${modalHeader}
@@ -98,11 +98,38 @@ export class Modal {
 
 			renderIcons();
 
+			// Animate in
+			requestAnimationFrame(() => {
+				dialog.classList.remove(
+					"translate-y-4",
+					"opacity-0",
+					"scale-95",
+				);
+				dialog.classList.add(
+					"translate-y-0",
+					"opacity-100",
+					"scale-100",
+				);
+			});
+
 			// Safe cleanup helper
 			const cleanup = (value: T | null) => {
-				dialog.close();
-				dialog.remove();
-				resolve(value);
+				dialog.classList.remove(
+					"translate-y-0",
+					"opacity-100",
+					"scale-100",
+				);
+				dialog.classList.add("translate-y-2", "opacity-0", "scale-95");
+
+				dialog.addEventListener(
+					"transitionend",
+					() => {
+						dialog.close();
+						dialog.remove();
+						resolve(value);
+					},
+					{ once: true },
+				);
 			};
 
 			// Event Listeners

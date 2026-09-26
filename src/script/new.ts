@@ -5,22 +5,41 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 	btn.addEventListener("click", async () => {
 		const formEl = document.createElement("form");
+
 		formEl.innerHTML = `
-            <div class="h-80">
-                <input type="text" id="template-name" class="input" placeholder="e.g. Invoice Template" required style="width: 100%; padding: 0.5rem;"/>
+            <div class="new-list">
+                <label>
+                    <span class="text-xs font-medium">Blank</span>
+                    <input type="radio" name="new-list-item" value="blank" checked>
+                </label>
+
+                <label>
+                    <span class="text-xs font-medium">Invoice</span>
+                    <input type="radio" name="new-list-item" value="invoice">
+                </label>
+
+                <label>
+                    <span class="text-xs font-medium">Receipt</span>
+                    <input type="radio" name="new-list-item" value="receipt">
+                </label>
             </div>
         `;
 
 		const result = await Modal.show({
+			title: "Select Template",
 			body: formEl,
 			confirmText: "Create",
-			size: "min-w-2xl!",
+			size: "min-w-3xl!",
 		});
 
 		if (result) {
-			const input =
-				formEl.querySelector<HTMLInputElement>("#template-name");
-			console.log("New template name:", input?.value);
+			// Retrieve the value of the checked radio button
+			const selectedOption = formEl.querySelector<HTMLInputElement>(
+				'input[name="new-list-item"]:checked',
+			);
+
+			const templateValue = selectedOption?.value;
+			console.log("Selected template:", templateValue);
 		}
 	});
 }

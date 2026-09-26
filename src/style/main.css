@@ -2,8 +2,10 @@
 @import "form.css";
 @import "tab.css";
 @import "modal.css";
+@import "toast.css";
 @import "button.css";
 @import "icon.css";
+@import "new.css";
 @import "rainbow.css";
 
 .main {

@@ -5,8 +5,10 @@ export type ToastType = "success" | "error" | "warning" | "info";
 export interface ToastOptions {
 	message: string;
 	type?: ToastType;
-	duration?: number; // Duration in ms (default: 3000ms, 0 = persistent)
+	duration?: number; // Duration in ms (default: DEFAULT_AUTO_DISMISS_DURATIONms, 0 = persistent)
 }
+
+const AUTO_CLOSE_DURATION = 5000;
 
 export class Toast {
 	private static container: HTMLDivElement | null = null;
@@ -36,7 +38,9 @@ export class Toast {
 		const toastType =
 			typeof options === "string" ? type : (options.type ?? "info");
 		const duration =
-			typeof options === "string" ? 3000 : (options.duration ?? 3000);
+			typeof options === "string"
+				? AUTO_CLOSE_DURATION
+				: (options.duration ?? AUTO_CLOSE_DURATION);
 
 		const container = this.getContainer();
 		const toast = document.createElement("div");
@@ -75,14 +79,14 @@ export class Toast {
 		const style = typeStyles[toastType];
 
 		// Layout & Initial animation state (hidden)
-		toast.className = `pointer-events-auto flex items-center justify-between gap-3 p-3 rounded-xl border shadow-lg ${style.bg} ${style.border} ${style.text} transition-all duration-300 transform translate-y-4 opacity-0 scale-95`;
+		toast.className = `toast ${style.bg} ${style.border} ${style.text} translate-y-4 opacity-0 scale-95`;
 
 		toast.innerHTML = `
-            <div class="flex items-center gap-3">
-                <i class="size-8" data-icon="${style.icon}"></i>
-                <span class="text-sm font-medium">${message}</span>
+            <div class="toast-body">
+                <i data-icon="${style.icon}"></i>
+                <span class="toast-content">${message}</span>
             </div>
-            <button type="button" class="toast-close bg-transparent border-0 text-gray-400 hover:text-gray-700 cursor-pointer p-0.5 rounded-md leading-none text-lg transition-colors">&times;</button>
+            <button type="button" class="toast-close ">&times;</button>
         `;
 
 		container.appendChild(toast);

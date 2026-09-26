@@ -1,0 +1,13 @@
+.new-list {
+	@apply h-80 mt-2 -mb-3 flex flex-row flex-wrap gap-2 p-2 justify-items-start border rounded overflow-y-auto;
+}
+
+.new-list > label {
+	@apply flex flex-col justify-center items-center w-20 h-24 border rounded p-2 cursor-pointer transition-colors hover:bg-gray-50;
+	/* Styles applied when the internal radio is checked */
+	@apply has-[:checked]:bg-blue-50 has-[:checked]:border-blue-600 has-[:checked]:text-blue-700 has-[:checked]:ring-2 has-[:checked]:ring-blue-600/20;
+}
+
+.new-list > label > input[type="radio"] {
+	@apply hidden;
+}

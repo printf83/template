@@ -6,81 +6,130 @@ export const data = createData({
 	schema: [
 		{ key: "id", type: "number" },
 		{ key: "name", type: "string" },
-		{ key: "nric", type: "string" },
-		{ key: "job", type: "string" },
-		{ key: "salary", type: "number" },
-		{ key: "weight", type: "number" },
+		{
+			key: "lang",
+			type: "array",
+			items: {
+				key: "item",
+				type: "object",
+				children: [
+					{ key: "title", type: "string" },
+					{ key: "level", type: "number" },
+				],
+			},
+		},
+		{
+			key: "hobby",
+			type: "array",
+			items: { key: "item", type: "string" },
+		},
+		{
+			key: "notify",
+			type: "number",
+		},
 	],
 	data: [
 		{
 			id: 1,
 			name: "Ahmad Firdaus bin Zamri",
-			nric: "931015145633",
-			job: "Software Engineer",
-			salary: 6500,
-			weight: 72.5,
+			lang: [
+				{ title: "C++", level: 5 },
+				{ title: "Basic", level: 8 },
+				{ title: "Visual Basic", level: 4 },
+			],
+			hobby: ["Reading", "Gardening", "Cooking"],
+			notify: 4,
 		},
 		{
 			id: 2,
 			name: "Nurul Aisyah binti Mansor",
-			nric: "960422105844",
-			job: "Accountant",
-			salary: 5200,
-			weight: 55.2,
+			lang: [
+				{ title: "Javascript", level: 4 },
+				{ title: "Typescript", level: 9 },
+				{ title: "GoLang", level: 2 },
+			],
+			hobby: ["Hiking", "Photography"],
+			notify: 2,
 		},
 		{
 			id: 3,
 			name: "Muhammad Khairul bin Azman",
-			nric: "891102086315",
-			job: "Project Manager",
-			salary: 8500,
-			weight: 80.1,
+			lang: [
+				{ title: "Rust", level: 7 },
+				{ title: "Python", level: 3 },
+				{ title: "C#", level: 5 },
+				{ title: "Java", level: 9 },
+			],
+			hobby: ["Painting"],
+			notify: 0,
 		},
 		{
 			id: 4,
 			name: "Siti Aminah binti Razali",
-			nric: "010708035296",
-			job: "Data Analyst",
-			salary: 4800,
-			weight: 61.8,
+			lang: [],
+			hobby: ["Gaming", "Traveling", "Knitting", "Writing"],
+			notify: 2,
 		},
 		{
 			id: 5,
 			name: "Mohd Syazwan bin Bakri",
-			nric: "950213115477",
-			job: "Marketing Executive",
-			salary: 4300,
-			weight: 68.4,
+			lang: [
+				{ title: "Ruby", level: 2 },
+				{ title: "SQL", level: 6 },
+				{ title: "PHP", level: 7 },
+				{ title: "R", level: 3 },
+			],
+			hobby: [],
+			notify: 3,
 		},
 	],
 	short: {
-		executive: "exc",
-		manager: "mgr",
-		engineer: "eng",
+		javascript: "js",
+		typescript: "ts",
+		golang: "go",
 	},
 	asset: {
 		"file-1": "",
 	},
 	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
-	<div>ID : <span class="font-semibold">{{id}}</span></div>
 	<div>Name : <span class="font-semibold">{{name}}</span></div>
-	<div>Nric : <span class="font-semibold">{{%nric nric}}</span></div>
-	<div class="flex gap-2">Age : 
-		<span class="font-semibold">{{%age nric}} yo</span>
-		<span class="italic">({{%titlecase %number_text %age nric}} Years Old)</span>
-	</div>	
-	<div>Sex : <span class="font-semibold">{{%sex nric}}</span></div>
-	<div>Nationality : <span class="font-semibold">{{%nationality nric}}</span></div>
-	<div>Job : <span class="font-semibold">{{%short job}}</span></div>
-	<div class="flex gap-2">Salary : 
-		<span class="font-semibold">MYR {{%money salary}}</span>
-		<span class="italic">(Malaysian Ringgit {{%titlecase %money_text salary}} Only)</span>
+
+	{{#if lang}}
+	<div>Language : 
+		<div class="flex flex-col gap-2">
+		{{#loop lang}}
+			<div class="flex gap-2">
+				<span>{{%short title}}</span>
+				<span>(Level #{{level}})</span>
+			</div>
+		{{/loop lang}}
+		</div>
 	</div>
-	<div class="flex gap-2">Weight : 
-		<span class="font-semibold">{{%number weight}} Kg</span>
-		<span class="italic">({{%titlecase %number_text weight}} Kilogram)</span>
+	{{/if lang}}
+
+	{{#if hobby}}
+	<div>Hobby : 
+		<div class="flex gap-2">
+		{{#loop hobby}}
+			<span class="bg-gray-200">{{_this}}</span>
+		{{/loop hobby}}
+		</div>
 	</div>
+	{{/if hobby}}
+
+	{{#if notify}}
+	<div>Notification : 
+		<span class="font-semibold text-rose-400">You have {{%lowercase %number_text notify}} notification.</span>
+	</div>
+	{{/if notify}}
+
+	{{#ifnot notify}}
+	<div>Notification : 
+		<span class="font-semibold text-blue-400">You have no notification.</span>
+	</div>
+	{{/ifnot notify}}
+
 </div>
 	`,
-	thumb: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAlwSFlzAABYlQAAWJUB2W030wAAAAd0SU1FB+oJGgkXMRIz+O0AAAGRSURBVDjLndSxSlthFAfwX24SzB0MRRAko0JDKH0Bhw4S6GAhQ0aH7q5CnsEnUHDr4AMIdmgGAxl8gVLCLdQlGAQ71Cpc5SZ8HXq5NCkI8ZzpnO//5/vO/5zzQV1PIvOgr23R2voeZBI9dag7lgm5X+vOwbuui7PMsTo9mWDgwKGxILFVwLckgrFDBwaCTI9EMLABOu4E+wVhX3CnAzYMBElkE+duwIURmgWhiZELcOMcm5EnrOeAqRTVglBFappH63iKXGJPx6pYrIyKmlispoKyWGxVxx4uS9o+afhtJFX21isT35UQvNbwy1czsZa6iY9/pUsK6Z7zRJdSLt97TVUVuxq+GeavfueNic+mMokvfix2tWYgOCriI8FA7V9INEco5Tc+k4ssafOEIPyHWMi9qOglZV26cX3BOB+NNUPBSTEaJ4KhtXw0xoJ+ZBunztxLpWaYepRKPZpiJpW6d+YU25EV3OZFVsTICkkyxCp59BMrkSt8yBdoRwtJQUjQspMv0C6uXrCiS38CS34zfwD6q+Ip5c11jAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNi0wOS0yNlQwOToyMzo0OSswMDowMAKfG48AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjYtMDktMjZUMDk6MjM6NDkrMDA6MDBzwqMzAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI2LTA5LTI2VDA5OjIzOjQ5KzAwOjAwJNeC7AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=",
+	thumb: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABQElEQVRIS7WU20lEMRCGv7UAFS9FqGAB2sEqCGItPggivliNb6JW4HbgpQgvWIAog5MwGTM5WdzzvWzyz5z5s5MwE0Zmklcj4Q2OgFNgR/ePwBVwq3vPYL41OARu8q7kALjLu1+68q3BA7AHXAMXql0CJ8AM2Fct0ZVvDd6ANWALeFFN1k8a21At8QGsDuVbg1dgHdgGnrMK3/rr76umJwOptSlC1KJzc6paIcHru9qq46hFrUublylwLwt/KjE502e3nNU+5E6kPfJM84vzBjV8KxKRXtAMKlGhSC9oBpWoUKQXNINKVCjSC3zQzpaVrPbx+Z9ZNC9ds0ienBC1wusyAZqzaBGjQr6VNr1rrSKYhp30P53+zweGrnxr4GfRUu0vG7ryrUHrkvNsMXTl+77aWfRVmy2OwXxvsHBGN/gBqNpkGYRxOXEAAAAQZGVCR0NCNzU1ODYyNjBFNjJBRTOwqXgDAAAAAElFTkSuQmCC",
 });

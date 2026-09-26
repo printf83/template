@@ -49,18 +49,22 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 		let templateMap: Record<string, Data<SchemaItem[]>> = {};
 
 		const fetchTemplatesTask = (async () => {
-			const [csv, json, fn, cmd] = await Promise.all([
+			const [t1, t2, t3, t4, t5, t6] = await Promise.all([
 				import("../data/template_csv"),
 				import("../data/template_json"),
 				import("../data/template_function"),
 				import("../data/template_command"),
+				import("../data/template_picture"),
+				import("../data/template_asset"),
 			]);
 
 			templateMap = {
-				t1: csv.data,
-				t2: json.data,
-				t3: fn.data,
-				t4: cmd.data,
+				t1: t1.data,
+				t2: t2.data,
+				t3: t3.data,
+				t4: t4.data,
+				t5: t5.data,
+				t6: t6.data,
 			};
 
 			// Render list items once imports complete

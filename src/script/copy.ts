@@ -51,7 +51,9 @@ async function ensureDocumentFocused(): Promise<void> {
 /**
  * Copies text directly to system clipboard with focus recovery.
  */
-async function copyTextToSystemClipboard(text: string): Promise<boolean> {
+export async function copyTextToSystemClipboard(
+	text: string,
+): Promise<boolean> {
 	// 1. Force document focus so OS clipboard receives the payload
 	await ensureDocumentFocused();
 
@@ -98,8 +100,10 @@ async function copyTextToSystemClipboard(text: string): Promise<boolean> {
  * Async file picker that reads file content (Base64 for images, plain text for code/data),
  * copies it directly to the clipboard, and returns the metadata.
  */
-export async function pickAndCopyFile(): Promise<PickedFileResult | null> {
-	const file = await selectFile(".html,.htm,.csv,.json,.css,.js,image/*");
+export async function pickFile(
+	fileFormat = ".html,.htm,.csv,.json,.css,.js,image/*",
+): Promise<PickedFileResult | null> {
+	const file = await selectFile(fileFormat);
 	if (!file) return null;
 
 	// 1. Enforce file size limit to avoid tab freeze
@@ -114,12 +118,6 @@ export async function pickAndCopyFile(): Promise<PickedFileResult | null> {
 	// 2. Read content safely
 	const content = isImage ? await readAsBase64(file) : await file.text();
 
-	// Copy content with explicit focus restoration
-	const success = await copyTextToSystemClipboard(content);
-	if (!success) {
-		throw new Error("Clipboard write was blocked by the browser.");
-	}
-
 	return {
 		fileName: file.name,
 		fileType: file.type || (isImage ? "image" : "text/plain"),
@@ -132,13 +130,21 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 
 	btn.addEventListener("click", async () => {
 		try {
-			const result = await pickAndCopyFile();
+			const fileContent = await pickFile();
 
 			// User cancelled file selection dialog -> exit silently
-			if (!result) return;
+			if (!fileContent) return;
+
+			// Copy content with explicit focus restoration
+			const copySuccess = await copyTextToSystemClipboard(
+				fileContent.content,
+			);
+			if (!copySuccess) {
+				throw new Error("Clipboard write was blocked by the browser.");
+			}
 
 			Toast.success(
-				`Successfully copied <strong>${result.fileName}</strong> to your clipboard.`,
+				`Successfully copied <strong>${fileContent.fileName}</strong> to your clipboard.`,
 			);
 		} catch (error) {
 			const message =
@@ -148,6 +154,35 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 			Modal.alert(
 				`Failed to process file: ${message}`,
 				"Copy Failed",
+				"error",
+			);
+		}
+	});
+}
+
+export function attachUploadThumb(
+	target: HTMLDivElement,
+	input: HTMLInputElement,
+) {
+	if (!target || !input) return;
+
+	target.addEventListener("click", async () => {
+		try {
+			const fileContent = await pickFile("image/*");
+
+			// User cancelled file selection dialog -> exit silently
+			if (!fileContent) return;
+
+			input.value = fileContent.content;
+			target.style.backgroundImage = `url("${fileContent.content}")`;
+		} catch (error) {
+			const message =
+				error instanceof Error
+					? error.message
+					: "An unexpected error occurred.";
+			Modal.alert(
+				`Failed to process file: ${message}`,
+				"Read Failed",
 				"error",
 			);
 		}

@@ -3,7 +3,7 @@ import { attachBtnPrintAll } from "./script/print";
 import "./style/main.css";
 import { attachBtnDownloadPdf } from "./script/pdf";
 import { getEditData, initEditor, setEditData } from "./script/edit";
-import { attachCopyFile } from "./script/copy";
+import { attachCopyFile, attachUploadThumb } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
 import { attachEditorNew } from "./script/new";
@@ -87,6 +87,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 	) as HTMLButtonElement;
 	if (btnEditorUploadFile) {
 		attachEditorNew(btnEditorNew);
+	}
+
+	const inputThumbEditor = document.getElementById(
+		"thumb-editor",
+	) as HTMLInputElement;
+	const prevThumbEditor = document.getElementById(
+		"thumb-prev-editor",
+	) as HTMLDivElement;
+	if (inputThumbEditor && prevThumbEditor) {
+		attachUploadThumb(prevThumbEditor, inputThumbEditor);
 	}
 
 	const formMain = document.getElementById("formMain") as HTMLDivElement;

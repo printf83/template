@@ -302,6 +302,12 @@ export function setEditData<T extends readonly SchemaItem[]>(
 		editorState.data?.setValue(formatCSV(data.data));
 	}
 
+	// Thumbnail
+	const elem = document.getElementById("thumb-prev-editor") as HTMLDivElement;
+	if (elem) {
+		elem.style.backgroundImage = `url("${data.thumb}")` || "";
+	}
+
 	// Input Fields
 	setValue("title-editor", data.title);
 	setValue("thumb-editor", data.thumb);

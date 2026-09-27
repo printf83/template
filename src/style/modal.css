@@ -33,5 +33,5 @@
 }
 
 .modal-footer button {
-	@apply grow;
+	@apply flex-1;
 }

@@ -12,7 +12,7 @@ export function attachBtnFaq(btn: HTMLButtonElement) {
 			Modal.show({
 				title: "Frequently Asked Questions",
 				type: "question",
-				body: `<div class="bg-neutral-50 border border-neutral-200 rounded-lg max-h-96 overflow-y-auto p-2 inset-shadow-sm">${faqText}</div>`,
+				body: `<div class="max-h-[calc(100svh-460px)] bg-neutral-50 border border-neutral-200 rounded-lg overflow-y-auto p-2 inset-shadow-sm">${faqText}</div>`,
 				size: "min-w-[600px]!",
 				confirmText: "Okay",
 				showCancel: false,

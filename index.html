@@ -5,11 +5,11 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-xAbL4LCn.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-BsmNI80m.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-DYNBvATV.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index--y5NtbIX.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-BKXrc4SR.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
@@ -184,31 +184,47 @@
 					</label>
 					<div class="tab-panel">
 						<div class="form-container">
-							<div class="form-field">
-								<label class="form-label">Title</label>
-								<input
-									type="text"
-									class="form-input"
-									id="title-editor"
-								/>
-							</div>
+							<div class="grid grid-cols-7 gap-3">
+								<div class="flex flex-col col-span-6 gap-3">
+									<div class="form-field">
+										<label class="form-label">Title</label>
+										<input
+											type="text"
+											class="form-input"
+											id="title-editor"
+										/>
+									</div>
 
-							<div class="form-field">
-								<label class="form-label">Thumbnail</label>
-								<input
-									type="text"
-									class="form-input"
-									id="thumb-editor"
-									placeholder="data:image/png;base64,"
-								/>
-							</div>
-
-							<div class="form-field">
-								<label class="form-label">Language</label>
-								<select class="form-select" id="lang-editor">
-									<option value="EN">English</option>
-									<option value="MY">Bahasa Melayu</option>
-								</select>
+									<div class="form-field">
+										<label class="form-label"
+											>Language</label
+										>
+										<select
+											class="form-select"
+											id="lang-editor"
+										>
+											<option value="EN">English</option>
+											<option value="MY">
+												Bahasa Melayu
+											</option>
+										</select>
+									</div>
+								</div>
+								<div
+									class="col-span-1 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-sm"
+								>
+									<div
+										id="thumb-prev-editor"
+										class="w-full h-full rounded-sm bg-no-repeat bg-center cursor-pointer"
+									>
+										<input
+											type="text"
+											class="hidden"
+											id="thumb-editor"
+											placeholder="data:image/png;base64,"
+										/>
+									</div>
+								</div>
 							</div>
 
 							<h2 class="text-sm -mb-2">Nationality</h2>
@@ -279,7 +295,7 @@
 							<div class="form-field">
 								<div
 									id="short-editor"
-									class="form-code min-h-[calc(100svh-605px)] max-h-[calc(100svh-605px)] flex-1 overflow-hidden text-sm"
+									class="form-code min-h-[calc(100svh-535px)] max-h-[calc(100svh-535px)] flex-1 overflow-hidden text-sm"
 								></div>
 							</div>
 						</div>

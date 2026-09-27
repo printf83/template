@@ -44,6 +44,28 @@ async function readPrintSpeed() {
 	return Math.floor(totalPrintSpeed / totalPrintCount);
 }
 
+/** Formats numbers with localized thousands separators (e.g. 1,000 or 1.000 based on browser locale) */
+function formatNumber(num: number): string {
+	return new Intl.NumberFormat().format(num);
+}
+
+/** Formats seconds into human-readable duration (e.g. "1 minute 5 seconds" or "45 seconds") */
+function formatDuration(totalSeconds: number): string {
+	const seconds = Math.round(totalSeconds);
+	if (seconds < 60) {
+		return `${seconds} ${seconds === 1 ? "second" : "seconds"}`;
+	}
+
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = seconds % 60;
+
+	const minText = `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+	if (remainingSeconds === 0) return minText;
+
+	const secText = `${remainingSeconds} ${remainingSeconds === 1 ? "second" : "seconds"}`;
+	return `${minText} ${secText}`;
+}
+
 /**
  * Checks document page count against estimated processing time.
  * Displays a warning modal if processing will take too long.
@@ -65,10 +87,13 @@ export async function warningLargePrint(
 	if (currentEstimatedPrintSpeed > WARNING_LARGE_PRINT_TIME) {
 		const estimatedSeconds = Math.round(currentEstimatedPrintSpeed / 1000);
 
+		const formattedPages = formatNumber(pagesLength);
+		const formattedTime = formatDuration(estimatedSeconds);
+
 		const result = await Modal.show({
 			title: "Continue Printing?",
 			type: "question",
-			body: `This document has <strong>${pagesLength} pages</strong> to process and may take more than <strong>${estimatedSeconds} seconds</strong> to finish.`,
+			body: `This document has <strong>${formattedPages} pages</strong> to process and may take more than <strong>${formattedTime}</strong> to finish.`,
 			confirmText: "Yes, continue",
 			cancelText: "Cancel",
 		});

@@ -73,12 +73,12 @@ export class Modal {
                     <footer class="modal-footer">
                         ${
 							options.showCancel !== false
-								? `<button type="button" class="btn-cancel btn-secondary">${
+								? `<button type="button" class="btn-lg btn-cancel btn-secondary">${
 										options.cancelText ?? "Cancel"
 									}</button>`
 								: ""
 						}
-                        <button type="button" class="btn-confirm btn-primary">${
+                        <button type="button" class="btn-lg btn-confirm btn-primary">${
 							options.confirmText ?? "Confirm"
 						}</button>
                     </footer>

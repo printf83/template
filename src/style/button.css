@@ -10,7 +10,7 @@
 .btn-secondary,
 .btn-danger {
 	/* Changed transition-all -> transition-colors for hover states */
-	@apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium 
+	@apply inline-flex items-center justify-center gap-2 h-10 min-h-10 px-4 py-2 text-sm font-medium 
          rounded-lg transition-colors duration-150 cursor-pointer select-none
          focus-visible:outline-2 focus-visible:outline-offset-2
          disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98];
@@ -28,8 +28,22 @@
 	@apply size-4 shrink-0 inline-block;
 }
 
+.btn-lg {
+	@apply h-12 min-h-12 px-6 text-lg;
+}
+
 .btn-square {
-	@apply p-2.5;
+	@apply px-3;
+}
+
+.btn-circle {
+	@apply rounded-full;
+}
+
+/* Optional: If using with .btn-square or .btn-circle */
+.btn-lg.btn-square,
+.btn-lg.btn-circle {
+	@apply w-16 p-0;
 }
 
 /* Color Variants */

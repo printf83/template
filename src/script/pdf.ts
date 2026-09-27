@@ -1,53 +1,6 @@
 import type { jsPDF } from "jspdf";
 import { initIcons } from "./utils";
-
-function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
-	const iconEl = btn.querySelector("[data-icon]");
-	if (!iconEl) return;
-
-	btn.disabled = isLoading;
-	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
-
-	// Re-render Lucide icons to swap SVG
-	initIcons();
-}
-
-export function attachBtnDownloadPdf(
-	btn: HTMLButtonElement,
-	iframe: HTMLIFrameElement,
-) {
-	if (!btn || !iframe) return;
-
-	btn.addEventListener("click", async () => {
-		// Access document inside the iframe
-		const iframeDoc =
-			iframe.contentDocument || iframe.contentWindow?.document;
-
-		if (!iframeDoc) {
-			console.error("Cannot access iframe document.");
-			return;
-		}
-
-		const pages = Array.from(
-			iframeDoc.querySelectorAll<HTMLDivElement>(".page"),
-		);
-
-		if (pages.length === 0) {
-			console.warn("No .page elements found inside iframe.");
-			return;
-		}
-
-		setButtonLoading(btn, true);
-
-		try {
-			await generatePDF(pages);
-		} catch (error) {
-			console.error("PDF generation failed:", error);
-		} finally {
-			setButtonLoading(btn, false);
-		}
-	});
-}
+import { savePrintSpeed, warningLargePrint } from "./print";
 
 const SUPPORTED_FORMATS = [
 	"a0",
@@ -106,6 +59,7 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 	]);
 
 	console.time("Generate PDF");
+	const startTime = performance.now();
 
 	let pdf: jsPDF | null = null;
 
@@ -157,7 +111,63 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 
 	console.timeEnd("Generate PDF");
 
+	// Calculate execution duration in milliseconds
+	const elapsedTime = Math.round(performance.now() - startTime);
+	savePrintSpeed(elapsedTime, pages.length);
+
 	if (pdf) {
 		pdf.save(filename);
 	}
+}
+
+function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
+	const iconEl = btn.querySelector("[data-icon]");
+	if (!iconEl) return;
+
+	btn.disabled = isLoading;
+	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
+
+	// Re-render Lucide icons to swap SVG
+	initIcons();
+}
+
+export function attachBtnDownloadPdf(
+	btn: HTMLButtonElement,
+	iframe: HTMLIFrameElement,
+) {
+	if (!btn || !iframe) return;
+
+	btn.addEventListener("click", async () => {
+		// 1. Check for warning threshold before triggering print
+		const shouldProceed = await warningLargePrint(iframe);
+		if (!shouldProceed) return;
+
+		// 2. Proceed with print execution
+		const iframeDoc =
+			iframe.contentDocument || iframe.contentWindow?.document;
+
+		if (!iframeDoc) {
+			console.error("Cannot access iframe document.");
+			return;
+		}
+
+		const pages = Array.from(
+			iframeDoc.querySelectorAll<HTMLDivElement>(".page"),
+		);
+
+		if (pages.length === 0) {
+			console.warn("No .page elements found inside iframe.");
+			return;
+		}
+
+		setButtonLoading(btn, true);
+
+		try {
+			await generatePDF(pages);
+		} catch (error) {
+			console.error("PDF generation failed:", error);
+		} finally {
+			setButtonLoading(btn, false);
+		}
+	});
 }

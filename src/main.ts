@@ -10,6 +10,7 @@ import { attachEditorNew } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
 import type { Data, SchemaItem } from "./type/data";
 import { initData, initIcons } from "./script/utils";
+import { attachBtnFaq } from "./script/faq";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	initIcons();
@@ -59,6 +60,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	) as HTMLButtonElement;
 	if (iframe && btnDownloadPdf) {
 		attachBtnDownloadPdf(btnDownloadPdf, iframe);
+	}
+
+	const btnFaq = document.getElementById("btnFaq") as HTMLButtonElement;
+	if (btnFaq) {
+		attachBtnFaq(btnFaq);
 	}
 
 	const btnEditorReadFile = document.getElementById(

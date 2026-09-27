@@ -106,11 +106,20 @@ export async function pickFile(
 	const file = await selectFile(fileFormat);
 	if (!file) return null;
 
-	// 1. Enforce file size limit to avoid tab freeze
+	// 1. Warning file size limit to avoid tab freeze
 	if (file.size > MAX_FILE_SIZE_BYTES) {
-		throw new Error(
-			`File size exceeds limit (${(MAX_FILE_SIZE_BYTES / 1024 / 1024).toFixed(0)}MB)`,
-		);
+		const fileSizeMb = (file.size / 1024 / 1024).toFixed(1);
+		const limitMb = (MAX_FILE_SIZE_BYTES / 1024 / 1024).toFixed(0);
+
+		const confirmed = await Modal.show({
+			type: "warning",
+			title: "Large File",
+			body: `The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?`,
+			confirmText: "Yes, proceed",
+			cancelText: "Cancel",
+		});
+
+		if (!confirmed) return null;
 	}
 
 	const isImage = isImageFile(file);

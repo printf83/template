@@ -7,6 +7,7 @@
 @import "icon.css";
 @import "new.css";
 @import "rainbow.css";
+@import "faq.css";
 
 .main {
 	@apply bg-neutral-100 flex flex-col justify-between h-svh;

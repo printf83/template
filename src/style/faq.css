@@ -1,0 +1,33 @@
+.faq-container {
+	@apply space-y-2 text-left;
+}
+
+.faq-container h3 {
+	@apply text-sm font-bold uppercase tracking-wider px-2 pt-3 pb-0;
+}
+
+.faq-container details {
+	@apply text-neutral-600 hover:text-neutral-800 transition-all border border-neutral-200 rounded-lg p-2 bg-white shadow-xs;
+}
+
+/* Hide default browser summary arrow marker */
+.faq-container details summary::-webkit-details-marker {
+	display: none;
+}
+
+.faq-container details > summary {
+	@apply flex cursor-pointer items-center justify-between text-sm list-none;
+}
+
+.faq-container details > summary > span:last-child {
+	@apply transition-transform duration-200;
+}
+
+/* Rotate arrow on open */
+.faq-container details[open] > summary > span:last-child {
+	@apply rotate-180;
+}
+
+.faq-container details > p {
+	@apply mt-2 text-xs leading-relaxed;
+}

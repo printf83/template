@@ -1,0 +1,172 @@
+<div class="faq-container">
+	<!-- Category 1: Printing & Performance -->
+	<h3>Printing & Performance</h3>
+
+	<details name="faq">
+		<summary>
+			<span>How does the print time estimation work?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			The engine automatically tracks how fast your device renders pages
+			and stores this historical performance data locally in your
+			browser's Cache API. It uses this data to compute a running average
+			per page and accurately estimate processing times for future print
+			jobs.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>Why do I see a "Continue Printing?" warning modal?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			When a document contains many pages or is calculated to take longer
+			than 5 seconds to generate, the system displays a warning dialog to
+			prevent accidental browser tab freezes and allow you to confirm
+			before processing begins.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>How can I reset my stored print performance statistics?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Your print performance metrics (like total print speed and total
+			page count) are stored locally in your browser cache. Clearing your
+			browser's site data or executing <code>db.clear()</code> will reset
+			these calculations back to factory defaults.
+		</p>
+	</details>
+
+	<!-- Category 2: Template Logic & Expression Engine -->
+	<h3>Template Expressions</h3>
+
+	<details name="faq">
+		<summary>
+			<span>How do piped template expression helpers work?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			You can chain multiple transformation helpers together using the
+			<code>%</code> prefix inside standard handlebars syntax. For
+			example, <code>{{ %uppercase %money_text total }}</code> will first
+			format the value as currency and then convert the entire string to
+			uppercase.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>Are template helper transformations case-sensitive?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Transformers like the <code>short</code> text formatter
+			automatically preserve letter casing (Title Case, UPPERCASE, or
+			lowercase) based on how you enter the property key in your
+			dictionary schema.
+		</p>
+	</details>
+
+	<!-- Category 3: Files & Clipboard Handling -->
+	<h3>Files & Clipboard</h3>
+
+	<details name="faq">
+		<summary>
+			<span>What happens when I click "Copy File"?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Selecting a file converts code and data files (JSON, CSV, HTML) into
+			plain text, and converts images into Base64 Data URLs. It then
+			writes the output directly to your operating system clipboard so you
+			can paste it into external applications like VS Code or Notepad.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>What happens if I upload or copy a large file?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Files larger than <strong>10 MB</strong> trigger a warning dialog
+			before processing. While you can choose to proceed, processing very
+			large files (especially memory-intensive Base64 images) may
+			temporarily slow down or freeze your browser tab.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>Why did pasting fail after selecting a file?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Some browsers suppress system clipboard writing if the web page
+			loses active window focus while the file picker dialog is open. The
+			application automatically recovers tab focus before executing copy
+			requests to bypass this browser policy.
+		</p>
+	</details>
+
+	<!-- Category 4: Security & System Architecture -->
+	<h3>Security & Offline Support</h3>
+
+	<details name="faq">
+		<summary>
+			<span>Is my document data uploaded to an external server?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			No. All template evaluation, dynamic chunk loading, image
+			conversions, and PDF generations execute 100% locally inside your
+			web browser. None of your data is transmitted to external servers.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>Does this application work offline?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			Yes. Heavy dependencies (such as CodeMirror, jsPDF, and html2canvas)
+			are dynamically cached after their first load, allowing document
+			generation to function smoothly even without an internet connection.
+		</p>
+	</details>
+
+	<!-- Category: License & Terms -->
+	<h3>License & Terms</h3>
+
+	<details name="faq">
+		<summary>
+			<span>Under what license is this application provided?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			This software is open-source and released under the
+			<strong>MIT License</strong>. You are free to use, modify, adapt, or
+			distribute it for both personal and commercial projects without any
+			hidden fees or API restrictions.
+		</p>
+	</details>
+
+	<details name="faq">
+		<summary>
+			<span>Does this application come with any warranty?</span>
+			<span>▼</span>
+		</summary>
+		<p>
+			The software is provided <strong>"as is"</strong> without warranty
+			of any kind, express or implied. Because all document rendering and
+			processing execute 100% locally inside your web browser, you
+			maintain complete ownership and control over your data.
+		</p>
+	</details>
+</div>

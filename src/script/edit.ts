@@ -115,7 +115,9 @@ function parseDataContent(raw: string | undefined): any {
 	try {
 		return JSON.parse(trimmed);
 	} catch (ex) {
-		console.warn("Failed attempt to parse JSON string:", ex);
+		// csv file must fail this
+		// so no need to report the fail
+		// console.warn("Failed attempt to parse JSON string:", trimmed, ex);
 	}
 
 	// 2. CSV Parser

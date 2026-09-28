@@ -11,7 +11,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 		// 1. Initial loading state shown immediately inside the modal
 		formEl.innerHTML = `
-            <div class="new-list">
+            <div class="thumb-list">
                 <div class="flex w-full h-full gap-3 justify-center items-center">
                     <i data-icon="loader-circle" class="size-6"></i>
 					Loading templates...
@@ -87,13 +87,13 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 					return `<label ${bgStyle}>
                         <span class="text-xs font-medium">${d.title}</span>
-                        <input type="radio" name="new-list-item" value="${key}" ${isChecked}>
+                        <input type="radio" name="thumb-list-item" value="${key}" ${isChecked}>
                     </label>`;
 				})
 				.join("");
 
 			// Replace loading spinner with loaded template list
-			const listEl = formEl.querySelector(".new-list");
+			const listEl = formEl.querySelector(".thumb-list");
 			if (listEl) {
 				listEl.innerHTML = templateItems;
 			}
@@ -107,7 +107,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 			await fetchTemplatesTask;
 
 			const selectedOption = formEl.querySelector<HTMLInputElement>(
-				'input[name="new-list-item"]:checked',
+				'input[name="thumb-list-item"]:checked',
 			);
 
 			const templateValue = selectedOption?.value;

@@ -42,7 +42,7 @@ async function readPrintSpeed() {
 	]);
 
 	// 2. Apply default fallbacks
-	const totalPrintSpeed = rawSpeed || 300;
+	const totalPrintSpeed = rawSpeed || 100;
 	const totalPrintCount = rawCount || 1;
 
 	console.log({

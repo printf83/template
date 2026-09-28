@@ -1,4 +1,7 @@
 import type { PageRuleItem } from "../type/style.d";
+import tailwindReset from "../assets/reset.css?raw";
+import pagePrintCSS from "../assets/page-print.css?raw";
+import pageScreenCSS from "../assets/page-screen.css?raw";
 
 const SPACING_SCALE: Record<string, string> = {
 	"0": "0px",
@@ -1203,46 +1206,15 @@ function createPageRules(): Record<string, PageRuleItem | PageRuleItem[]> {
 		// Base Environment Setup
 		page: [
 			{
+				style: tailwindReset,
+			},
+			{
 				rule: "screen",
-				style: `
-          body { 
-            background-color: #e5e7eb; 
-            margin: 0; 
-            padding: 2.5rem; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 2.5rem; 
-          }
-          .page { 
-            background-color: #ffffff; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
-            box-sizing: border-box; 
-          }
-		  .page[contenteditable="true"]:focus { 
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-          }
-        `,
+				style: pageScreenCSS,
 			},
 			{
 				rule: "print",
-				style: `
-          body { 
-            background-color: transparent; 
-            padding: 0; 
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
-          .page { 
-            box-shadow: none; 
-            margin: 0; 
-            background-color: #ffffff; 
-            box-sizing: border-box;
-            break-after: page; 
-            page-break-after: always; 
-          }
-        `,
+				style: pagePrintCSS,
 			},
 		],
 	};

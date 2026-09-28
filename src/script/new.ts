@@ -49,17 +49,20 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 		let templateMap: Record<string, Data<SchemaItem[]>> = {};
 
 		const fetchTemplatesTask = (async () => {
-			const [t1, t2, t3, t4, t5, t6, t7, t8, t9] = await Promise.all([
-				import("../data/template_csv"),
-				import("../data/template_json"),
-				import("../data/template_function"),
-				import("../data/template_command"),
-				import("../data/template_picture"),
-				import("../data/template_asset"),
-				import("../data/template_100"),
-				import("../data/template_500"),
-				import("../data/template_1K"),
-			]);
+			const [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10] = await Promise.all(
+				[
+					import("../data/template_csv"),
+					import("../data/template_json"),
+					import("../data/template_function"),
+					import("../data/template_command"),
+					import("../data/template_picture"),
+					import("../data/template_asset"),
+					import("../data/template_letter"),
+					import("../data/template_100"),
+					import("../data/template_500"),
+					import("../data/template_1K"),
+				],
+			);
 
 			templateMap = {
 				t1: t1.data,
@@ -71,6 +74,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 				t7: t7.data,
 				t8: t8.data,
 				t9: t9.data,
+				t10: t10.data,
 			};
 
 			// Render list items once imports complete

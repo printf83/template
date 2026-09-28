@@ -1,0 +1,22 @@
+body {
+	background-color: #e5e7eb;
+	margin: 0;
+	padding: 2.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2.5rem;
+}
+
+.page {
+	background-color: #ffffff;
+	box-shadow:
+		0 10px 25px -5px rgba(0, 0, 0, 0.1),
+		0 8px 10px -6px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+}
+
+.page[contenteditable="true"]:focus {
+	outline: none;
+	-webkit-tap-highlight-color: transparent;
+}

@@ -602,6 +602,9 @@ function executeHelper<T extends readonly SchemaItem[]>(
 				return replacement.toLowerCase();
 			});
 		}
+		// Strings & Identification
+		case "br":
+			return String(val ?? "").replace(/\r\n|\r|\n/g, "<br/>");
 		case "uppercase":
 			return String(val).toUpperCase();
 		case "lowercase":
@@ -906,7 +909,49 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 			}
 
 			case "FUNC": {
-				const val = resolveValue(node.key!, scopeStack, rootRecord);
+				let val: unknown;
+
+				// Check if helper is targeting an asset (e.g. {{ %br #asset company-name }})
+				if (node.key && node.key.startsWith("#asset ")) {
+					const assetKey = node.key.slice(7).trim();
+
+					if (visitedAssets.has(assetKey)) {
+						console.warn(
+							`[HTML Engine] Circular asset reference detected for "${assetKey}"`,
+						);
+						val = "";
+					} else {
+						const rawAsset = data.asset
+							? (data.asset[assetKey] ?? "")
+							: "";
+
+						// If asset has inner template tags, evaluate them first
+						if (
+							rawAsset &&
+							(rawAsset.includes("{{") ||
+								rawAsset.includes("<!---"))
+						) {
+							const assetTokens = tokenize(rawAsset);
+							const assetAst = buildAST(assetTokens);
+							const nextVisited = new Set(visitedAssets).add(
+								assetKey,
+							);
+
+							val = evaluateAST(
+								assetAst,
+								scopeStack,
+								rootRecord,
+								data,
+								nextVisited,
+							);
+						} else {
+							val = rawAsset;
+						}
+					}
+				} else {
+					val = resolveValue(node.key!, scopeStack, rootRecord);
+				}
+
 				output += executeHelpers(node.fnNames!, val, data);
 				break;
 			}

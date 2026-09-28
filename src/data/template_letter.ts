@@ -1,7 +1,8 @@
 import { createData } from "./data";
+import assetCompanyLogo from "../assets/company-logo.txt?raw";
 
 export const data = createData({
-	title: "CSV",
+	title: "Letter",
 	lang: "EN",
 	schema: [
 		{ key: "col1", type: "string" },
@@ -53,8 +54,7 @@ export const data = createData({
 			<p class="text-indigo-600 font-semibold">{{#asset company-name}}</p>
 			<p>Reg No : <b>{{#asset company-reg}}</b></p>
 		</div>`,
-		"company-logo":
-			"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAmElEQVRIS+3VQQqCUAAEUL2ZnjxvZghj0B8ebsxVb6NMM3w0qHn6sflz9+2V65rrFfZ1wJ6rPh+xX0FwAOxXEBwA+2dwvMMl93fZju/ksQNGfGRgv4LgANivIDgA9isIDoD9CoIDYL+C4ADYryA4APYrCA6A/QqCA2C/guAA2D+D/2/R5SsacQDsVxAcAPsVBP/EgX0dcJs3ifwsGTjQzNcAAAAQZGVCRzI3MkM0OUQ1RjJFNDRGQjgfgI2UAAAAAElFTkSuQmCC",
+		"company-logo": assetCompanyLogo,
 	},
 	template: `<div class="page a4 page-mx-[15mm] page-mt-[10mm] relative" contenteditable="true">
 	{{#asset letter-head}}

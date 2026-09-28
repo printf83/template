@@ -1,0 +1,9 @@
+import{t as e}from"./index-BiBdBju5.js";import{t}from"./company-logo-Fha68yO9.js";var n=e({title:`Asset`,lang:`EN`,schema:[{key:`id`,type:`number`},{key:`name`,type:`string`}],data:[{id:1,name:`Ahmad Firdaus bin Zamri`},{id:2,name:`Nurul Aisyah binti Mansor`},{id:3,name:`Muhammad Khairul bin Azman`},{id:4,name:`Siti Aminah binti Razali`},{id:5,name:`Mohd Syazwan bin Bakri`}],short:{bin:`b`,binti:`bt`},asset:{company:`COMPANY <span class='italic underline'>NAME</span>`,logo:t},template:`<div class="page a4 page-m-[15mm]" contenteditable="true">
+	<div>ID : <span class="font-semibold">{{id}}</span></div>
+	<div>Name : <span class="font-semibold">{{%short name}}</span></div>
+	<div>Company : <span class="font-semibold">{{#asset company}}</span></div>
+	<div>Company Logo :
+		<div class="asset-[logo] w-24 h-24 bg-cover bg-center bg-no-repeat"></div>
+	</div>
+</div>
+	`,thumb:`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAB70lEQVRIS93VS6hNcRTH8c8NiTBQjBSRISkD5gZCBiYGJpQy8kqhPPJ+5RlmikwMjIWJMQMihkqUEjFQ5FXod+86p3O3c+513e7Ed7TW+q+9f/u/9n+tf58xpq9tDc1kbMWG8q/iIr6W35PhBLK+Dicxqx0d4DV240Y70oWhBJbiApaU/xTby058Ydn3sQWPyh9EN4F8ab44X571t9hbZflVOYlvxDHMrHh2shNvKqefpkASDmESvuM8juBzO2MwU3EA2zAeX7AfZ1sJnQJ3sbzsm9iFV+UPx1ycwZryb2NVjE6BD5he9gNs7lXXLizG5fpv4T1mxOgUaNX3HpaVf71Oyrtaa5L6n8L6elfr2dD/7m4Cia2uOs7HJxzHOXyrnInYgT2Ygufl32q8p6dAmFDHLz9xGl7WIQinMQcfcRiX8KPW/lqgRWp5FJvakYHcK3V8U+9ORizQYhEel50me1Z2k38WCCPO+b8EckpmYyXu1DabDFeiFdXFLzAvgc7EnJScitBrVPQSyKg4gbXlH6yZ9kdiGmdfx7DLfEmTtYZdUyD9keGWMd4adumb9Ek/TYHQbVxH+Bp+Vs64GtfZ9YjGdSfNC+dJ9UJIDywoOxdOrtOH5Q9iKIGQ9TG7MjvJpZ/xnfqGXELZ3agv/VHzG9kgdRlpBokyAAAAEGRlQkdDRUNBQjg1OUI0OTMxOEIxGxnimQAAAABJRU5ErkJggg==`});export{n as data};

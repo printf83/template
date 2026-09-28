@@ -1,14 +1,12 @@
 import { Modal } from "./modal";
 import { Toast } from "./toast";
-import { selectFile } from "./utils";
+import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
 
 export interface PickedFileResult {
 	fileName: string;
 	fileType: string;
 	content: string; // Base64 for images, text for code/data
 }
-
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
 /** Helper to detect images even if file.type is empty */
 function isImageFile(file: File): boolean {
@@ -114,7 +112,7 @@ export async function pickFile(
 		const confirmed = await Modal.show({
 			type: "warning",
 			title: "Large File",
-			body: `The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?`,
+			body: `<p class="pb-4">The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?</p>`,
 			confirmText: "Yes, proceed",
 			cancelText: "Cancel",
 		});

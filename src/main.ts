@@ -9,28 +9,74 @@ import { attachUploadFile } from "./script/upload";
 import { attachEditorNew } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
 import type { Data, SchemaItem } from "./type/data";
-import { initData, initIcons } from "./script/utils";
+import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
 
-document.addEventListener("DOMContentLoaded", async () => {
-	initIcons();
-	initEditor();
+const getAllElement = () => {
+	const iframe = getElementById<HTMLIFrameElement>("iframe");
 
-	const iframe = document.getElementById(
-		"iframe",
-	) as HTMLIFrameElement | null;
+	const btnDownloadPdf = getElementById<HTMLButtonElement>("btnDownloadPdf");
+	const btnPrintAll = getElementById<HTMLButtonElement>("btnPrintAll");
+	const btnFaq = getElementById<HTMLButtonElement>("btnFaq");
+	const btnEditorReadFile =
+		getElementById<HTMLButtonElement>("btnEditorReadFile");
+	const btnEditorDownloadFile = getElementById<HTMLButtonElement>(
+		"btnEditorDownloadFile",
+	);
+	const btnEditorUploadFile = getElementById<HTMLButtonElement>(
+		"btnEditorUploadFile",
+	);
+	const btnEditorNew = getElementById<HTMLButtonElement>("btnEditorNew");
 
-	const genPage = <const T extends readonly SchemaItem[]>(
-		data: Data<T> | null,
-	) => {
-		if (iframe) {
-			console.time("Build Template");
+	const inputThumbEditor = getElementById<HTMLInputElement>("thumb-editor");
+	const prevThumbEditor = getElementById<HTMLDivElement>("thumb-prev-editor");
 
-			const { html, style, script } = render(data);
-			iframe.srcdoc = minifies(
-				`<!DOCTYPE html>
+	const formMain = getElementById<HTMLDivElement>("formMain");
+	const formEditor = getElementById<HTMLDivElement>("formEditor");
+	const ctlMain = getElementById<HTMLDivElement>("ctlMain");
+	const ctlEditor = getElementById<HTMLDivElement>("ctlEditor");
+
+	const btnEditor = getElementById<HTMLButtonElement>("btnEditor");
+	const btnEditorCancel =
+		getElementById<HTMLButtonElement>("btnEditorCancel");
+	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
+
+	return {
+		iframe,
+		btnDownloadPdf,
+		btnPrintAll,
+		btnFaq,
+		btnEditorReadFile,
+		btnEditorDownloadFile,
+		btnEditorUploadFile,
+		btnEditorNew,
+		inputThumbEditor,
+		prevThumbEditor,
+		formMain,
+		formEditor,
+		ctlMain,
+		ctlEditor,
+		btnEditor,
+		btnEditorCancel,
+		btnEditorSave,
+	};
+};
+
+const genPage = <const T extends readonly SchemaItem[]>(
+	data: Data<T> | null,
+	iframe: HTMLIFrameElement,
+) => {
+	if (iframe) {
+		console.time("Build Template");
+
+		const { html, style, script } = render(data);
+		iframe.dataset["filename"] = data?.title;
+
+		iframe.srcdoc = minifies(
+			`<!DOCTYPE html>
 				<html>
 					<head>
+						<title>${data?.title}</title>
 						${style ? `<style>${style}</style>` : ``}
 					</head>
 					<body>
@@ -38,86 +84,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 						${script ? `<script>${script}</script>` : ``}
 					</body>
 				</html>`,
-			);
+		);
 
-			console.timeEnd("Build Template");
-		}
-	};
+		console.timeEnd("Build Template");
+	}
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+	initIcons();
+	initEditor();
+
+	const {
+		iframe,
+		btnDownloadPdf,
+		btnPrintAll,
+		btnFaq,
+		btnEditorReadFile,
+		btnEditorDownloadFile,
+		btnEditorUploadFile,
+		btnEditorNew,
+		inputThumbEditor,
+		prevThumbEditor,
+		formMain,
+		formEditor,
+		ctlMain,
+		ctlEditor,
+		btnEditor,
+		btnEditorCancel,
+		btnEditorSave,
+	} = getAllElement();
 
 	const data = await initData();
 	const currentData = setCurrentData(data);
-	genPage(currentData);
+	genPage(currentData, iframe);
 
-	const btnPrintAll = document.getElementById(
-		"btnPrintAll",
-	) as HTMLButtonElement;
-	if (iframe && btnPrintAll) {
-		attachBtnPrintAll(btnPrintAll, iframe);
-	}
-
-	const btnDownloadPdf = document.getElementById(
-		"btnDownloadPdf",
-	) as HTMLButtonElement;
-	if (iframe && btnDownloadPdf) {
-		attachBtnDownloadPdf(btnDownloadPdf, iframe);
-	}
-
-	const btnFaq = document.getElementById("btnFaq") as HTMLButtonElement;
-	if (btnFaq) {
-		attachBtnFaq(btnFaq);
-	}
-
-	const btnEditorReadFile = document.getElementById(
-		"btnEditorReadFile",
-	) as HTMLButtonElement;
-	if (btnEditorReadFile) {
-		attachCopyFile(btnEditorReadFile);
-	}
-
-	const btnEditorDownloadFile = document.getElementById(
-		"btnEditorDownloadFile",
-	) as HTMLButtonElement;
-	if (btnEditorDownloadFile) {
-		attachDownloadFile(btnEditorDownloadFile);
-	}
-
-	const btnEditorUploadFile = document.getElementById(
-		"btnEditorUploadFile",
-	) as HTMLButtonElement;
-	if (btnEditorUploadFile) {
-		attachUploadFile(btnEditorUploadFile);
-	}
-
-	const btnEditorNew = document.getElementById(
-		"btnEditorNew",
-	) as HTMLButtonElement;
-	if (btnEditorUploadFile) {
-		attachEditorNew(btnEditorNew);
-	}
-
-	const inputThumbEditor = document.getElementById(
-		"thumb-editor",
-	) as HTMLInputElement;
-	const prevThumbEditor = document.getElementById(
-		"thumb-prev-editor",
-	) as HTMLDivElement;
-	if (inputThumbEditor && prevThumbEditor) {
-		attachUploadThumb(prevThumbEditor, inputThumbEditor);
-	}
-
-	const formMain = document.getElementById("formMain") as HTMLDivElement;
-	const formEditor = document.getElementById("formEditor") as HTMLDivElement;
-	const ctlMain = document.getElementById("ctlMain") as HTMLDivElement;
-	const ctlEditor = document.getElementById("ctlEditor") as HTMLDivElement;
-	const btnEditor = document.getElementById("btnEditor") as HTMLButtonElement;
-	const btnEditorCancel = document.getElementById(
-		"btnEditorCancel",
-	) as HTMLButtonElement;
-	const btnEditorSave = document.getElementById(
-		"btnEditorSave",
-	) as HTMLButtonElement;
+	attachBtnPrintAll(btnPrintAll, iframe);
+	attachBtnDownloadPdf(btnDownloadPdf, btnEditor, btnPrintAll, iframe);
+	attachBtnFaq(btnFaq);
+	attachCopyFile(btnEditorReadFile);
+	attachDownloadFile(btnEditorDownloadFile);
+	attachUploadFile(btnEditorUploadFile);
+	attachEditorNew(btnEditorNew);
+	attachUploadThumb(prevThumbEditor, inputThumbEditor);
 
 	if (
+		iframe &&
 		formMain &&
 		formEditor &&
 		ctlMain &&
@@ -151,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const editedData = getEditData();
 			if (editedData) {
 				setCurrentData(editedData);
-				genPage(editedData);
+				genPage(editedData, iframe);
 			}
 		});
 	}

@@ -5,16 +5,29 @@ import { Modal } from "./modal";
 const WARNING_LARGE_PRINT_TIME = 5000;
 
 export async function savePrintSpeed(elapsedTime: number, pagesLength: number) {
-	if (pagesLength > 0) {
-		// 1. Read existing metrics
-		const oldPrintSpeed = (await db.read<number>("total-print-speed")) || 0;
-		const oldPrintCount = (await db.read<number>("total-print-count")) || 0;
+	if (pagesLength <= 0) return;
 
+	// 1. Read existing metrics
+	const oldPrintSpeed = (await db.read<number>("total-print-speed")) || 0;
+	const oldPrintCount = (await db.read<number>("total-print-count")) || 0;
+
+	// 2. Initial state or current job was slower: reset baseline
+	const isFirstRun = oldPrintCount === 0;
+	const isCurrentSlower =
+		!isFirstRun &&
+		oldPrintSpeed / oldPrintCount < elapsedTime / pagesLength;
+
+	if (isCurrentSlower) {
+		await Promise.all([
+			db.write("total-print-speed", elapsedTime),
+			db.write("total-print-count", pagesLength),
+		]);
+	} else {
+		// Accumulate running total
 		const updatedSpeed = Math.floor(oldPrintSpeed + elapsedTime);
 		const updatedCount = oldPrintCount + pagesLength;
 
-		// 3. Persist updated values asynchronously
-		Promise.all([
+		await Promise.all([
 			db.write("total-print-speed", updatedSpeed),
 			db.write("total-print-count", updatedCount),
 		]);
@@ -92,8 +105,8 @@ export async function warningLargePrint(
 
 		const result = await Modal.show({
 			title: "Continue Printing?",
-			type: "question",
-			body: `This document has <strong>${formattedPages} pages</strong> to process and may take more than <strong>${formattedTime}</strong> to finish.`,
+			type: "warning",
+			body: `<p class="pb-4">This document has <strong>${formattedPages} pages</strong> to process and may take more than <strong>${formattedTime}</strong> to finish.</p>`,
 			confirmText: "Yes, continue",
 			cancelText: "Cancel",
 		});
@@ -109,18 +122,18 @@ export function attachBtnPrintAll(
 	btn: HTMLButtonElement,
 	iframe: HTMLIFrameElement,
 ) {
-	if (btn && iframe) {
-		btn.addEventListener("click", async () => {
-			// 1. Check for warning threshold before triggering print
-			const shouldProceed = await warningLargePrint(iframe);
-			if (!shouldProceed) return;
+	if (!btn || !iframe) return;
 
-			// 2. Proceed with print execution
-			const iframeWindow = iframe.contentWindow;
-			if (iframeWindow) {
-				iframeWindow.focus();
-				iframeWindow.print();
-			}
-		});
-	}
+	btn.addEventListener("click", async () => {
+		// 1. Check for warning threshold before triggering print
+		const shouldProceed = await warningLargePrint(iframe);
+		if (!shouldProceed) return;
+
+		// 2. Proceed with print execution
+		const iframeWindow = iframe.contentWindow;
+		if (iframeWindow) {
+			iframeWindow.focus();
+			iframeWindow.print();
+		}
+	});
 }

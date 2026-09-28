@@ -2,15 +2,13 @@ import type { Data, SchemaItem } from "../type/data";
 import { setEditData } from "./edit";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
-import { selectFile } from "./utils";
+import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
 
 export interface UploadFileResult<T extends readonly SchemaItem[]> {
 	fileName: string;
 	fileType: string;
 	content: Data<T>;
 }
-
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
 function isObject(val: unknown): val is Record<string, unknown> {
 	return typeof val === "object" && val !== null && !Array.isArray(val);
@@ -94,7 +92,7 @@ export async function uploadData<
 		const confirmed = await Modal.show({
 			type: "warning",
 			title: "Large File",
-			body: `The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?`,
+			body: `<p class="pb-4">The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?</p>`,
 			confirmText: "Yes, proceed",
 			cancelText: "Cancel",
 		});

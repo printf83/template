@@ -7,7 +7,7 @@
 }
 
 .faq-container details {
-	@apply text-neutral-600 hover:text-neutral-800 transition-all border border-neutral-200 rounded-lg p-2 bg-white shadow-xs;
+	@apply bg-white text-neutral-700 hover:text-neutral-900 transition-all border border-neutral-200 rounded-lg p-2 shadow-xs;
 }
 
 /* Hide default browser summary arrow marker */

@@ -120,11 +120,18 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 	}
 }
 
-function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
+function setButtonLoading(
+	btn: HTMLButtonElement,
+	btnSetting: HTMLButtonElement,
+	btnPrint: HTMLButtonElement,
+	isLoading: boolean,
+) {
 	const iconEl = btn.querySelector("[data-icon]");
 	if (!iconEl) return;
 
 	btn.disabled = isLoading;
+	btnSetting.disabled = isLoading;
+	btnPrint.disabled = isLoading;
 	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
 
 	// Re-render Lucide icons to swap SVG
@@ -133,9 +140,11 @@ function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
 
 export function attachBtnDownloadPdf(
 	btn: HTMLButtonElement,
+	btnSetting: HTMLButtonElement,
+	btnPrint: HTMLButtonElement,
 	iframe: HTMLIFrameElement,
 ) {
-	if (!btn || !iframe) return;
+	if (!btn || !btnSetting || !btnPrint || !iframe) return;
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
@@ -160,14 +169,15 @@ export function attachBtnDownloadPdf(
 			return;
 		}
 
-		setButtonLoading(btn, true);
+		setButtonLoading(btn, btnSetting, btnPrint, true);
+		const filename = iframe.dataset["filename"];
 
 		try {
-			await generatePDF(pages);
+			await generatePDF(pages, filename);
 		} catch (error) {
 			console.error("PDF generation failed:", error);
 		} finally {
-			setButtonLoading(btn, false);
+			setButtonLoading(btn, btnSetting, btnPrint, false);
 		}
 	});
 }

@@ -7,16 +7,16 @@
 }
 
 .modal-header {
-	@apply p-4 pb-0;
+	@apply p-4;
 }
 
 .modal-title {
-	@apply flex flex-col gap-2 justify-items-center items-center m-0 font-semibold text-gray-900;
+	@apply text-xl flex flex-col gap-2 justify-items-center items-center m-0 font-semibold text-gray-900;
 }
 
 .modal-title [data-icon],
 .modal-title svg {
-	@apply size-10;
+	@apply size-12;
 }
 
 .modal-close {
@@ -25,7 +25,7 @@
 }
 
 .modal-body {
-	@apply py-4 px-5 text-gray-700 text-sm text-center w-full;
+	@apply px-4 text-gray-700 text-sm text-center w-full;
 }
 
 .modal-footer {

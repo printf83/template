@@ -47,3 +47,11 @@ export async function initData() {
 	const { data } = await import("../data/template_csv");
 	return data;
 }
+
+export const getElementById = <T extends HTMLElement = HTMLElement>(
+	id: string,
+): T => {
+	return document.getElementById(id) as T;
+};
+
+export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit

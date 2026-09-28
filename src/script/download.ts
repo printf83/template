@@ -56,12 +56,12 @@ function downloadData<T extends readonly SchemaItem[]>(
 }
 
 export function attachDownloadFile(btn: HTMLButtonElement) {
-	if (btn) {
-		btn.addEventListener("click", () => {
-			const data = getEditData();
-			if (data) {
-				downloadData(data, data.title);
-			}
-		});
-	}
+	if (!btn) return;
+
+	btn.addEventListener("click", () => {
+		const data = getEditData();
+		if (data) {
+			downloadData(data, data.title);
+		}
+	});
 }

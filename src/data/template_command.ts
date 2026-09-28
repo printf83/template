@@ -119,13 +119,13 @@ export const data = createData({
 
 	{{#if notify}}
 	<div>Notification : 
-		<span class="font-semibold text-rose-400">You have {{%lowercase %number_text notify}} notification.</span>
+		<span class="font-semibold text-rose-600">You have {{%lowercase %number_text notify}} notification.</span>
 	</div>
 	{{/if notify}}
 
 	{{#ifnot notify}}
 	<div>Notification : 
-		<span class="font-semibold text-blue-400">You have no notification.</span>
+		<span class="font-semibold text-blue-600">No notification.</span>
 	</div>
 	{{/ifnot notify}}
 

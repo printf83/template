@@ -44,7 +44,7 @@ export async function initIcons() {
 
 // Dynamic load default data
 export async function initData() {
-	const { data } = await import("../data/template_csv");
+	const { data } = await import("../data/template_letterhead");
 	return data;
 }
 

@@ -848,6 +848,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 	scopeStack: Record<string, unknown>[],
 	rootRecord: unknown,
 	data: Data<T>,
+	visitedAssets: Set<string> = new Set(),
 ): string {
 	let output = "";
 
@@ -858,7 +859,38 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 				break;
 
 			case "ASSET": {
-				output += data.asset ? (data.asset[node.key!] ?? "") : "";
+				const assetKey = node.key!;
+
+				// Prevent circular asset references (e.g. Asset A containing {{#asset A}})
+				if (visitedAssets.has(assetKey)) {
+					console.warn(
+						`[HTML Engine] Circular asset reference detected for "${assetKey}"`,
+					);
+					break;
+				}
+
+				const rawAsset = data.asset ? (data.asset[assetKey] ?? "") : "";
+
+				if (rawAsset) {
+					// If the asset contains nested template tags, tokenize & evaluate it
+					if (rawAsset.includes("{{") || rawAsset.includes("<!---")) {
+						const assetTokens = tokenize(rawAsset);
+						const assetAst = buildAST(assetTokens);
+						const nextVisited = new Set(visitedAssets).add(
+							assetKey,
+						);
+
+						output += evaluateAST(
+							assetAst,
+							scopeStack,
+							rootRecord,
+							data,
+							nextVisited,
+						);
+					} else {
+						output += rawAsset;
+					}
+				}
 				break;
 			}
 
@@ -895,6 +927,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 						[...scopeStack, targetObj as Record<string, unknown>],
 						rootRecord,
 						data,
+						visitedAssets,
 					);
 				}
 				break;
@@ -922,6 +955,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 							[...scopeStack, loopScope],
 							rootRecord,
 							data,
+							visitedAssets,
 						);
 					});
 				}
@@ -936,6 +970,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 						scopeStack,
 						rootRecord,
 						data,
+						visitedAssets,
 					);
 				}
 				break;
@@ -949,6 +984,7 @@ function evaluateAST<T extends readonly SchemaItem[]>(
 						scopeStack,
 						rootRecord,
 						data,
+						visitedAssets,
 					);
 				}
 				break;

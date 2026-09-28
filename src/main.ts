@@ -1,6 +1,6 @@
+import "./style/main.css";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
-import "./style/main.css";
 import { attachBtnDownloadPdf } from "./script/pdf";
 import { getEditData, initEditor, setEditData } from "./script/edit";
 import { attachCopyFile, attachUploadThumb } from "./script/copy";
@@ -8,9 +8,9 @@ import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
 import { attachEditorNew } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
-import type { Data, SchemaItem } from "./type/data";
 import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
+import type { Data, SchemaItem } from "./type/data";
 
 const getAllElement = () => {
 	const iframe = getElementById<HTMLIFrameElement>("iframe");

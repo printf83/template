@@ -32,11 +32,7 @@ export function render<T extends readonly SchemaItem[]>(
 		}
 	}
 	
-	@meida print {
-		#pageControlContainer {
-			display: none !important;
-		}
-	}
+	
 	`;
 	// PAGE CONTROL CSS
 	// #pageControlContainer {
@@ -52,6 +48,12 @@ export function render<T extends readonly SchemaItem[]>(
 	// 	display: flex;
 	// 	flex: col;
 	// 	gap: 0.25rem;
+	// }
+
+	// @meida print {
+	// 	#pageControlContainer {
+	// 		display: none !important;
+	// 	}
 	// }
 
 	const systemScript = "";

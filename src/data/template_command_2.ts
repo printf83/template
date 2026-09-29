@@ -1,7 +1,7 @@
 import { createData } from "./data";
 
 export const data = createData({
-	title: "Command 1",
+	title: "Command 2",
 	lang: "EN",
 	schema: [
 		{ key: "id", type: "number" },
@@ -92,42 +92,42 @@ export const data = createData({
 		"file-1": "",
 	},
 	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
-	<div>Name : <span class="font-semibold">{{name}}</span></div>
+	<div>Name : <span class="font-semibold"><!---name---></span></div>
 
-	{{#if lang}}
+	<!---#if lang--->
 	<div>Language : 
 		<div class="flex flex-col">
-		{{#loop lang}}
+		<!---#loop lang--->
 			<div class="flex gap-1">
-				<span>{{%short title}}</span>
-				<span>(Level #{{level}})</span>
+				<span><!---%short title---></span>
+				<span>(Level #<!---level--->)</span>
 			</div>
-		{{/loop lang}}
+		<!---/loop lang--->
 		</div>
 	</div>
-	{{/if lang}}
+	<!---/if lang--->
 
-	{{#if hobby}}
+	<!---#if hobby--->
 	<div>Hobby : 
 		<div class="flex gap-2">
-		{{#loop hobby}}
-			<span class="bg-gray-200 px-2 py-1 rounded">{{_this}}</span>
-		{{/loop hobby}}
+		<!---#loop hobby--->
+			<span class="bg-gray-200 px-2 py-1 rounded"><!---_this---></span>
+		<!---/loop hobby--->
 		</div>
 	</div>
-	{{/if hobby}}
+	<!---/if hobby--->
 
-	{{#if notify}}
+	<!---#if notify--->
 	<div>Notification : 
-		<span class="font-semibold text-rose-600">You have {{%lowercase %number_text notify}} notification.</span>
+		<span class="font-semibold text-rose-600">You have <!---%lowercase %number_text notify---> notification.</span>
 	</div>
-	{{/if notify}}
+	<!---/if notify--->
 
-	{{#ifnot notify}}
+	<!---#ifnot notify--->
 	<div>Notification : 
 		<span class="font-semibold text-blue-600">No notification.</span>
 	</div>
-	{{/ifnot notify}}
+	<!---/ifnot notify--->
 
 </div>
 	`,

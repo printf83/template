@@ -49,33 +49,28 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 		let templateMap: Record<string, Data<SchemaItem[]>> = {};
 
 		const fetchTemplatesTask = (async () => {
-			const [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10] = await Promise.all(
-				[
-					import("../data/template_csv"),
-					import("../data/template_json"),
-					import("../data/template_function"),
-					import("../data/template_command"),
-					import("../data/template_picture"),
-					import("../data/template_asset"),
-					import("../data/template_letter"),
-					import("../data/template_100"),
-					import("../data/template_500"),
-					import("../data/template_1K"),
-				],
+			const targets = {
+				csv: () => import("../data/template_csv"),
+				json: () => import("../data/template_json"),
+				function: () => import("../data/template_function"),
+				command: () => import("../data/template_command"),
+				command2: () => import("../data/template_command_2"),
+				picture: () => import("../data/template_picture"),
+				asset: () => import("../data/template_asset"),
+				letter: () => import("../data/template_letter"),
+				t100: () => import("../data/template_100"),
+				t500: () => import("../data/template_500"),
+				t1K: () => import("../data/template_1K"),
+			};
+
+			const entries = await Promise.all(
+				Object.entries(targets).map(async ([key, load]) => [
+					key,
+					(await load()).data,
+				]),
 			);
 
-			templateMap = {
-				t1: t1.data,
-				t2: t2.data,
-				t3: t3.data,
-				t4: t4.data,
-				t5: t5.data,
-				t6: t6.data,
-				t7: t7.data,
-				t8: t8.data,
-				t9: t9.data,
-				t10: t10.data,
-			};
+			templateMap = Object.fromEntries(entries);
 
 			// Render list items once imports complete
 			const templateItems = Object.entries(templateMap)

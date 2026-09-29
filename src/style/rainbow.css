@@ -1,24 +1,10 @@
 .rainbow-animated {
-	background: linear-gradient(
-		90deg,
-		#ff0000,
-		#ff7f00,
-		#ffff00,
-		#00ff00,
-		#0000ff,
-		#4b0082,
-		#8b00ff,
-		#ff0000
-	);
-	background-size: 200% auto;
-	-webkit-background-clip: text;
-	background-clip: text;
-	color: transparent;
-	font-weight: bold;
-	text-box-trim: trim-both;
-
-	/* Smooth continuous animation */
-	animation: rainbow-slide 3s linear infinite;
+	@apply bg-[linear-gradient(90deg,#ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#8b00ff,#ff0000)]
+           bg-size-[200%_auto]
+           bg-clip-text
+           text-transparent
+           [text-box-trim:trim-both]
+           animate-[rainbow-slide_3s_linear_infinite];
 }
 
 @keyframes rainbow-slide {

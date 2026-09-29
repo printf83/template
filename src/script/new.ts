@@ -11,9 +11,9 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 		// 1. Initial loading state shown immediately inside the modal
 		formEl.innerHTML = `
-            <div class="thumb-list">
-                <div class="flex w-full h-full gap-3 justify-center items-center">
-                    <i data-icon="loader-circle" class="size-6"></i>
+            <div class="thumb-list h-[calc(100svh-360px)]">
+                <div class="loading">
+                    <i data-icon="loader-circle"></i>
 					Loading templates...
                 </div>
             </div>

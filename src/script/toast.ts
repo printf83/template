@@ -83,7 +83,7 @@ export class Toast {
 
 		toast.innerHTML = `
             <div class="toast-body">
-                <i data-icon="${style.icon}"></i>
+                <i data-icon="${style.icon}" class="size-6"></i>
                 <span class="toast-content">${message}</span>
             </div>
             <button type="button" class="toast-close ">&times;</button>

@@ -95,6 +95,45 @@ export async function copyTextToSystemClipboard(
 }
 
 /**
+ * Checks if the browser permits reading from the system clipboard.
+ */
+async function checkClipboardPermission(): Promise<boolean> {
+	try {
+		// 'clipboard-read' is supported in Chromium browsers (Chrome, Edge, Opera)
+		const permission = await navigator.permissions.query({
+			name: "clipboard-read" as PermissionName,
+		});
+
+		// Returns false only if the user explicitly blocked clipboard access
+		return permission.state === "granted" || permission.state === "prompt";
+	} catch {
+		// Firefox/Safari throw a TypeError on 'clipboard-read' in permissions.query.
+		// Fall back to true so navigator.clipboard.readText() can attempt execution directly.
+		return true;
+	}
+}
+
+/**
+ * Reads text directly from the system clipboard.
+ * MUST invoke navigator.clipboard.readText() synchronously within the user gesture event loop.
+ */
+export async function readTextFromSystemClipboard(): Promise<string | null> {
+	if (!navigator.clipboard || !window.isSecureContext) {
+		console.warn("Clipboard API is not available or context is insecure.");
+		return null;
+	}
+
+	try {
+		// Call readText() IMMEDIATELY.
+		// Do not await permission queries or focus helpers before this line!
+		return await navigator.clipboard.readText();
+	} catch (err) {
+		console.warn("Async Clipboard read failed or permission denied:", err);
+		return null;
+	}
+}
+
+/**
  * Async file picker that reads file content (Base64 for images, plain text for code/data),
  * copies it directly to the clipboard, and returns the metadata.
  */

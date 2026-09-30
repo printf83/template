@@ -11,6 +11,11 @@ import { getCurrentData, setCurrentData } from "./data/data";
 import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
 import type { Data, SchemaItem } from "./type/data";
+import {
+	attachAddShortDictionary,
+	attachCopyShortDictionary,
+	attachPasteShortDictionary,
+} from "./script/short";
 
 const getAllElement = () => {
 	const iframe = getElementById<HTMLIFrameElement>("iframe");
@@ -41,6 +46,19 @@ const getAllElement = () => {
 		getElementById<HTMLButtonElement>("btnEditorCancel");
 	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
 
+	const btnEditorAddShortItem = getElementById<HTMLButtonElement>(
+		"btnEditorAddShortItem",
+	);
+	const btnEditorCopyShortItem = getElementById<HTMLButtonElement>(
+		"btnEditorCopyShortItem",
+	);
+	const btnEditorPasteShortItem = getElementById<HTMLButtonElement>(
+		"btnEditorPasteShortItem",
+	);
+	const shortDictionaryContainer = getElementById<HTMLDivElement>(
+		"shortDictionaryContainer",
+	);
+
 	return {
 		iframe,
 		btnDownloadPdf,
@@ -59,6 +77,10 @@ const getAllElement = () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
+		btnEditorAddShortItem,
+		btnEditorCopyShortItem,
+		btnEditorPasteShortItem,
+		shortDictionaryContainer,
 	};
 };
 
@@ -112,6 +134,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
+		btnEditorAddShortItem,
+		btnEditorCopyShortItem,
+		btnEditorPasteShortItem,
+		shortDictionaryContainer,
 	} = getAllElement();
 
 	const data = await initData();
@@ -126,6 +152,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 	attachUploadFile(btnEditorUploadFile);
 	attachEditorNew(btnEditorNew);
 	attachUploadThumb(prevThumbEditor, inputThumbEditor);
+	attachAddShortDictionary(btnEditorAddShortItem, shortDictionaryContainer);
+	attachCopyShortDictionary(btnEditorCopyShortItem, shortDictionaryContainer);
+	attachPasteShortDictionary(
+		btnEditorPasteShortItem,
+		shortDictionaryContainer,
+	);
 
 	if (
 		iframe &&

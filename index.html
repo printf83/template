@@ -296,59 +296,38 @@
 
 							<h2 class="text-sm -mb-2">Short Dictionary</h2>
 							<div class="form-field">
-								<div
-									id="short2-editor"
-									class="text-list min-h-[calc(100svh-535px)] max-h-[calc(100svh-535px)]"
-								>
-									<label>
-										<span>short : long</span>
-										<input
-											type="radio"
-											name="short-dictionary-item"
-										/>
-									</label>
+								<div class="short-list-container">
+									<div class="short-list-scrollbar">
+										<div
+											class="short-list"
+											id="shortDictionaryContainer"
+										></div>
+									</div>
 
-									<label>
-										<span>
-											sekolah menengah kebangsaan : smk
-										</span>
-										<input
-											type="radio"
-											name="short-dictionary-item"
-										/>
-									</label>
-
-									<label>
-										<span>sekolah kebangsaan : sk</span>
-										<input
-											type="radio"
-											name="short-dictionary-item"
-										/>
-									</label>
-
-									<label>
-										<span>
-											sekolah rendah jenis kebangsaan :
-											srjk
-										</span>
-										<input
-											type="radio"
-											name="short-dictionary-item"
-										/>
-									</label>
-
-									<button class="btn-primary btn-sm">
-										Add
-									</button>
+									<div class="join w-full">
+										<button
+											class="btn-primary grow"
+											id="btnEditorCopyShortItem"
+										>
+											<i data-icon="copy"></i>
+											Copy
+										</button>
+										<button
+											class="btn-primary grow"
+											id="btnEditorPasteShortItem"
+										>
+											<i data-icon="clipboard"></i>
+											Paste
+										</button>
+										<button
+											class="btn-primary grow"
+											id="btnEditorAddShortItem"
+										>
+											<i data-icon="plus"></i>
+											Add New
+										</button>
+									</div>
 								</div>
-							</div>
-
-							<h2 class="text-sm -mb-2">Short Dictionary</h2>
-							<div class="form-field">
-								<div
-									id="short-editor"
-									class="form-code min-h-[calc(100svh-535px)] max-h-[calc(100svh-535px)]"
-								></div>
 							</div>
 						</div>
 					</div>

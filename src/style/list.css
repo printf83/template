@@ -16,13 +16,11 @@
 	@apply flex w-full h-full gap-3 justify-center items-center;
 }
 
-.text-list,
 .thumb-list {
 	@apply my-list-container;
 }
 
-.thumb-list > label > span,
-.text-list > label > span {
+.thumb-list > label > span {
 	@apply w-full text-center text-xs truncate;
 }
 
@@ -30,22 +28,14 @@
 	@apply my-list-item w-26 h-32 justify-end pb-1 bg-center bg-no-repeat;
 }
 
-.text-list > label {
-	@apply my-list-item w-64 h-8;
-}
-
-.text-list > label > input[type="radio"],
 .thumb-list > label > input[type="radio"] {
 	@apply hidden;
 }
 
-.text-list .loading,
 .thumb-list .loading {
 	@apply my-list-loading;
 }
 
-.text-list .loading i[data-icon],
-.text-list .loading svg,
 .thumb-list .loading i[data-icon],
 .thumb-list .loading svg {
 	@apply size-6;

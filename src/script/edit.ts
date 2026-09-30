@@ -1,10 +1,11 @@
 import { getLangKey, NATIONALITY_CONFIG, SEX_CONFIG } from "../page/html";
 import type { Data, SchemaItem } from "../type/data";
 import { createCodeEditor, type EditorLanguage } from "./editor";
+import { getShortDictionaryData, setShortDictionaryData } from "./short";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
 
-type EditorKey = "data" | "html" | "style" | "script" | "asset" | "short";
+type EditorKey = "data" | "html" | "style" | "script" | "asset";
 
 const editorState: Partial<Record<EditorKey, CodeEditor>> = {};
 
@@ -32,7 +33,6 @@ export function initEditor() {
 			{ key: "style", id: "style-editor", language: "css" },
 			{ key: "script", id: "script-editor", language: "javascript" },
 			{ key: "asset", id: "asset-editor", language: "json" },
-			{ key: "short", id: "short-editor", language: "json" },
 		];
 
 	configs.forEach(({ key, id, language }) => {
@@ -291,7 +291,15 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	editorState.asset?.setValue(formatJson(data.asset ?? {}));
 
 	if ("short" in data) {
-		editorState.short?.setValue(formatJson((data as any).short));
+		const shortDictionaryContainer = document.getElementById(
+			"shortDictionaryContainer",
+		) as HTMLDivElement;
+		if (shortDictionaryContainer) {
+			setShortDictionaryData(
+				shortDictionaryContainer,
+				(data as any).short as Record<string, string>,
+			);
+		}
 	}
 
 	// Data Editor
@@ -325,6 +333,10 @@ export function setEditData<T extends readonly SchemaItem[]>(
 export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 	const dataValue = editorState.data?.getValue();
 
+	const shortDictionaryContainer = document.getElementById(
+		"shortDictionaryContainer",
+	) as HTMLDivElement;
+
 	return {
 		title: getValue("title-editor"),
 		thumb: getValue("thumb-editor"),
@@ -345,7 +357,7 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 		script: editorState.script?.getValue() ?? "",
 
 		// JSON parsed fields
-		short: parseString(editorState.short?.getValue()),
+		short: getShortDictionaryData(shortDictionaryContainer),
 		asset: parseString(editorState.asset?.getValue()),
 
 		// Auto-detects and converts JSON or CSV data

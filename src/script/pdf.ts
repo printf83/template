@@ -148,7 +148,10 @@ export function attachBtnDownloadPdf(
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
-		const shouldProceed = await warningLargePrint(iframe);
+		const shouldProceed = await warningLargePrint(
+			iframe,
+			"Continue Generating PDF?",
+		);
 		if (!shouldProceed) return;
 
 		// 2. Proceed with print execution

@@ -32,7 +32,7 @@
 }
 
 .short-list-container > .short-list-scrollbar {
-	@apply max-h-[calc(100svh-600px)] overflow-y-auto 
+	@apply max-h-[calc(100svh-570px)] overflow-y-auto 
     border border-zinc-200 rounded-lg overflow-hidden
     shadow-xs bg-white
     [&:not(:has(.short-list-item))]:hidden;

@@ -86,6 +86,7 @@ function formatDuration(totalSeconds: number): string {
  */
 export async function warningLargePrint(
 	iframe: HTMLIFrameElement,
+	title: string = "Continue Printing?",
 ): Promise<boolean> {
 	if (!iframe) return true;
 
@@ -104,7 +105,7 @@ export async function warningLargePrint(
 		const formattedTime = formatDuration(estimatedSeconds);
 
 		const result = await Modal.show({
-			title: "Continue Printing?",
+			title: title,
 			type: "warning",
 			body: `<p class="pb-4">This document has <strong>${formattedPages} pages</strong> to process and may take more than <strong>${formattedTime}</strong> to finish.</p>`,
 			confirmText: "Yes, continue",
@@ -126,7 +127,10 @@ export function attachBtnPrintAll(
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
-		const shouldProceed = await warningLargePrint(iframe);
+		const shouldProceed = await warningLargePrint(
+			iframe,
+			"Continue Printing?",
+		);
 		if (!shouldProceed) return;
 
 		// 2. Proceed with print execution

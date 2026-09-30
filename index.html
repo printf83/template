@@ -5,16 +5,18 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-BiBdBju5.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-B--rAPb9.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-DYNBvATV.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-CKAA73E6.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-CGyRJuVA.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
 			<div class="header">
-				<h1 class="text-2xl text-shadow-xs rainbow-animated">
+				<h1
+					class="text-2xl font-semibold text-shadow-xs rainbow-animated"
+				>
 					template
 				</h1>
 				<div class="btn-group" id="ctlMain">
@@ -111,7 +113,7 @@
 						<div class="form-container">
 							<div
 								id="data-editor"
-								class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)] flex-1 overflow-hidden text-sm"
+								class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
 							></div>
 						</div>
 					</div>
@@ -133,7 +135,7 @@
 								<label class="form-label">Html</label>
 								<div
 									id="html-editor"
-									class="form-code min-h-[calc(100svh-460px)] max-h-[calc(100svh-460px)] flex-1 overflow-hidden text-sm"
+									class="form-code min-h-[calc(100svh-460px)] max-h-[calc(100svh-460px)]"
 								></div>
 							</div>
 
@@ -141,7 +143,7 @@
 								<label class="form-label">Style</label>
 								<div
 									id="style-editor"
-									class="form-code min-h-24 max-h-24 flex-1 overflow-hidden text-sm"
+									class="form-code min-h-24 max-h-24"
 								></div>
 							</div>
 
@@ -149,7 +151,7 @@
 								<label class="form-label">Script</label>
 								<div
 									id="script-editor"
-									class="form-code min-h-24 max-h-24 flex-1 overflow-hidden text-sm"
+									class="form-code min-h-24 max-h-24"
 								></div>
 							</div>
 						</div>
@@ -171,7 +173,7 @@
 							<div class="form-field">
 								<div
 									id="asset-editor"
-									class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)] flex-1 overflow-hidden text-sm"
+									class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
 								></div>
 							</div>
 						</div>
@@ -297,12 +299,47 @@
 								</div>
 							</div>
 
-							<h2 class="text-sm -mb-2">Short Dictionary</h2>
 							<div class="form-field">
-								<div
-									id="short-editor"
-									class="form-code min-h-[calc(100svh-535px)] max-h-[calc(100svh-535px)] flex-1 overflow-hidden text-sm"
-								></div>
+								<div class="short-list-container">
+									<div
+										class="flex justify-between items-center"
+									>
+										<div class="text-sm">
+											Short Dictionary
+										</div>
+										<div>
+											<div class="join shadow-xs">
+												<button
+													class="btn-secondary btn-square btn-sm"
+													id="btnEditorCopyShortItem"
+												>
+													<i data-icon="copy"></i>
+												</button>
+												<button
+													class="btn-secondary btn-square btn-sm"
+													id="btnEditorPasteShortItem"
+												>
+													<i
+														data-icon="clipboard"
+													></i>
+												</button>
+												<button
+													class="btn-primary btn-square btn-sm"
+													id="btnEditorAddShortItem"
+												>
+													<i data-icon="plus"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="short-list-scrollbar">
+										<div
+											class="short-list"
+											id="shortDictionaryContainer"
+										></div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

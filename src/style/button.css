@@ -32,6 +32,10 @@
 	@apply h-12 min-h-12 px-6 text-lg;
 }
 
+.btn-sm {
+	@apply h-8 min-h-8 px-3 text-xs;
+}
+
 .btn-square {
 	@apply px-3;
 }
@@ -44,6 +48,11 @@
 .btn-lg.btn-square,
 .btn-lg.btn-circle {
 	@apply w-16 p-0;
+}
+
+.btn-sm.btn-square,
+.btn-sm.btn-circle {
+	@apply w-10 p-0;
 }
 
 /* Color Variants */

@@ -11,7 +11,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 		// 1. Initial loading state shown immediately inside the modal
 		formEl.innerHTML = `
-            <div class="thumb-list h-[calc(100svh-360px)]">
+            <div class="thumb-list h-[calc(100svh-360px)] mt-4">
                 <div class="loading">
                     <i data-icon="loader-circle"></i>
 					Loading templates...
@@ -81,7 +81,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 					const isChecked = index === 0 ? "checked" : "";
 
 					return `<label ${bgStyle}>
-                        <span class="text-xs font-medium">${d.title}</span>
+                        <span>${d.title}</span>
                         <input type="radio" name="thumb-list-item" value="${key}" ${isChecked}>
                     </label>`;
 				})

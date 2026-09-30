@@ -1,36 +1,51 @@
 @utility my-list-container {
-	@apply p-4 mt-4 
+	@apply p-2
 	flex flex-wrap justify-start place-content-start
 	gap-2 overflow-y-auto inset-shadow-sm
     rounded-lg border border-zinc-200 bg-neutral-50;
 }
 
 @utility my-list-item {
-	@apply flex flex-col justify-end items-center rounded-sm cursor-pointer
+	@apply p-1 overflow-hidden
+	flex flex-col justify-center items-center rounded-sm cursor-pointer
 	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-50 hover:text-neutral-900 shadow-xs
-	has-checked:bg-neutral-100 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;
+	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;
 }
 
 @utility my-list-loading {
 	@apply flex w-full h-full gap-3 justify-center items-center;
 }
 
+.text-list,
 .thumb-list {
 	@apply my-list-container;
 }
 
-.thumb-list > label {
-	@apply my-list-item w-26 h-32 pb-1 bg-center bg-no-repeat;
+.thumb-list > label > span,
+.text-list > label > span {
+	@apply w-full text-center text-xs truncate;
 }
 
+.thumb-list > label {
+	@apply my-list-item w-26 h-32 justify-end pb-1 bg-center bg-no-repeat;
+}
+
+.text-list > label {
+	@apply my-list-item w-64 h-8;
+}
+
+.text-list > label > input[type="radio"],
 .thumb-list > label > input[type="radio"] {
 	@apply hidden;
 }
 
+.text-list .loading,
 .thumb-list .loading {
 	@apply my-list-loading;
 }
 
+.text-list .loading i[data-icon],
+.text-list .loading svg,
 .thumb-list .loading i[data-icon],
 .thumb-list .loading svg {
 	@apply size-6;

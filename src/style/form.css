@@ -47,7 +47,7 @@
 }
 
 .form-code {
-	@apply p-0 overflow-hidden;
+	@apply p-0 flex-1 overflow-hidden text-sm;
 }
 
 .form-textarea {

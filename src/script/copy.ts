@@ -95,25 +95,6 @@ export async function copyTextToSystemClipboard(
 }
 
 /**
- * Checks if the browser permits reading from the system clipboard.
- */
-async function checkClipboardPermission(): Promise<boolean> {
-	try {
-		// 'clipboard-read' is supported in Chromium browsers (Chrome, Edge, Opera)
-		const permission = await navigator.permissions.query({
-			name: "clipboard-read" as PermissionName,
-		});
-
-		// Returns false only if the user explicitly blocked clipboard access
-		return permission.state === "granted" || permission.state === "prompt";
-	} catch {
-		// Firefox/Safari throw a TypeError on 'clipboard-read' in permissions.query.
-		// Fall back to true so navigator.clipboard.readText() can attempt execution directly.
-		return true;
-	}
-}
-
-/**
  * Reads text directly from the system clipboard.
  * MUST invoke navigator.clipboard.readText() synchronously within the user gesture event loop.
  */
@@ -197,11 +178,7 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Modal.alert(
-				`Failed to process file: ${message}`,
-				"Copy Failed",
-				"error",
-			);
+			Toast.error(`Failed to process file: ${message}`);
 		}
 	});
 }
@@ -226,11 +203,7 @@ export function attachUploadThumb(
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Modal.alert(
-				`Failed to process file: ${message}`,
-				"Read Failed",
-				"error",
-			);
+			Toast.error(`Failed to process file: ${message}`);
 		}
 	});
 }

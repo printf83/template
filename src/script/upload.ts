@@ -156,11 +156,7 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Modal.alert(
-				`Failed to process file: ${message}`,
-				"Load Failed",
-				"error",
-			);
+			Toast.error(`Failed to process file: ${message}`);
 		}
 	});
 }

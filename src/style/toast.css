@@ -8,11 +8,11 @@
 
 .toast-body [data-icon],
 .toast-body svg {
-	@apply size-8;
+	@apply size-7;
 }
 
 .toast-content {
-	@apply text-sm font-medium;
+	@apply text-sm font-medium max-w-70;
 }
 
 .toast-close {

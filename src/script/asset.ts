@@ -3,27 +3,61 @@ import { Toast } from "./toast";
 import { initIcons, renderTemplate } from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
 
+function getValueType(value?: string): "text" | "image" | "html" {
+	if (!value) {
+		return "text";
+	}
+	if (value.startsWith("data:image/")) {
+		return "image";
+	}
+	if (value.includes("<") && value.includes(">")) {
+		return "html";
+	}
+	return "text";
+}
+
+function genPreview(value?: string): string {
+	if (!value) return "";
+
+	// Simple escaping for text content
+	return value
+		.slice(0, 50)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 function addItem(
 	list: HTMLDivElement,
-	data?: { key?: string; value?: string },
+	data?: {
+		key?: string;
+		value?: string;
+	},
 ) {
 	if (!list) return;
 
+	const type = getValueType(data?.value);
+	const icon =
+		type === "image" ? "image" : type === "html" ? "code-xml" : "file-text";
+
+	const bgStyle =
+		type === "image"
+			? `style="background-image: url('${data?.value}');"`
+			: "";
+
+	const preview = type !== "image" ? genPreview(data?.value) : "";
+
 	// Append directly to the container
-	list.insertAdjacentHTML("beforeend", renderTemplate(assetListItem, data));
-
-	const item = list.lastElementChild as HTMLDivElement;
-	if (!item) return;
-
-	const btnDelete = item.querySelector("button.btn-delete");
-	if (!btnDelete) return;
-
-	btnDelete.addEventListener(
-		"click",
-		() => {
-			item.remove();
-		},
-		{ once: true },
+	list.insertAdjacentHTML(
+		"beforeend",
+		renderTemplate(assetListItem, {
+			...data,
+			icon,
+			bgStyle,
+			preview,
+		}),
 	);
 }
 
@@ -134,17 +168,13 @@ export function getAssetData(list: HTMLDivElement): Record<string, string> {
 	if (!list) return {};
 
 	const result: Record<string, string> = {};
-	const items = list.querySelectorAll("div.asset-list-item");
+	const items = list.querySelectorAll<HTMLLabelElement>(".asset-list-item");
 
 	items.forEach((item) => {
-		const key = (
-			item.querySelector("input.asset-key") as HTMLInputElement
-		)?.value.trim();
-		const value = (
-			item.querySelector("input.asset-value") as HTMLInputElement
-		)?.value;
+		const key = item.dataset.key?.trim();
+		const value = item.dataset.value?.trim();
 
-		if (key) {
+		if (key && key !== undefined && value && value !== undefined) {
 			result[key] = value;
 		}
 	});

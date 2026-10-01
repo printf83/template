@@ -27,6 +27,8 @@ import {
 	CircleAlert,
 	Sparkles,
 	Undo2,
+	CodeXml,
+	Image,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -61,6 +63,8 @@ export const renderIcons = () => {
 			CircleAlert,
 			Sparkles,
 			Undo2,
+			CodeXml,
+			Image,
 		},
 	});
 };

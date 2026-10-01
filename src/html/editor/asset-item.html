@@ -1,17 +1,6 @@
-<div class="asset-list-item">
-	<input
-		class="form-input asset-key"
-		type="text"
-		placeholder="Key"
-		value="{{key}}"
-	/>
-	<input
-		type="text"
-		class="form-input asset-value"
-		placeholder="Value"
-		value="{{value}}"
-	/>
-	<button class="btn-secondary btn-delete" type="button">
-		<i data-icon="trash"></i>
-	</button>
-</div>
+<label class="asset-list-item" data-key="{{key}}" data-value="{{value}}">
+	<i data-icon="{{icon}}"></i>
+	<div {{{bgStyle}}}>{{preview}}</div>
+	<span>{{key}}</span>
+	<input type="radio" name="asset-list-item" value="{{key}}" {{isChecked}} />
+</label>

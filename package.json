@@ -27,7 +27,7 @@
 		"codemirror": "^6.0.2",
 		"html-to-image": "^1.11.13",
 		"jspdf": "^4.2.1",
-		"lucide": "^1.48.0",
+		"lucide": "^1.49.0",
 		"tailwindcss": "^4.3.3",
 		"thememirror": "^2.0.1"
 	}

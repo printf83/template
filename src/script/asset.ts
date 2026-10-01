@@ -53,6 +53,11 @@ function attachAssetEditor(item: HTMLDivElement) {
 		const modalPromise = Modal.show({
 			body: assetEditor,
 			size: "min-w-[600px]!",
+			onShow: () => {
+				setTimeout(() => {
+					codeEditor.refresh();
+				}, 500);
+			},
 		});
 
 		const result = await modalPromise;
@@ -60,6 +65,7 @@ function attachAssetEditor(item: HTMLDivElement) {
 		if (result && codeEditor) {
 			item.dataset.key = assetEditorKey.value;
 			item.dataset.value = codeEditor.getValue() || "";
+			codeEditor.destroy();
 		}
 	});
 }

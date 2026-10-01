@@ -168,7 +168,7 @@ export function createCodeEditor({
 
 	return {
 		refresh: () => {
-			view.requestMeasure();
+			view.update([]);
 		},
 
 		/** Get current editor string value */

@@ -6,6 +6,7 @@ import {
 import { Toast } from "./toast";
 import { initIcons, renderTemplate } from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
+import assetListItemChild from "../html/editor/asset-item-child.html?raw";
 import { Modal } from "./modal";
 import { createCodeEditor, detectValueType } from "./editor";
 import assetEditorHtml from "../html/editor/asset-edit.html?raw";
@@ -63,22 +64,22 @@ function attachAssetEditor(item: HTMLDivElement) {
 		const result = await modalPromise;
 
 		if (result && codeEditor) {
-			item.dataset.key = assetEditorKey.value;
-			item.dataset.value = codeEditor.getValue() || "";
+			const key = assetEditorKey.value;
+			const value = codeEditor.getValue() || "";
+
+			item.dataset.key = key;
+			item.dataset.value = value;
 			codeEditor.destroy();
+
+			//need to replace item
+			const temp = genItem(assetListItemChild, { key, value });
+			item.innerHTML = temp;
+			initIcons();
 		}
 	});
 }
 
-function addItem(
-	list: HTMLDivElement,
-	data?: {
-		key?: string;
-		value?: string;
-	},
-) {
-	if (!list) return;
-
+function genItem(template: string, data?: { key?: string; value?: string }) {
 	const type = detectValueType(data?.value);
 
 	let icon = "file-text";
@@ -112,16 +113,27 @@ function addItem(
 
 	const preview = type !== "image" ? genPreview(data?.value) : "";
 
+	return renderTemplate(template, {
+		...data,
+		icon,
+		bgStyle,
+		preview,
+	});
+}
+
+function addItem(
+	list: HTMLDivElement,
+	data?: {
+		key?: string;
+		value?: string;
+	},
+) {
+	if (!list) return;
+
+	const temp = genItem(assetListItem, data);
+
 	// Append directly to the container
-	list.insertAdjacentHTML(
-		"beforeend",
-		renderTemplate(assetListItem, {
-			...data,
-			icon,
-			bgStyle,
-			preview,
-		}),
-	);
+	list.insertAdjacentHTML("beforeend", temp);
 
 	const item = list.lastElementChild as HTMLDivElement;
 	if (item) {

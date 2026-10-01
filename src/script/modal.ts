@@ -10,6 +10,7 @@ export interface ModalOptions {
 	cancelText?: string;
 	showCancel?: boolean;
 	size?: string;
+	onShow?: (dlg: HTMLDialogElement) => void;
 }
 
 export class Modal {
@@ -97,6 +98,13 @@ export class Modal {
 			dialog.showModal();
 
 			initIcons();
+
+			// -------------------------------------------------------------
+			// Call onShow hook now that dialog is mounted and open in DOM
+			// -------------------------------------------------------------
+			if (typeof options.onShow === "function") {
+				options.onShow(dialog);
+			}
 
 			// Animate in
 			requestAnimationFrame(() => {

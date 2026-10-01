@@ -4,10 +4,11 @@ import {
 	readTextFromSystemClipboard,
 } from "./copy";
 import { Toast } from "./toast";
-import { getElementById, initIcons, renderTemplate } from "./utils";
+import { initIcons, renderTemplate } from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
 import { Modal } from "./modal";
 import { createCodeEditor, detectValueType } from "./editor";
+import assetEditorHtml from "../html/editor/asset-edit.html?raw";
 
 function genPreview(value?: string): string {
 	if (!value) return "";
@@ -29,39 +30,43 @@ function attachAssetEditor(item: HTMLDivElement) {
 		const key = item.dataset.key || "";
 		const value = item.dataset.value || "";
 
-		const assetEditorHtml =
-			await import("../html/editor/asset-edit.html?raw");
 		const assetEditor = document.createElement("div");
-		assetEditor.innerHTML = assetEditorHtml.default;
+		assetEditor.innerHTML = assetEditorHtml;
 
 		const assetEditorKey =
 			assetEditor.querySelector<HTMLInputElement>("#asset-key");
-		const assetEditorValueContainer =
+		const assetEditorValue =
 			assetEditor.querySelector<HTMLDivElement>("#asset-value");
 
-		if (!assetEditor || !assetEditorKey || !assetEditorValueContainer)
-			return;
+		if (!assetEditorKey || !assetEditorValue) return;
 
 		const valueType = detectValueType(value);
 
-		const assetEditorValue = createCodeEditor({
-			container: assetEditorValueContainer,
+		const codeEditor = createCodeEditor({
+			container: assetEditorValue,
 			language: valueType,
-			initialValue: value,
 		});
 
 		assetEditorKey.value = key;
+		codeEditor.setValue(value);
 
 		const modalPromise = Modal.show({
 			body: assetEditor,
 			size: "min-w-[600px]!",
+			onShow: () => {
+				setTimeout(() => {
+					codeEditor.refresh();
+					codeEditor.setLanguage(valueType);
+					codeEditor.setValue(value);
+				}, 500);
+			},
 		});
 
 		const result = await modalPromise;
 
-		if (result) {
+		if (result && codeEditor) {
 			item.dataset.key = assetEditorKey.value;
-			item.dataset.value = assetEditorValue.getValue() || "";
+			item.dataset.value = codeEditor.getValue() || "";
 		}
 	});
 }

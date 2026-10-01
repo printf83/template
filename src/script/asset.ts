@@ -1,20 +1,13 @@
-import { copyTextToSystemClipboard, readTextFromSystemClipboard } from "./copy";
+import {
+	copyTextToSystemClipboard,
+	pickFile,
+	readTextFromSystemClipboard,
+} from "./copy";
 import { Toast } from "./toast";
-import { initIcons, renderTemplate } from "./utils";
+import { getElementById, initIcons, renderTemplate } from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
-
-function getValueType(value?: string): "text" | "image" | "html" {
-	if (!value) {
-		return "text";
-	}
-	if (value.startsWith("data:image/")) {
-		return "image";
-	}
-	if (value.includes("<") && value.includes(">")) {
-		return "html";
-	}
-	return "text";
-}
+import { Modal } from "./modal";
+import { createCodeEditor, detectValueType } from "./editor";
 
 function genPreview(value?: string): string {
 	if (!value) return "";
@@ -29,6 +22,50 @@ function genPreview(value?: string): string {
 		.replace(/'/g, "&#039;");
 }
 
+function attachAssetEditor(item: HTMLDivElement) {
+	if (!item) return;
+
+	item.addEventListener("dblclick", async () => {
+		const key = item.dataset.key || "";
+		const value = item.dataset.value || "";
+
+		const assetEditorHtml =
+			await import("../html/editor/asset-edit.html?raw");
+		const assetEditor = document.createElement("div");
+		assetEditor.innerHTML = assetEditorHtml.default;
+
+		const assetEditorKey =
+			assetEditor.querySelector<HTMLInputElement>("#asset-key");
+		const assetEditorValueContainer =
+			assetEditor.querySelector<HTMLDivElement>("#asset-value");
+
+		if (!assetEditor || !assetEditorKey || !assetEditorValueContainer)
+			return;
+
+		const valueType = detectValueType(value);
+
+		const assetEditorValue = createCodeEditor({
+			container: assetEditorValueContainer,
+			language: valueType,
+			initialValue: value,
+		});
+
+		assetEditorKey.value = key;
+
+		const modalPromise = Modal.show({
+			body: assetEditor,
+			size: "min-w-[600px]!",
+		});
+
+		const result = await modalPromise;
+
+		if (result) {
+			item.dataset.key = assetEditorKey.value;
+			item.dataset.value = assetEditorValue.getValue() || "";
+		}
+	});
+}
+
 function addItem(
 	list: HTMLDivElement,
 	data?: {
@@ -38,9 +75,31 @@ function addItem(
 ) {
 	if (!list) return;
 
-	const type = getValueType(data?.value);
-	const icon =
-		type === "image" ? "image" : type === "html" ? "code-xml" : "file-text";
+	const type = detectValueType(data?.value);
+
+	let icon = "file-text";
+	switch (type) {
+		case "image":
+			icon = "image";
+			break;
+		case "html":
+			icon = "code-xml";
+			break;
+		case "javascript":
+			icon = "code-js";
+			break;
+		case "json":
+			icon = "code-json";
+			break;
+		case "css":
+			icon = "code-css";
+			break;
+		case "csv":
+			icon = "table";
+			break;
+		default:
+			icon = "file-text";
+	}
 
 	const bgStyle =
 		type === "image"
@@ -59,6 +118,11 @@ function addItem(
 			preview,
 		}),
 	);
+
+	const item = list.lastElementChild as HTMLDivElement;
+	if (item) {
+		attachAssetEditor(item);
+	}
 }
 
 export function attachAddAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
@@ -67,6 +131,27 @@ export function attachAddAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	btn.addEventListener("click", () => {
 		addItem(list);
 		initIcons();
+	});
+}
+
+export function attachUploadAsset(
+	btn: HTMLButtonElement,
+	list: HTMLDivElement,
+) {
+	if (!btn || !list) return;
+
+	btn.addEventListener("click", async () => {
+		try {
+			const fileContent = await pickFile();
+			if (!fileContent) return;
+
+			addItem(list, {
+				key: fileContent.fileName,
+				value: fileContent.content,
+			});
+
+			initIcons();
+		} catch (error) {}
 	});
 }
 

@@ -167,7 +167,7 @@ export class Modal {
 		return this.show({
 			type,
 			title,
-			body: `<p class="pb-4">${message}</p>`,
+			body: `<p class="pb-4 text-gray-700 text-sm text-center">${message}</p>`,
 			showCancel: true,
 			confirmText: "Confirm",
 		}).then((res) => res === true);
@@ -182,7 +182,7 @@ export class Modal {
 		return this.show({
 			type,
 			title,
-			body: `<p class="pb-4">${message}</p>`,
+			body: `<p class="pb-4 text-gray-700 text-sm text-center">${message}</p>`,
 			showCancel: false,
 			confirmText: "OK",
 		}).then(() => undefined);

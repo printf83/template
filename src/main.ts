@@ -16,6 +16,7 @@ import {
 	attachAddAsset,
 	attachCopyAsset,
 	attachPasteAsset,
+	attachUploadAsset,
 } from "./script/asset";
 import { db } from "./script/db";
 
@@ -54,6 +55,7 @@ const getAllElement = () => {
 	const abbrList = getElementById<HTMLDivElement>("abbrList");
 
 	const btnAddAsset = getElementById<HTMLButtonElement>("btnAddAsset");
+	const btnUploadAsset = getElementById<HTMLButtonElement>("btnUploadAsset");
 	const btnCopyAsset = getElementById<HTMLButtonElement>("btnCopyAsset");
 	const btnPasteAsset = getElementById<HTMLButtonElement>("btnPasteAsset");
 	const assetList = getElementById<HTMLDivElement>("assetList");
@@ -81,6 +83,7 @@ const getAllElement = () => {
 		btnPasteAbbr,
 		abbrList,
 		btnAddAsset,
+		btnUploadAsset,
 		btnCopyAsset,
 		btnPasteAsset,
 		assetList,
@@ -166,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnPasteAbbr,
 		abbrList,
 		btnAddAsset,
+		btnUploadAsset,
 		btnCopyAsset,
 		btnPasteAsset,
 		assetList,
@@ -187,6 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	attachCopyAbbr(btnCopyAbbr, abbrList);
 	attachPasteAbbr(btnPasteAbbr, abbrList);
 	attachAddAsset(btnAddAsset, assetList);
+	attachUploadAsset(btnUploadAsset, assetList);
 	attachCopyAsset(btnCopyAsset, assetList);
 	attachPasteAsset(btnPasteAsset, assetList);
 

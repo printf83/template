@@ -1,37 +1,33 @@
 .asset-list-container {
-	@apply flex flex-col gap-2 p-2 inset-shadow-sm rounded-lg border border-zinc-200 bg-neutral-50;
+	@apply flex flex-col inset-shadow-sm rounded-lg border border-zinc-200 bg-neutral-50;
 }
 
 .asset-list-scrollbar {
-	@apply overflow-y-auto;
+	@apply overflow-y-auto p-2;
 }
 
 .asset-list {
 	@apply flex flex-wrap justify-start place-content-start gap-2;
 }
 
-.asset-list > label {
+.asset-list > .asset-list-item {
 	@apply relative w-26 h-32 p-1 
-	overflow-hidden
+	overflow-hidden select-none
 	flex flex-col justify-between items-center
 	rounded-sm cursor-pointer
 	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-50 hover:text-neutral-900 shadow-xs
-	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;
+	focus:bg-neutral-50 focus:border-zinc-400 focus:text-neutral-700 focus:ring-4 focus:ring-zinc-900/5;
 }
 
-.asset-list > label > input[type="radio"] {
-	@apply hidden;
-}
-
-.asset-list > label > span {
+.asset-list > .asset-list-item > span {
 	@apply w-full text-center text-xs truncate;
 }
 
-.asset-list > label > div {
+.asset-list > .asset-list-item > div {
 	@apply w-full h-full flex justify-center items-center grow bg-cover bg-center bg-no-repeat text-center text-[0.5rem] text-ellipsis;
 }
 
-.asset-list > label > svg,
-.asset-list > label > i[data-icon] {
+.asset-list > .asset-list-item > svg,
+.asset-list > .asset-list-item > i[data-icon] {
 	@apply size-4 absolute right-1;
 }

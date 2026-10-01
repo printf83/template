@@ -6,7 +6,7 @@
 }
 
 @utility my-list-item {
-	@apply p-1 overflow-hidden
+	@apply p-1 overflow-hidden select-none
 	flex flex-col justify-center items-center rounded-sm cursor-pointer
 	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-50 hover:text-neutral-900 shadow-xs
 	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;

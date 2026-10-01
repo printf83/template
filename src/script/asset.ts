@@ -53,13 +53,6 @@ function attachAssetEditor(item: HTMLDivElement) {
 		const modalPromise = Modal.show({
 			body: assetEditor,
 			size: "min-w-[600px]!",
-			onShow: () => {
-				setTimeout(() => {
-					codeEditor.refresh();
-					codeEditor.setLanguage(valueType);
-					codeEditor.setValue(value);
-				}, 500);
-			},
 		});
 
 		const result = await modalPromise;

@@ -24,7 +24,7 @@ export function initEditor() {
 			{ key: "html", id: "html-editor", language: "html" },
 			{ key: "style", id: "style-editor", language: "css" },
 			{ key: "script", id: "script-editor", language: "javascript" },
-			{ key: "asset", id: "asset-editor", language: "json" },
+			{ key: "asset", id: "asset-value", language: "json" },
 		];
 
 	configs.forEach(({ key, id, language }) => {

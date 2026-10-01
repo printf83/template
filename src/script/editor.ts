@@ -6,7 +6,13 @@ import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { ayuLight as codeTheme } from "thememirror";
 
-export type EditorLanguage = "html" | "css" | "javascript" | "json" | "csv";
+export type EditorLanguage =
+	| "html"
+	| "css"
+	| "javascript"
+	| "json"
+	| "csv"
+	| "text";
 
 interface EditorOptions {
 	container: HTMLElement;
@@ -35,8 +41,9 @@ export function createCodeEditor({
 			case "html":
 				return html();
 			case "csv":
+			case "text":
 			default:
-				return []; // Plain text extension for CSV
+				return []; // Plain text extension for CSV and text
 		}
 	};
 
@@ -58,6 +65,17 @@ export function createCodeEditor({
 				if (update.docChanged && onChange) {
 					onChange(update.state.doc.toString());
 				}
+			}),
+			EditorView.domEventHandlers({
+				focus(event) {
+					const parent = (event.target as HTMLElement).closest(
+						".form-code",
+					) as HTMLDivElement;
+
+					if (parent) {
+						parent.focus();
+					}
+				},
 			}),
 		],
 		parent: container,

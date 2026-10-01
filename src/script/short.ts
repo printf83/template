@@ -1,6 +1,7 @@
 import { copyTextToSystemClipboard, readTextFromSystemClipboard } from "./copy";
 import { Toast } from "./toast";
-import { initIcons } from "./utils";
+import { initIcons, renderTemplate } from "./utils";
+import shortListItem from "../html/editor/short-item.html?raw";
 
 function addItem(
 	container: HTMLElement,
@@ -11,23 +12,7 @@ function addItem(
 	// Append directly to the container
 	container.insertAdjacentHTML(
 		"beforeend",
-		`<div class="short-list-item">
-            <input
-                class="form-input long-editor"
-                type="text"
-                placeholder="Long Text"
-                value="${data?.key ?? ""}"
-            />
-            <input
-                type="text"
-                class="form-input short-editor"
-                placeholder="Short Text"
-                value="${data?.value ?? ""}"
-            />
-            <button class="btn-secondary btn-delete" type="button">
-                <i data-icon="trash"></i>
-            </button>
-        </div>`,
+		renderTemplate(shortListItem, data),
 	);
 
 	const item = container.lastElementChild as HTMLDivElement;

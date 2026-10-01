@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import injectHTML from "vite-plugin-html-inject";
 
 export default defineConfig({
 	base: "/template/",
-	plugins: [tailwindcss()],
+	plugins: [tailwindcss(), injectHTML()],
 	build: {
 		// Increases threshold slightly if 500kB is too strict for your project
 		chunkSizeWarningLimit: 800,

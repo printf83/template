@@ -2,6 +2,9 @@ import type { Data, SchemaItem } from "../type/data";
 import { setEditData } from "./edit";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
+import newList from "../html/editor/new-list.html?raw";
+import newListItem from "../html/editor/new-item.html?raw";
+import { renderTemplate } from "./utils";
 
 export function attachEditorNew(btn: HTMLButtonElement) {
 	if (!btn) return;
@@ -10,14 +13,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 		const formEl = document.createElement("form");
 
 		// 1. Initial loading state shown immediately inside the modal
-		formEl.innerHTML = `
-            <div class="thumb-list h-[calc(100svh-360px)] mt-4">
-                <div class="loading">
-                    <i data-icon="loader-circle"></i>
-					Loading templates...
-                </div>
-            </div>
-        `;
+		formEl.innerHTML = newList;
 
 		// Double-click shortcut delegate
 		formEl.addEventListener("dblclick", (e) => {
@@ -75,15 +71,14 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 			// Render list items once imports complete
 			const templateItems = Object.entries(templateMap)
 				.map(([key, d], index) => {
-					const bgStyle = d.thumb
-						? `style="background-image: url('${d.thumb}')"`
-						: "";
-					const isChecked = index === 0 ? "checked" : "";
-
-					return `<label ${bgStyle}>
-                        <span>${d.title}</span>
-                        <input type="radio" name="thumb-list-item" value="${key}" ${isChecked}>
-                    </label>`;
+					return renderTemplate(newListItem, {
+						bgStyle: d.thumb
+							? `style="background-image: url('${d.thumb}')"`
+							: "",
+						title: d.title,
+						key: key,
+						isChecked: index === 0 ? "checked" : "",
+					});
 				})
 				.join("");
 

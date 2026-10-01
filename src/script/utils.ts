@@ -42,6 +42,29 @@ export async function initIcons() {
 	renderIcons();
 }
 
+/**
+ * Replaces {{key}} or {{{no escape key}}} placeholders in a template string with matching values from a data object.
+ */
+export function renderTemplate(
+	template: string,
+	data: Record<string, unknown> = {},
+): string {
+	// 1. Process {{{raw}}} placeholders (no escaping)
+	let result = template.replace(/\{\{\{\s*(\w+)\s*\}\}\}/g, (_, key) => {
+		const val = data[key];
+		return val !== undefined && val !== null ? String(val) : "";
+	});
+
+	// 2. Process {{escaped}} placeholders (escapes double quotes)
+	result = result.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, key) => {
+		const val = data[key];
+		if (val === undefined || val === null) return "";
+		return String(val).replace(/"/g, "&quot;");
+	});
+
+	return result;
+}
+
 // Dynamic load default data
 export async function initData() {
 	const { data } = await import("../data/template_letter");

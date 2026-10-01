@@ -18,16 +18,6 @@
 	@apply btn;
 }
 
-/* Size both the placeholder <i> AND the replaced <svg> before JS runs */
-.btn-primary [data-icon],
-.btn-primary svg,
-.btn-secondary [data-icon],
-.btn-secondary svg,
-.btn-danger [data-icon],
-.btn-danger svg {
-	@apply size-4 shrink-0 inline-block;
-}
-
 .btn-lg {
 	@apply h-12 min-h-12 px-6 text-lg;
 }
@@ -40,8 +30,32 @@
 	@apply px-3;
 }
 
+.btn-sm.btn-square {
+	@apply px-2;
+}
+
 .btn-circle {
 	@apply rounded-full;
+}
+
+/* Size both the placeholder <i> AND the replaced <svg> before JS runs */
+.btn-primary [data-icon],
+.btn-primary svg,
+.btn-secondary [data-icon],
+.btn-secondary svg,
+.btn-danger [data-icon],
+.btn-danger svg {
+	@apply size-4 shrink-0 inline-block;
+}
+
+.btn-sm [data-icon],
+.btn-sm svg {
+	@apply size-3.5 shrink-0 inline-block;
+}
+
+.btn-lg [data-icon],
+.btn-lg svg {
+	@apply size-4.5 shrink-0 inline-block;
 }
 
 /* Optional: If using with .btn-square or .btn-circle */

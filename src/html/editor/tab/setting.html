@@ -1,0 +1,106 @@
+<input type="radio" id="tab-4" name="editor-tabs" class="tab-radio" />
+<label for="tab-4" class="tab-btn">
+	<i data-icon="settings"></i>
+	<span>Setting</span>
+</label>
+<div class="tab-panel">
+	<div class="form-container">
+		<div class="flex flex-row gap-3">
+			<div class="grow flex flex-col gap-3">
+				<div class="form-field">
+					<label class="form-label">Title</label>
+					<input type="text" class="form-input" id="title-editor" />
+				</div>
+
+				<div class="form-field">
+					<label class="form-label">Language</label>
+					<select class="form-select" id="lang-editor">
+						<option value="EN">English</option>
+						<option value="MY">Bahasa Melayu</option>
+					</select>
+				</div>
+			</div>
+			<div
+				class="w-28 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-sm"
+			>
+				<div
+					id="thumb-prev-editor"
+					class="w-full h-full rounded-sm bg-no-repeat bg-center cursor-pointer"
+				>
+					<input
+						type="text"
+						class="hidden"
+						id="thumb-editor"
+						placeholder="data:image/png;base64,"
+					/>
+				</div>
+			</div>
+		</div>
+
+		<h2 class="text-sm -mb-2">Nationality</h2>
+		<div class="grid grid-cols-3 gap-2">
+			<div class="form-field col-span-1">
+				<label class="form-label">Malaysian</label>
+				<input
+					type="text"
+					class="form-input"
+					id="nationality-citizen-editor"
+					placeholder="Malaysian"
+				/>
+			</div>
+			<div class="form-field col-span-1">
+				<label class="form-label">Non-Malaysian</label>
+				<input
+					type="text"
+					class="form-input"
+					id="nationality-noncitizen-editor"
+					placeholder="Non-Malaysian"
+				/>
+			</div>
+			<div class="form-field col-span-1">
+				<label class="form-label">Unknown</label>
+				<input
+					type="text"
+					class="form-input"
+					id="nationality-unknown-editor"
+					placeholder="Unknown"
+				/>
+			</div>
+		</div>
+
+		<h2 class="text-sm -mb-2">Sex</h2>
+		<div class="grid grid-cols-3 gap-2">
+			<div class="form-field col-span-1">
+				<label class="form-label">Male</label>
+				<input
+					type="text"
+					class="form-input"
+					id="sex-male-editor"
+					placeholder="Male"
+				/>
+			</div>
+			<div class="form-field col-span-1">
+				<label class="form-label">Female</label>
+				<input
+					type="text"
+					class="form-input"
+					id="sex-female-editor"
+					placeholder="Female"
+				/>
+			</div>
+			<div class="form-field col-span-1">
+				<label class="form-label">Unknown</label>
+				<input
+					type="text"
+					class="form-input"
+					id="sex-unknown-editor"
+					placeholder="Unknown"
+				/>
+			</div>
+		</div>
+
+		<div class="form-field">
+			<load src="src/html/editor/short-list.html" />
+		</div>
+	</div>
+</div>

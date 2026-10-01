@@ -91,13 +91,13 @@ function genItem(template: string, data?: { key?: string; value?: string }) {
 			icon = "code-xml";
 			break;
 		case "javascript":
-			icon = "code-js";
+			icon = "scroll-text";
 			break;
 		case "json":
-			icon = "code-json";
+			icon = "file-braces-corner";
 			break;
 		case "css":
-			icon = "code-css";
+			icon = "swatch-book";
 			break;
 		case "csv":
 			icon = "table";

@@ -29,6 +29,10 @@ import {
 	Undo2,
 	CodeXml,
 	Image,
+	FileBracesCorner,
+	SwatchBook,
+	Table,
+	ScrollText,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -65,6 +69,10 @@ export const renderIcons = () => {
 			Undo2,
 			CodeXml,
 			Image,
+			FileBracesCorner,
+			SwatchBook,
+			Table,
+			ScrollText,
 		},
 	});
 };

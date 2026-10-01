@@ -12,10 +12,16 @@ import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
 import type { Data, SchemaItem } from "./type/data";
 import {
-	attachAddShortDictionary,
-	attachCopyShortDictionary,
-	attachPasteShortDictionary,
+	attachAddShort,
+	attachCopyShort,
+	attachPasteShort,
 } from "./script/short";
+import {
+	attachAddAsset,
+	attachCopyAsset,
+	attachPasteAsset,
+} from "./script/asset";
+import { db } from "./script/db";
 
 const getAllElement = () => {
 	const iframe = getElementById<HTMLIFrameElement>("iframe");
@@ -46,18 +52,15 @@ const getAllElement = () => {
 		getElementById<HTMLButtonElement>("btnEditorCancel");
 	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
 
-	const btnEditorAddShortItem = getElementById<HTMLButtonElement>(
-		"btnEditorAddShortItem",
-	);
-	const btnEditorCopyShortItem = getElementById<HTMLButtonElement>(
-		"btnEditorCopyShortItem",
-	);
-	const btnEditorPasteShortItem = getElementById<HTMLButtonElement>(
-		"btnEditorPasteShortItem",
-	);
-	const shortDictionaryContainer = getElementById<HTMLDivElement>(
-		"shortDictionaryContainer",
-	);
+	const btnAddShort = getElementById<HTMLButtonElement>("btnAddShort");
+	const btnCopyShort = getElementById<HTMLButtonElement>("btnCopyShort");
+	const btnPasteShort = getElementById<HTMLButtonElement>("btnPasteShort");
+	const shortList = getElementById<HTMLDivElement>("shortList");
+
+	const btnAddAsset = getElementById<HTMLButtonElement>("btnAddAsset");
+	const btnCopyAsset = getElementById<HTMLButtonElement>("btnCopyAsset");
+	const btnPasteAsset = getElementById<HTMLButtonElement>("btnPasteAsset");
+	const assetList = getElementById<HTMLDivElement>("assetList");
 
 	return {
 		iframe,
@@ -77,10 +80,14 @@ const getAllElement = () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
-		btnEditorAddShortItem,
-		btnEditorCopyShortItem,
-		btnEditorPasteShortItem,
-		shortDictionaryContainer,
+		btnAddShort,
+		btnCopyShort,
+		btnPasteShort,
+		shortList,
+		btnAddAsset,
+		btnCopyAsset,
+		btnPasteAsset,
+		assetList,
 	};
 };
 
@@ -112,6 +119,30 @@ const genPage = <const T extends readonly SchemaItem[]>(
 	}
 };
 
+const setInterface = (
+	current: "main" | "editor",
+	ctlMain: HTMLDivElement,
+	ctlEditor: HTMLDivElement,
+	formMain: HTMLDivElement,
+	formEditor: HTMLDivElement,
+) => {
+	if (formMain && formEditor && ctlMain && ctlEditor) {
+		if (current === "main") {
+			ctlEditor.classList.add("hidden");
+			ctlMain.classList.remove("hidden");
+			formEditor.classList.add("hidden");
+			formMain.classList.remove("hidden");
+		} else {
+			ctlMain.classList.add("hidden");
+			ctlEditor.classList.remove("hidden");
+			formMain.classList.add("hidden");
+			formEditor.classList.remove("hidden");
+		}
+
+		db.write("interface", current);
+	}
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
 	initIcons();
 	initEditor();
@@ -134,10 +165,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
-		btnEditorAddShortItem,
-		btnEditorCopyShortItem,
-		btnEditorPasteShortItem,
-		shortDictionaryContainer,
+		btnAddShort,
+		btnCopyShort,
+		btnPasteShort,
+		shortList,
+		btnAddAsset,
+		btnCopyAsset,
+		btnPasteAsset,
+		assetList,
 	} = getAllElement();
 
 	const data = await initData();
@@ -152,12 +187,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 	attachUploadFile(btnEditorUploadFile);
 	attachEditorNew(btnEditorNew);
 	attachUploadThumb(prevThumbEditor, inputThumbEditor);
-	attachAddShortDictionary(btnEditorAddShortItem, shortDictionaryContainer);
-	attachCopyShortDictionary(btnEditorCopyShortItem, shortDictionaryContainer);
-	attachPasteShortDictionary(
-		btnEditorPasteShortItem,
-		shortDictionaryContainer,
-	);
+	attachAddShort(btnAddShort, shortList);
+	attachCopyShort(btnCopyShort, shortList);
+	attachPasteShort(btnPasteShort, shortList);
+	attachAddAsset(btnAddAsset, assetList);
+	attachCopyAsset(btnCopyAsset, assetList);
+	attachPasteAsset(btnPasteAsset, assetList);
 
 	if (
 		iframe &&
@@ -169,28 +204,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditorCancel &&
 		btnEditorSave
 	) {
-		btnEditor.addEventListener("click", () => {
-			ctlMain.classList.add("hidden");
-			ctlEditor.classList.remove("hidden");
-			formMain.classList.add("hidden");
-			formEditor.classList.remove("hidden");
+		const interfaceState = await db.read<"main" | "editor">("interface");
+		if (interfaceState === "editor") {
+			setEditData(getCurrentData());
+			setInterface("editor", ctlMain, ctlEditor, formMain, formEditor);
+		} else {
+			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
+		}
 
+		btnEditor.addEventListener("click", () => {
+			setInterface("editor", ctlMain, ctlEditor, formMain, formEditor);
 			setEditData(getCurrentData());
 		});
 
 		btnEditorCancel.addEventListener("click", () => {
-			ctlEditor.classList.add("hidden");
-			ctlMain.classList.remove("hidden");
-			formEditor.classList.add("hidden");
-			formMain.classList.remove("hidden");
+			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 		});
 
 		btnEditorSave.addEventListener("click", () => {
-			ctlEditor.classList.add("hidden");
-			ctlMain.classList.remove("hidden");
-			formEditor.classList.add("hidden");
-			formMain.classList.remove("hidden");
-
+			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			const editedData = getEditData();
 			if (editedData) {
 				setCurrentData(editedData);

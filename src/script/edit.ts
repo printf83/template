@@ -1,7 +1,8 @@
 import { getLangKey, NATIONALITY_CONFIG, SEX_CONFIG } from "../page/html";
 import type { Data, SchemaItem } from "../type/data";
 import { createCodeEditor, type EditorLanguage } from "./editor";
-import { getShortDictionaryData, setShortDictionaryData } from "./short";
+import { getShortData, setShortData } from "./short";
+import { getElementById } from "./utils";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
 
@@ -36,7 +37,7 @@ export function initEditor() {
 		];
 
 	configs.forEach(({ key, id, language }) => {
-		const container = document.getElementById(id) as HTMLDivElement | null;
+		const container = getElementById<HTMLDivElement>(id);
 		if (container) {
 			editorState[key] = createCodeEditor({ container, language });
 		}
@@ -66,9 +67,7 @@ export function initEditor() {
 		}
 	}
 
-	const langEditor = document.getElementById(
-		"lang-editor",
-	) as HTMLSelectElement;
+	const langEditor = getElementById<HTMLSelectElement>("lang-editor");
 	if (langEditor) {
 		langEditor.addEventListener("change", () => setPlaceholderBaseOnLang());
 		setPlaceholderBaseOnLang();
@@ -78,7 +77,7 @@ export function initEditor() {
 function setValue<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
 >(id: string, value?: string) {
-	const elem = document.getElementById(id) as T | null;
+	const elem = getElementById<T>(id);
 	if (elem) {
 		elem.value = value || "";
 	}
@@ -88,7 +87,7 @@ function setPlaceholder<T extends HTMLInputElement | HTMLTextAreaElement>(
 	id: string,
 	value?: string,
 ) {
-	const elem = document.getElementById(id) as T | null;
+	const elem = getElementById<T>(id);
 	if (elem) {
 		elem.placeholder = value || "";
 	}
@@ -97,7 +96,7 @@ function setPlaceholder<T extends HTMLInputElement | HTMLTextAreaElement>(
 function getValue<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
 >(id: string): string | undefined {
-	const elem = document.getElementById(id) as T | null;
+	const elem = getElementById<T>(id);
 	return elem ? elem.value : undefined;
 }
 
@@ -291,12 +290,10 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	editorState.asset?.setValue(formatJson(data.asset ?? {}));
 
 	if ("short" in data) {
-		const shortDictionaryContainer = document.getElementById(
-			"shortDictionaryContainer",
-		) as HTMLDivElement;
-		if (shortDictionaryContainer) {
-			setShortDictionaryData(
-				shortDictionaryContainer,
+		const shortList = getElementById<HTMLDivElement>("shortList");
+		if (shortList) {
+			setShortData(
+				shortList,
 				(data as any).short as Record<string, string>,
 			);
 		}
@@ -313,10 +310,8 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	}
 
 	// Thumbnail
-	const elem = document.getElementById("thumb-prev-editor") as HTMLDivElement;
-	if (elem) {
-		elem.style.backgroundImage = `url("${data.thumb}")` || "";
-	}
+	const elem = getElementById<HTMLDivElement>("thumb-prev-editor");
+	if (elem) elem.style.backgroundImage = `url("${data.thumb}")` || "";
 
 	// Input Fields
 	setValue("title-editor", data.title);
@@ -333,9 +328,7 @@ export function setEditData<T extends readonly SchemaItem[]>(
 export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 	const dataValue = editorState.data?.getValue();
 
-	const shortDictionaryContainer = document.getElementById(
-		"shortDictionaryContainer",
-	) as HTMLDivElement;
+	const shortList = getElementById<HTMLDivElement>("shortList");
 
 	return {
 		title: getValue("title-editor"),
@@ -357,7 +350,7 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 		script: editorState.script?.getValue() ?? "",
 
 		// JSON parsed fields
-		short: getShortDictionaryData(shortDictionaryContainer),
+		short: getShortData(shortList),
 		asset: parseString(editorState.asset?.getValue()),
 
 		// Auto-detects and converts JSON or CSV data

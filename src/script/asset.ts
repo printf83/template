@@ -1,7 +1,7 @@
 import { copyTextToSystemClipboard, readTextFromSystemClipboard } from "./copy";
 import { Toast } from "./toast";
 import { initIcons, renderTemplate } from "./utils";
-import shortListItem from "../html/editor/short-item.html?raw";
+import assetListItem from "../html/editor/asset-item.html?raw";
 
 function addItem(
 	list: HTMLDivElement,
@@ -10,7 +10,7 @@ function addItem(
 	if (!list) return;
 
 	// Append directly to the container
-	list.insertAdjacentHTML("beforeend", renderTemplate(shortListItem, data));
+	list.insertAdjacentHTML("beforeend", renderTemplate(assetListItem, data));
 
 	const item = list.lastElementChild as HTMLDivElement;
 	if (!item) return;
@@ -27,7 +27,7 @@ function addItem(
 	);
 }
 
-export function attachAddShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachAddAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", () => {
@@ -36,14 +36,14 @@ export function attachAddShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 	});
 }
 
-export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", async () => {
-		const result = getShortData(list);
+		const result = getAssetData(list);
 
 		if (Object.keys(result).length === 0) {
-			Toast.warning("The Short Dictionary is empty.");
+			Toast.warning("The Asset Dictionary is empty.");
 			return;
 		}
 
@@ -53,7 +53,7 @@ export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 			);
 			if (success) {
 				Toast.success(
-					`Successfully copied <strong>Short Dictionary</strong> to your clipboard.`,
+					`Successfully copied <strong>Asset Dictionary</strong> to your clipboard.`,
 				);
 			}
 		} catch (error) {
@@ -61,12 +61,12 @@ export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to copy Short Dictionary: ${message}`);
+			Toast.error(`Failed to copy Asset Dictionary: ${message}`);
 		}
 	});
 }
 
-export function attachPasteShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", async () => {
@@ -92,22 +92,22 @@ export function attachPasteShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 			}
 
 			// 4. Update dictionary items
-			setShortData(list, data, true);
+			setAssetData(list, data, true);
 
 			Toast.success(
-				`Successfully pasted <strong>Short Dictionary</strong> from your clipboard.`,
+				`Successfully pasted <strong>Asset Dictionary</strong> from your clipboard.`,
 			);
 		} catch (error) {
 			const message =
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to paste Short Dictionary: ${message}`);
+			Toast.error(`Failed to paste Asset Dictionary: ${message}`);
 		}
 	});
 }
 
-export function setShortData(
+export function setAssetData(
 	list: HTMLDivElement,
 	data: Record<string, string>,
 	append: boolean = false,
@@ -116,7 +116,7 @@ export function setShortData(
 
 	// Clear existing items
 	if (!append) {
-		list.querySelectorAll("div.short-list-item").forEach((el) =>
+		list.querySelectorAll("div.asset-list-item").forEach((el) =>
 			el.remove(),
 		);
 	}
@@ -130,18 +130,18 @@ export function setShortData(
 	}
 }
 
-export function getShortData(list: HTMLDivElement): Record<string, string> {
+export function getAssetData(list: HTMLDivElement): Record<string, string> {
 	if (!list) return {};
 
 	const result: Record<string, string> = {};
-	const items = list.querySelectorAll("div.short-list-item");
+	const items = list.querySelectorAll("div.asset-list-item");
 
 	items.forEach((item) => {
 		const key = (
 			item.querySelector("input.long-editor") as HTMLInputElement
 		)?.value.trim();
 		const value = (
-			item.querySelector("input.short-editor") as HTMLInputElement
+			item.querySelector("input.asset-editor") as HTMLInputElement
 		)?.value;
 
 		if (key) {

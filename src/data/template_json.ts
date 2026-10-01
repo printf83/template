@@ -79,7 +79,7 @@ export const data = createData({
 			],
 		},
 	],
-	short: {
+	abbr: {
 		long: "short",
 	},
 	asset: {

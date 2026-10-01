@@ -570,9 +570,9 @@ function executeHelper<T extends readonly SchemaItem[]>(
 			// 3. Odd = Male (1, 3, 5, 7, 9), Even = Female (0, 2, 4, 6, 8)
 			return lastDigit % 2 !== 0 ? maleLabel : femaleLabel;
 		}
-		case "short": {
+		case "abbr": {
 			const str = String(val);
-			const dict = data.short;
+			const dict = data.abbr;
 			if (!dict) return str;
 
 			return str.replace(/\b[A-Za-z0-9_]+\b/g, (word) => {
@@ -628,8 +628,8 @@ function executeHelpers<T extends readonly SchemaItem[]>(
 	val: unknown,
 	data: Data<T>,
 ): string {
-	// Right-to-left execution: %uppercase %short %money_text amount
-	// equals uppercase(short(money_text(amount)))
+	// Right-to-left execution: %uppercase %abbr %money_text amount
+	// equals uppercase(abbr(money_text(amount)))
 	return fnNames.reduceRight((currentVal: unknown, fnName) => {
 		return executeHelper(fnName, currentVal, data);
 	}, val) as string;

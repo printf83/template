@@ -409,7 +409,7 @@ export const data = createData({
 			b: "CV",
 		},
 	],
-	short: {},
+	abbr: {},
 	asset: {},
 	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
 	<div class="h-[240mm] flex flex-col justify-center items-center">

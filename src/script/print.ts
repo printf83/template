@@ -45,14 +45,6 @@ async function readPrintSpeed() {
 	const totalPrintSpeed = rawSpeed || 100;
 	const totalPrintCount = rawCount || 1;
 
-	console.log({
-		totalPrintCount,
-		totalPrintSpeed,
-		currentEstimatedPrintSpeed: Math.floor(
-			totalPrintSpeed / totalPrintCount,
-		),
-	});
-
 	// 3. Compute and return per-page average
 	return Math.floor(totalPrintSpeed / totalPrintCount);
 }

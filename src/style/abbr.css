@@ -1,39 +1,39 @@
-.short-list > div,
-.short-list > button {
+.abbr-list > div,
+.abbr-list > button {
 	@apply flex w-full;
 }
 
-.short-list > div {
+.abbr-list > div {
 	@apply border-b border-zinc-200;
 }
 
-.short-list > div:last-child {
+.abbr-list > div:last-child {
 	@apply border-b-0;
 }
 
-.short-list > div input,
-.short-list > div button {
+.abbr-list > div input,
+.abbr-list > div button {
 	@apply border-0 rounded-none;
 }
 
-.short-list > div button {
+.abbr-list > div button {
 	@apply hover:text-red-600 hover:bg-red-100;
 }
 
-.short-list > div input {
+.abbr-list > div input {
 	@apply border-e border-zinc-200   
            hover:border-zinc-200
            hover:bg-neutral-50
            focus:ring-0 focus:border-zinc-200;
 }
 
-.short-list-container {
+.abbr-list-container {
 	@apply flex flex-col gap-2 p-2 inset-shadow-sm rounded-lg border border-zinc-200 bg-neutral-50;
 }
 
-.short-list-container > .short-list-scrollbar {
-	@apply max-h-[calc(100svh-570px)] overflow-y-auto 
+.abbr-list-container > .abbr-list-scrollbar {
+	@apply overflow-y-auto 
     border border-zinc-200 rounded-lg overflow-hidden
     shadow-xs bg-white
-    [&:not(:has(.short-list-item))]:hidden;
+    [&:not(:has(.abbr-list-item))]:hidden;
 }

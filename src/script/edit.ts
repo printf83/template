@@ -1,7 +1,8 @@
 import { getLangKey, NATIONALITY_CONFIG, SEX_CONFIG } from "../page/html";
 import type { Data, SchemaItem } from "../type/data";
+import { getAssetData, setAssetData } from "./asset";
 import { createCodeEditor, type EditorLanguage } from "./editor";
-import { getShortData, setShortData } from "./short";
+import { getAbbrData, setAbbrData } from "./abbr";
 import { getElementById } from "./utils";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
@@ -13,16 +14,6 @@ const editorState: Partial<Record<EditorKey, CodeEditor>> = {};
 function formatJson(val: unknown): string {
 	if (val === undefined || val === null) return "{}";
 	return typeof val === "string" ? val : JSON.stringify(val, null, 2);
-}
-
-function parseString(val: string | undefined): unknown {
-	if (!val || val.trim() === "") return undefined;
-	try {
-		return JSON.parse(val);
-	} catch (ex) {
-		console.error("Failed to parse JSON string:", ex);
-		return undefined;
-	}
 }
 
 export function initEditor() {
@@ -289,13 +280,20 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	// JSON Editors
 	editorState.asset?.setValue(formatJson(data.asset ?? {}));
 
-	if ("short" in data) {
-		const shortList = getElementById<HTMLDivElement>("shortList");
-		if (shortList) {
-			setShortData(
-				shortList,
-				(data as any).short as Record<string, string>,
+	if ("asset" in data) {
+		const assetList = getElementById<HTMLDivElement>("assetList");
+		if (assetList) {
+			setAssetData(
+				assetList,
+				(data as any).asset as Record<string, string>,
 			);
+		}
+	}
+
+	if ("abbr" in data) {
+		const abbrList = getElementById<HTMLDivElement>("abbrList");
+		if (abbrList) {
+			setAbbrData(abbrList, (data as any).abbr as Record<string, string>);
 		}
 	}
 
@@ -328,7 +326,8 @@ export function setEditData<T extends readonly SchemaItem[]>(
 export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 	const dataValue = editorState.data?.getValue();
 
-	const shortList = getElementById<HTMLDivElement>("shortList");
+	const abbrList = getElementById<HTMLDivElement>("abbrList");
+	const assetList = getElementById<HTMLDivElement>("assetList");
 
 	return {
 		title: getValue("title-editor"),
@@ -350,8 +349,8 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 		script: editorState.script?.getValue() ?? "",
 
 		// JSON parsed fields
-		short: getShortData(shortList),
-		asset: parseString(editorState.asset?.getValue()),
+		abbr: getAbbrData(abbrList),
+		asset: getAssetData(assetList),
 
 		// Auto-detects and converts JSON or CSV data
 		data: parseDataContent(dataValue),

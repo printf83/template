@@ -83,7 +83,7 @@ export const data = createData({
 			notify: 3,
 		},
 	],
-	short: {
+	abbr: {
 		javascript: "js",
 		typescript: "ts",
 		golang: "go",
@@ -99,7 +99,7 @@ export const data = createData({
 		<div class="flex flex-col">
 		<!---#loop lang--->
 			<div class="flex gap-1">
-				<span><!---%short title---></span>
+				<span><!---%abbr title---></span>
 				<span>(Level #<!---level--->)</span>
 			</div>
 		<!---/loop lang--->

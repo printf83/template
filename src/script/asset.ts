@@ -43,7 +43,7 @@ export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 		const result = getAssetData(list);
 
 		if (Object.keys(result).length === 0) {
-			Toast.warning("The Asset Dictionary is empty.");
+			Toast.warning("The asset list is empty.");
 			return;
 		}
 
@@ -53,7 +53,7 @@ export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 			);
 			if (success) {
 				Toast.success(
-					`Successfully copied <strong>Asset Dictionary</strong> to your clipboard.`,
+					`Successfully copied asset list to your clipboard.`,
 				);
 			}
 		} catch (error) {
@@ -61,7 +61,7 @@ export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to copy Asset Dictionary: ${message}`);
+			Toast.error(`Failed to copy asset list: ${message}`);
 		}
 	});
 }
@@ -95,14 +95,14 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 			setAssetData(list, data, true);
 
 			Toast.success(
-				`Successfully pasted <strong>Asset Dictionary</strong> from your clipboard.`,
+				`Successfully pasted asset list from your clipboard.`,
 			);
 		} catch (error) {
 			const message =
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to paste Asset Dictionary: ${message}`);
+			Toast.error(`Failed to paste asset list: ${message}`);
 		}
 	});
 }
@@ -138,10 +138,10 @@ export function getAssetData(list: HTMLDivElement): Record<string, string> {
 
 	items.forEach((item) => {
 		const key = (
-			item.querySelector("input.long-editor") as HTMLInputElement
+			item.querySelector("input.asset-key") as HTMLInputElement
 		)?.value.trim();
 		const value = (
-			item.querySelector("input.asset-editor") as HTMLInputElement
+			item.querySelector("input.asset-value") as HTMLInputElement
 		)?.value;
 
 		if (key) {

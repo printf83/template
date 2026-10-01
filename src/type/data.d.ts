@@ -59,7 +59,7 @@ export type Data<T extends readonly SchemaItem[]> = {
 	script?: string;
 	style?: string;
 	asset?: Record<string, string>;
-	short?: Record<string, string>;
+	abbr?: Record<string, string>;
 	nationality?: {
 		citizen: string;
 		nonCitizen: string;

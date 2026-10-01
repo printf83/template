@@ -33,7 +33,7 @@ export const data = createData({
 			picture: "",
 		},
 	],
-	short: {
+	abbr: {
 		bin: "b",
 		binti: "bt",
 	},
@@ -41,7 +41,7 @@ export const data = createData({
 		"file-1": "",
 	},
 	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
-	<div>Name : <span class="font-semibold">{{%short name}}</span></div>
+	<div>Name : <span class="font-semibold">{{%abbr name}}</span></div>
 
 	{{#if picture}}
 	<div class="w-24 h-28 bg-cover bg-center bg-no-repeat border rounded" style="background-image:url('{{picture}}')"></div>

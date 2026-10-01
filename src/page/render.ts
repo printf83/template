@@ -103,7 +103,6 @@ export function render<T extends readonly SchemaItem[]>(
 	// `;
 
 	const generatedHtml = html(data);
-	console.log(generatedHtml);
 
 	const finalHtml = [generatedHtml, systemHtml].filter(Boolean).join("\n");
 

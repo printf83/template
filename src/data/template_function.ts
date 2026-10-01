@@ -53,7 +53,7 @@ export const data = createData({
 			weight: 68.4,
 		},
 	],
-	short: {
+	abbr: {
 		executive: "exc",
 		manager: "mgr",
 		engineer: "eng",
@@ -71,7 +71,7 @@ export const data = createData({
 	</div>
 	<div>Sex : <span class="font-semibold">{{%sex nric}}</span></div>
 	<div>Nationality : <span class="font-semibold">{{%nationality nric}}</span></div>
-	<div>Job : <span class="font-semibold">{{%short job}}</span></div>
+	<div>Job : <span class="font-semibold">{{%abbr job}}</span></div>
 	<div class="flex gap-2">Salary : 
 		<span class="font-semibold">MYR {{%money salary}}</span>
 		<span class="italic">(Malaysian Ringgit {{%titlecase %money_text salary}} Only)</span>

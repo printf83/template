@@ -25,7 +25,7 @@ export const data = createData({
 			col3: "row 3 col 3",
 		},
 	],
-	short: {
+	abbr: {
 		long: "short",
 	},
 	asset: {

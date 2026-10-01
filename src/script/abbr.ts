@@ -1,7 +1,7 @@
 import { copyTextToSystemClipboard, readTextFromSystemClipboard } from "./copy";
 import { Toast } from "./toast";
 import { initIcons, renderTemplate } from "./utils";
-import shortListItem from "../html/editor/short-item.html?raw";
+import abbrListItem from "../html/editor/abbr-item.html?raw";
 
 function addItem(
 	list: HTMLDivElement,
@@ -10,7 +10,7 @@ function addItem(
 	if (!list) return;
 
 	// Append directly to the container
-	list.insertAdjacentHTML("beforeend", renderTemplate(shortListItem, data));
+	list.insertAdjacentHTML("beforeend", renderTemplate(abbrListItem, data));
 
 	const item = list.lastElementChild as HTMLDivElement;
 	if (!item) return;
@@ -27,7 +27,7 @@ function addItem(
 	);
 }
 
-export function attachAddShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachAddAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", () => {
@@ -36,14 +36,14 @@ export function attachAddShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 	});
 }
 
-export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachCopyAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", async () => {
-		const result = getShortData(list);
+		const result = getAbbrData(list);
 
 		if (Object.keys(result).length === 0) {
-			Toast.warning("The Short Dictionary is empty.");
+			Toast.warning("The abbreviation list is empty.");
 			return;
 		}
 
@@ -53,7 +53,7 @@ export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 			);
 			if (success) {
 				Toast.success(
-					`Successfully copied <strong>Short Dictionary</strong> to your clipboard.`,
+					`Successfully copied abbreviation list to your clipboard.`,
 				);
 			}
 		} catch (error) {
@@ -61,12 +61,12 @@ export function attachCopyShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to copy Short Dictionary: ${message}`);
+			Toast.error(`Failed to copy abbreviation list: ${message}`);
 		}
 	});
 }
 
-export function attachPasteShort(btn: HTMLButtonElement, list: HTMLDivElement) {
+export function attachPasteAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", async () => {
@@ -92,22 +92,22 @@ export function attachPasteShort(btn: HTMLButtonElement, list: HTMLDivElement) {
 			}
 
 			// 4. Update dictionary items
-			setShortData(list, data, true);
+			setAbbrData(list, data, true);
 
 			Toast.success(
-				`Successfully pasted <strong>Short Dictionary</strong> from your clipboard.`,
+				`Successfully pasted abbreviation list from your clipboard.`,
 			);
 		} catch (error) {
 			const message =
 				error instanceof Error
 					? error.message
 					: "An unexpected error occurred.";
-			Toast.error(`Failed to paste Short Dictionary: ${message}`);
+			Toast.error(`Failed to paste abbreviation list: ${message}`);
 		}
 	});
 }
 
-export function setShortData(
+export function setAbbrData(
 	list: HTMLDivElement,
 	data: Record<string, string>,
 	append: boolean = false,
@@ -116,7 +116,7 @@ export function setShortData(
 
 	// Clear existing items
 	if (!append) {
-		list.querySelectorAll("div.short-list-item").forEach((el) =>
+		list.querySelectorAll("div.abbr-list-item").forEach((el) =>
 			el.remove(),
 		);
 	}
@@ -130,18 +130,18 @@ export function setShortData(
 	}
 }
 
-export function getShortData(list: HTMLDivElement): Record<string, string> {
+export function getAbbrData(list: HTMLDivElement): Record<string, string> {
 	if (!list) return {};
 
 	const result: Record<string, string> = {};
-	const items = list.querySelectorAll("div.short-list-item");
+	const items = list.querySelectorAll("div.abbr-list-item");
 
 	items.forEach((item) => {
 		const key = (
-			item.querySelector("input.long-editor") as HTMLInputElement
+			item.querySelector("input.abbr-long") as HTMLInputElement
 		)?.value.trim();
 		const value = (
-			item.querySelector("input.short-editor") as HTMLInputElement
+			item.querySelector("input.abbr-short") as HTMLInputElement
 		)?.value;
 
 		if (key) {

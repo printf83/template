@@ -11,11 +11,7 @@ import { getCurrentData, setCurrentData } from "./data/data";
 import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
 import type { Data, SchemaItem } from "./type/data";
-import {
-	attachAddShort,
-	attachCopyShort,
-	attachPasteShort,
-} from "./script/short";
+import { attachAddAbbr, attachCopyAbbr, attachPasteAbbr } from "./script/abbr";
 import {
 	attachAddAsset,
 	attachCopyAsset,
@@ -52,10 +48,10 @@ const getAllElement = () => {
 		getElementById<HTMLButtonElement>("btnEditorCancel");
 	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
 
-	const btnAddShort = getElementById<HTMLButtonElement>("btnAddShort");
-	const btnCopyShort = getElementById<HTMLButtonElement>("btnCopyShort");
-	const btnPasteShort = getElementById<HTMLButtonElement>("btnPasteShort");
-	const shortList = getElementById<HTMLDivElement>("shortList");
+	const btnAddAbbr = getElementById<HTMLButtonElement>("btnAddAbbr");
+	const btnCopyAbbr = getElementById<HTMLButtonElement>("btnCopyAbbr");
+	const btnPasteAbbr = getElementById<HTMLButtonElement>("btnPasteAbbr");
+	const abbrList = getElementById<HTMLDivElement>("abbrList");
 
 	const btnAddAsset = getElementById<HTMLButtonElement>("btnAddAsset");
 	const btnCopyAsset = getElementById<HTMLButtonElement>("btnCopyAsset");
@@ -80,10 +76,10 @@ const getAllElement = () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
-		btnAddShort,
-		btnCopyShort,
-		btnPasteShort,
-		shortList,
+		btnAddAbbr,
+		btnCopyAbbr,
+		btnPasteAbbr,
+		abbrList,
 		btnAddAsset,
 		btnCopyAsset,
 		btnPasteAsset,
@@ -165,10 +161,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditor,
 		btnEditorCancel,
 		btnEditorSave,
-		btnAddShort,
-		btnCopyShort,
-		btnPasteShort,
-		shortList,
+		btnAddAbbr,
+		btnCopyAbbr,
+		btnPasteAbbr,
+		abbrList,
 		btnAddAsset,
 		btnCopyAsset,
 		btnPasteAsset,
@@ -187,9 +183,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 	attachUploadFile(btnEditorUploadFile);
 	attachEditorNew(btnEditorNew);
 	attachUploadThumb(prevThumbEditor, inputThumbEditor);
-	attachAddShort(btnAddShort, shortList);
-	attachCopyShort(btnCopyShort, shortList);
-	attachPasteShort(btnPasteShort, shortList);
+	attachAddAbbr(btnAddAbbr, abbrList);
+	attachCopyAbbr(btnCopyAbbr, abbrList);
+	attachPasteAbbr(btnPasteAbbr, abbrList);
 	attachAddAsset(btnAddAsset, assetList);
 	attachCopyAsset(btnCopyAsset, assetList);
 	attachPasteAsset(btnPasteAsset, assetList);

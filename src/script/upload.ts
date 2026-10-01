@@ -49,7 +49,7 @@ export function isValidDataPayload<T extends readonly SchemaItem[]>(
 
 	// 4. Optional dictionary fields (Record<string, string>)
 	if (obj.asset !== undefined && !isStringRecord(obj.asset)) return false;
-	if (obj.short !== undefined && !isStringRecord(obj.short)) return false;
+	if (obj.abbr !== undefined && !isStringRecord(obj.abbr)) return false;
 
 	// 5. Optional nationality configuration
 	if (obj.nationality !== undefined) {

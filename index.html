@@ -5,11 +5,11 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-DGzgw3b0.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-CY8a2pdh.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
-		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-DYNBvATV.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-j94hcda5.css">
+		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CChPA71y.js">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-FfxyUn4n.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
@@ -121,12 +121,18 @@
 
 		<div class="form-field">
 			<label class="form-label">Style</label>
-			<div id="style-editor" class="form-code min-h-24 max-h-24"></div>
+			<div
+				id="style-editor"
+				class="form-code min-h-24 max-h-24"
+			></div>
 		</div>
 
 		<div class="form-field">
 			<label class="form-label">Script</label>
-			<div id="script-editor" class="form-code min-h-24 max-h-24"></div>
+			<div
+				id="script-editor"
+				class="form-code min-h-24 max-h-24"
+			></div>
 		</div>
 	</div>
 </div>
@@ -138,12 +144,50 @@
 </label>
 <div class="tab-panel">
 	<div class="form-container">
-		<div class="form-field">
-			<div
-				id="asset-editor"
-				class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
-			></div>
+		<div class="asset-list-container">
+	<div class="flex justify-between items-center p-2">
+		<div class="text-sm font-semibold">Asset List</div>
+		<div>
+			<div class="join shadow-xs">
+				<button
+					class="btn-secondary btn-square btn-sm"
+					id="btnCopyAsset"
+					title="Copy"
+				>
+					<i data-icon="copy"></i>
+					<span class="sr-only">Copy</span>
+				</button>
+				<button
+					class="btn-secondary btn-square btn-sm"
+					id="btnPasteAsset"
+					title="Paste"
+				>
+					<i data-icon="clipboard"></i>
+					<span class="sr-only">Paste</span>
+				</button>
+				<button
+					class="btn-secondary btn-sm"
+					id="btnUploadAsset"
+					title="Upload"
+				>
+					<i data-icon="upload"></i>
+					<span class="sr-only">Upload</span>
+				</button>
+				<button class="btn-primary btn-sm" id="btnAddAsset" title="Add">
+					<i data-icon="plus"></i>
+					<span class="sr-only">Add</span>
+				</button>
+			</div>
 		</div>
+	</div>
+
+	<div
+		class="asset-list-scrollbar min-h-[calc(100svh-225px)] max-h-[calc(100svh-225px)]"
+	>
+		<div class="asset-list" id="assetList"></div>
+	</div>
+</div>
+
 	</div>
 </div>
 
@@ -249,14 +293,14 @@
 		</div>
 
 		<div class="form-field">
-			<div class="short-list-container">
+			<div class="abbr-list-container">
 	<div class="flex justify-between items-center">
-		<div class="text-sm font-semibold">Short Dictionary</div>
+		<div class="text-sm font-semibold">Abbreviation List</div>
 		<div>
 			<div class="join shadow-xs">
 				<button
 					class="btn-secondary btn-square btn-sm"
-					id="btnEditorCopyShortItem"
+					id="btnCopyAbbr"
 					title="Copy"
 				>
 					<i data-icon="copy"></i>
@@ -264,17 +308,13 @@
 				</button>
 				<button
 					class="btn-secondary btn-square btn-sm"
-					id="btnEditorPasteShortItem"
+					id="btnPasteAbbr"
 					title="Paste"
 				>
 					<i data-icon="clipboard"></i>
 					<span class="sr-only">Paste</span>
 				</button>
-				<button
-					class="btn-primary btn-sm"
-					id="btnEditorAddShortItem"
-					title="Add"
-				>
+				<button class="btn-primary btn-sm" id="btnAddAbbr" title="Add">
 					<i data-icon="plus"></i>
 					<span class="sr-only">Add</span>
 				</button>
@@ -282,8 +322,8 @@
 		</div>
 	</div>
 
-	<div class="short-list-scrollbar">
-		<div class="short-list" id="shortDictionaryContainer"></div>
+	<div class="abbr-list-scrollbar max-h-[calc(100svh-570px)]">
+		<div class="abbr-list" id="abbrList"></div>
 	</div>
 </div>
 

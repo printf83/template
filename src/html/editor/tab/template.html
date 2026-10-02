@@ -6,14 +6,14 @@
 <div class="tab-panel">
 	<div class="form-container">
 		<div class="form-field">
-			<label
+			<div
 				class="form-label"
 				data-filename="template"
 				data-filetype=".html"
-				data-filemime="text/html"
-				><span>Html</span>
-				<load src="src/html/editor/form-code-control.html"
-			/></label>
+			>
+				<label>Html</label>
+				<load src="src/html/editor/form-code-control.html" />
+			</div>
 			<div
 				id="html-editor"
 				class="form-code h-[calc(100svh-545px)]"
@@ -21,26 +21,18 @@
 		</div>
 
 		<div class="form-field">
-			<label
-				class="form-label"
-				data-filename="style"
-				data-filetype=".css"
-				data-filemime="text/css"
-				><span>Style</span>
-				<load src="src/html/editor/form-code-control.html"
-			/></label>
+			<div class="form-label" data-filename="style" data-filetype=".css">
+				<label>Style</label>
+				<load src="src/html/editor/form-code-control.html" />
+			</div>
 			<div id="style-editor" class="form-code h-32"></div>
 		</div>
 
 		<div class="form-field">
-			<label
-				class="form-label"
-				data-filename="script"
-				data-filetype=".js"
-				data-filemime="text/javascript"
-				><span>Script</span>
-				<load src="src/html/editor/form-code-control.html"
-			/></label>
+			<div class="form-label" data-filename="script" data-filetype=".js">
+				<label>Script</label>
+				<load src="src/html/editor/form-code-control.html" />
+			</div>
 			<div id="script-editor" class="form-code h-32"></div>
 		</div>
 	</div>

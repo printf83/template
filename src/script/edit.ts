@@ -86,16 +86,15 @@ function setPlaceholder<T extends HTMLInputElement | HTMLTextAreaElement>(
 
 function setCodeEditorMetadata(
 	id: string,
-	data: { filename: string; filetype: string; filemime: string },
+	data: { filename: string; filetype: string },
 ) {
 	const elem = getElementById<HTMLDivElement>(id);
 	if (elem) {
-		const label = elem.previousElementSibling as HTMLLabelElement;
+		const formLabel = elem.previousElementSibling as HTMLDivElement;
 
-		if (label) {
-			label.setAttribute("data-filename", data.filename);
-			label.setAttribute("data-filetype", data.filetype);
-			label.setAttribute("data-filemime", data.filemime);
+		if (formLabel) {
+			formLabel.setAttribute("data-filename", data.filename);
+			formLabel.setAttribute("data-filetype", data.filetype);
 		}
 	}
 }
@@ -318,7 +317,6 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	if (isJson) {
 		setCodeEditorMetadata("data-editor", {
 			filename: "data",
-			filemime: "application/json",
 			filetype: ".json",
 		});
 		editorState.data?.setLanguage("json");
@@ -326,7 +324,6 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	} else {
 		setCodeEditorMetadata("data-editor", {
 			filename: "data",
-			filemime: "text/csv",
 			filetype: ".csv",
 		});
 

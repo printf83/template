@@ -122,6 +122,8 @@ function parseArbitraryClass<T extends readonly SchemaItem[]>(
 
 	// 5. Standard Property Mappings
 	switch (prefix) {
+		case "text-shadow":
+			return { style: `text-shadow: ${value};` };
 		case "bg-size":
 			return { style: `background-size: ${value};` };
 		case "bg-position":

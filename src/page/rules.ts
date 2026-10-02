@@ -733,6 +733,28 @@ const SHADOW_RULES: Record<string, PageRuleItem> = {
 };
 
 // ============================================================================
+// TEXT SHADOW
+// ============================================================================
+
+const TEXT_SHADOW_RULES: Record<string, PageRuleItem> = {
+	"text-shadow-sm": {
+		style: "text-shadow: 0px 1px 0px rgb(0 0 0 / 0.075), 0px 1px 1px rgb(0 0 0 / 0.075), 0px 2px 2px rgb(0 0 0 / 0.075);",
+	},
+	"text-shadow": {
+		style: "text-shadow: 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1);",
+	},
+	"text-shadow-md": {
+		style: "text-shadow: 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1), 0px 2px 4px rgb(0 0 0 / 0.1);",
+	},
+	"text-shadow-lg": {
+		style: "text-shadow: 0px 1px 2px rgb(0 0 0 / 0.1), 0px 3px 2px rgb(0 0 0 / 0.1), 0px 4px 8px rgb(0 0 0 / 0.1);",
+	},
+	"text-shadow-none": {
+		style: "text-shadow: none;",
+	},
+};
+
+// ============================================================================
 // GRID FLEX
 // ============================================================================
 
@@ -1271,6 +1293,7 @@ const PAGE_MARGIN_RULES: Record<string, PageRuleItem> = {
 export const rules: Record<string, PageRuleItem | PageRuleItem[]> =
 	Object.freeze({
 		...SHADOW_RULES,
+		...TEXT_SHADOW_RULES,
 		...BACKGROUND_RULES,
 		...PAGE_BREAK_RULES,
 		...PAGE_MARGIN_RULES,
@@ -1320,6 +1343,10 @@ export const ARBITRARY_PROPERTIES: Record<string, string[]> = Object.freeze({
 	// Borders & Radius
 	rounded: ["border-radius"],
 	border: ["border-width"],
+
+	// Shadow
+	shadow: ["box-shadow"],
+	"text-shadow": ["text-shadow"],
 
 	// Typography details
 	leading: ["line-height"], // e.g. leading-[1.6] or leading-[24px]

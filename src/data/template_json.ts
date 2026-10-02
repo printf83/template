@@ -90,7 +90,7 @@ export const data = createData({
 	<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
 	<div>Col3 : <span class="font-semibold">{{col3}}</span></div>
 	<div>Col4 : 
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-2 py-1">
 		{{#loop col4}}
 			<div class="flex gap-2">
 				<span class="bg-gray-200">{{child1}}</span>

@@ -43,7 +43,7 @@ Jalan Mat Salleh,
 		<div class="w-full h-full bg-contain bg-center bg-no-repeat asset-[company-logo]"></div>
 	</div>
 	<div class="flex flex-col">
-		<h1 class="text-3xl font-bold text-indigo-600">{{#asset company-name}}</h1>
+		<h1 class="text-3xl font-bold text-shadow text-indigo-600">{{#asset company-name}}</h1>
 		<p class="text-sm">{{%br #asset company-address}}</p>
 		<p class="text-sm">
 			Tel : <b>{{#asset company-phone}}</b> | 

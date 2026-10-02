@@ -58,7 +58,7 @@ Jalan Mat Salleh,
 </div>`,
 		"company-logo": assetCompanyLogo,
 	},
-	template: `<div class="page a4 page-mx-[15mm] page-mt-[10mm] relative" contenteditable="true">
+	template: `<div class="page a4 page-mx-[15mm] page-mt-[10mm] font-sans relative" contenteditable="true">
 	{{#asset letter-head}}
 	<div class="h-[225mm]">
 		<div>Col1 : <span class="font-semibold">{{col1}}</span></div>

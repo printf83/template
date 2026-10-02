@@ -38,7 +38,7 @@ export const data = createData({
 		company: "COMPANY <span class='italic underline'>NAME</span>",
 		logo: assetCompanyLogo,
 	},
-	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
+	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>ID : <span class="font-semibold">{{id}}</span></div>
 	<div>Name : <span class="font-semibold">{{%abbr name}}</span></div>
 	<div>Company : <span class="font-semibold">{{#asset company}}</span></div>

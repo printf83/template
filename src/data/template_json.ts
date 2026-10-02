@@ -85,7 +85,7 @@ export const data = createData({
 	asset: {
 		"file-1": "",
 	},
-	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
+	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
 	<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
 	<div>Col3 : <span class="font-semibold">{{col3}}</span></div>

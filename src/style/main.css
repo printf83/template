@@ -21,9 +21,13 @@
 
 .form-main,
 .form-edit {
-	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-xs;
+	@apply grow m-4 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-xs;
+}
+
+.form-edit {
+	@apply p-1;
 }
 
 .form-main-frame {
-	@apply min-w-full h-[calc(100svh-6rem)] border-none;
+	@apply min-w-full h-[calc(100svh-90px)] border-none;
 }

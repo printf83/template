@@ -51,7 +51,7 @@
 }
 
 .form-code {
-	@apply p-0 overflow-hidden text-sm;
+	@apply p-0 overflow-hidden text-sm!;
 }
 
 .form-code.focused {

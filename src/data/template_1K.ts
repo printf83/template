@@ -4011,7 +4011,7 @@ export const data = createData({
 	],
 	abbr: {},
 	asset: {},
-	template: `<div class="page a4 page-m-[15mm]" contenteditable="true">
+	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div class="h-[240mm] flex flex-col justify-center items-center">
 		<div class="text-[60mm] text-rose-800">{{b}}</div>
 		<div class="text-9xl text-emerald-800">{{a}}</div>

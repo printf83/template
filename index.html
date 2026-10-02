@@ -5,11 +5,11 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-BYhU1696.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-DHtghQfT.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CChPA71y.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-BdRsEit_.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-DJQi9WlF.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
@@ -97,10 +97,33 @@
 </label>
 <div class="tab-panel">
 	<div class="form-container">
-		<div
-			id="data-editor"
-			class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
-		></div>
+		<div class="form-field">
+			<label
+				class="form-label"
+				data-filename="data"
+				data-filetype=".json,.csv"
+				data-filemime="text/plain"
+			>
+				<span>Data</span>
+				<div>
+	<div class="join">
+		<button class="btn-secondary btn-xs btn-code-download" title="Download">
+			<i data-icon="download"></i>
+			<span class="sr-only">Download</span>
+		</button>
+		<button class="btn-secondary btn-xs btn-code-upload" title="Upload">
+			<i data-icon="upload"></i>
+			<span class="sr-only">Upload</span>
+		</button>
+	</div>
+</div>
+
+			</label>
+			<div
+				id="data-editor"
+				class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
+			></div>
+		</div>
 	</div>
 </div>
 
@@ -112,7 +135,25 @@
 <div class="tab-panel">
 	<div class="form-container">
 		<div class="form-field">
-			<label class="form-label">Html</label>
+			<label
+				class="form-label"
+				data-filename="template"
+				data-filetype=".html"
+				data-filemime="text/html"
+				><span>Html</span>
+				<div>
+	<div class="join">
+		<button class="btn-secondary btn-xs btn-code-download" title="Download">
+			<i data-icon="download"></i>
+			<span class="sr-only">Download</span>
+		</button>
+		<button class="btn-secondary btn-xs btn-code-upload" title="Upload">
+			<i data-icon="upload"></i>
+			<span class="sr-only">Upload</span>
+		</button>
+	</div>
+</div>
+</label>
 			<div
 				id="html-editor"
 				class="form-code min-h-[calc(100svh-460px)] max-h-[calc(100svh-460px)]"
@@ -120,19 +161,49 @@
 		</div>
 
 		<div class="form-field">
-			<label class="form-label">Style</label>
-			<div
-				id="style-editor"
-				class="form-code min-h-24 max-h-24"
-			></div>
+			<label
+				class="form-label"
+				data-filename="style"
+				data-filetype=".css"
+				data-filemime="text/css"
+				><span>Style</span>
+				<div>
+	<div class="join">
+		<button class="btn-secondary btn-xs btn-code-download" title="Download">
+			<i data-icon="download"></i>
+			<span class="sr-only">Download</span>
+		</button>
+		<button class="btn-secondary btn-xs btn-code-upload" title="Upload">
+			<i data-icon="upload"></i>
+			<span class="sr-only">Upload</span>
+		</button>
+	</div>
+</div>
+</label>
+			<div id="style-editor" class="form-code min-h-24 max-h-24"></div>
 		</div>
 
 		<div class="form-field">
-			<label class="form-label">Script</label>
-			<div
-				id="script-editor"
-				class="form-code min-h-24 max-h-24"
-			></div>
+			<label
+				class="form-label"
+				data-filename="script"
+				data-filetype=".js"
+				data-filemime="text/javascript"
+				><span>Script</span>
+				<div>
+	<div class="join">
+		<button class="btn-secondary btn-xs btn-code-download" title="Download">
+			<i data-icon="download"></i>
+			<span class="sr-only">Download</span>
+		</button>
+		<button class="btn-secondary btn-xs btn-code-upload" title="Upload">
+			<i data-icon="upload"></i>
+			<span class="sr-only">Upload</span>
+		</button>
+	</div>
+</div>
+</label>
+			<div id="script-editor" class="form-code min-h-24 max-h-24"></div>
 		</div>
 	</div>
 </div>

@@ -89,32 +89,33 @@ export type ValueType =
 	| "csv"
 	| "text";
 
-export function getFileMetadata(
-	language: ValueType,
-	value: string = "",
-): { fileType: string; fileMime: string } {
-	let fileType = ".txt";
+export function getFileMetadata(value: string = ""): {
+	fileExt: string;
+	fileMime: string;
+} {
+	let fileExt = "txt";
 	let fileMime = "text/plain";
 
-	switch (language) {
+	const lang = detectValueType(value);
+	switch (lang) {
 		case "html":
-			fileType = ".html";
+			fileExt = "html";
 			fileMime = "text/html";
 			break;
 		case "css":
-			fileType = ".css";
+			fileExt = "css";
 			fileMime = "text/css";
 			break;
 		case "javascript":
-			fileType = ".js";
+			fileExt = "js";
 			fileMime = "text/javascript";
 			break;
 		case "json":
-			fileType = ".json";
+			fileExt = "json";
 			fileMime = "application/json";
 			break;
 		case "csv":
-			fileType = ".csv";
+			fileExt = "csv";
 			fileMime = "text/csv";
 			break;
 		case "image":
@@ -129,26 +130,26 @@ export function getFileMetadata(
 
 				// Normalize extension mapping
 				if (subType === "jpeg") {
-					fileType = ".jpg";
+					fileExt = "jpg";
 				} else if (subType === "svg+xml") {
-					fileType = ".svg";
+					fileExt = "svg";
 				} else {
-					fileType = `.${subType}`; // .png, .webp, .gif, .bmp
+					fileExt = `${subType}`; // .png, .webp, .gif, .bmp
 				}
 			} else {
-				fileType = ".png";
+				fileExt = "png";
 				fileMime = "image/png";
 			}
 			break;
 
 		case "text":
 		default:
-			fileType = ".txt";
+			fileExt = "txt";
 			fileMime = "text/plain";
 			break;
 	}
 
-	return { fileType, fileMime };
+	return { fileExt, fileMime };
 }
 
 export function detectValueType(value?: string): ValueType {

@@ -8,6 +8,7 @@ import { ayuLight as codeTheme } from "thememirror";
 import { getFileMetadata, type ValueType } from "./utils";
 import { pickFile } from "./copy";
 import { downloadFile } from "./download";
+import { Toast } from "./toast";
 
 export type EditorLanguage = ValueType;
 
@@ -18,11 +19,7 @@ interface EditorOptions {
 	onChange?: (value: string) => void;
 }
 
-function attachUploadDownload(
-	container: HTMLDivElement,
-	view: EditorView,
-	language: EditorLanguage,
-) {
+function attachUploadDownload(container: HTMLDivElement, view: EditorView) {
 	if (!container || !view) return;
 
 	const formLabel = container.previousElementSibling as HTMLDivElement;
@@ -49,12 +46,17 @@ function attachUploadDownload(
 	if (btnDownload) {
 		btnDownload.addEventListener("click", async () => {
 			const content = view.state.doc.toString();
-			const { fileType, fileMime } = getFileMetadata(language, content);
-			downloadFile(
-				content,
-				fileMime,
-				`${fileName || "download"}${fileType}`,
-			);
+
+			if (content) {
+				const { fileExt, fileMime } = getFileMetadata(content);
+				downloadFile(
+					content,
+					fileMime,
+					`${fileName || "download"}.${fileExt}`,
+				);
+			} else {
+				Toast.error("Noting to download");
+			}
 		});
 	}
 }
@@ -129,7 +131,7 @@ export function createCodeEditor({
 		parent: container,
 	});
 
-	attachUploadDownload(container, view, language);
+	attachUploadDownload(container, view);
 
 	return {
 		refresh: () => {

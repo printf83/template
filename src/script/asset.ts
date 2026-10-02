@@ -49,6 +49,20 @@ export async function showAssetEditor(
 
 	if (!assetEditorKey || !assetEditorValue) return null;
 
+	const assetEditorValueContainer =
+		assetEditorValue.previousElementSibling as HTMLDivElement;
+	assetEditorValueContainer.setAttribute(
+		"data-filename",
+		data.key || "asset-value",
+	);
+
+	assetEditorKey.addEventListener("change", () => {
+		assetEditorValueContainer.setAttribute(
+			"data-filename",
+			assetEditorKey.value || "asset-value",
+		);
+	});
+
 	assetEditorKey.value = data.key;
 
 	const valueType = detectValueType(data.value);

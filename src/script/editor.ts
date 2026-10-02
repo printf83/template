@@ -27,15 +27,14 @@ function attachUploadDownload(
 
 	const prevSibling = container.previousElementSibling as HTMLLabelElement;
 	const fileName = prevSibling.dataset.filename as string;
+	const fileType = prevSibling.dataset.filetype as string;
+	const fileMime = prevSibling.dataset.filemime as string;
 	const btnUpload = prevSibling.querySelector(".btn-code-upload");
 	const btnDownload = prevSibling.querySelector(".btn-code-download");
 
 	if (btnUpload) {
 		btnUpload.addEventListener("click", async () => {
-			const { fileType } = getFileMetadata(language);
-			const fileContent = await pickFile(
-				fileType === ".txt" ? "" : fileType,
-			);
+			const fileContent = await pickFile(fileType);
 			if (fileContent) {
 				view.dispatch({
 					changes: {
@@ -51,10 +50,13 @@ function attachUploadDownload(
 	if (btnDownload) {
 		btnDownload.addEventListener("click", async () => {
 			const content = view.state.doc.toString();
-			const { fileType, fileMime } = getFileMetadata(language, content);
+			const { fileType, fileMime: fileMetadataMime } = getFileMetadata(
+				language,
+				content,
+			);
 			downloadFile(
 				content,
-				fileMime,
+				fileMime || fileMetadataMime,
 				`${fileName || "download"}${fileType}`,
 			);
 		});

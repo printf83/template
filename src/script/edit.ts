@@ -84,6 +84,22 @@ function setPlaceholder<T extends HTMLInputElement | HTMLTextAreaElement>(
 	}
 }
 
+function setCodeEditorMetadata(
+	id: string,
+	data: { filename: string; filetype: string; filemime: string },
+) {
+	const elem = getElementById<HTMLDivElement>(id);
+	if (elem) {
+		const label = elem.previousElementSibling as HTMLLabelElement;
+
+		if (label) {
+			label.setAttribute("data-filename", data.filename);
+			label.setAttribute("data-filetype", data.filetype);
+			label.setAttribute("data-filemime", data.filemime);
+		}
+	}
+}
+
 function getValue<
 	T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement,
 >(id: string): string | undefined {
@@ -300,9 +316,20 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	// Data Editor
 	const isJson = detectIsJson(data.data);
 	if (isJson) {
+		setCodeEditorMetadata("data-editor", {
+			filename: "data",
+			filemime: "application/json",
+			filetype: ".json",
+		});
 		editorState.data?.setLanguage("json");
 		editorState.data?.setValue(formatJson(data.data));
 	} else {
+		setCodeEditorMetadata("data-editor", {
+			filename: "data",
+			filemime: "text/csv",
+			filetype: ".csv",
+		});
+
 		editorState.data?.setLanguage("csv");
 		editorState.data?.setValue(formatCSV(data.data));
 	}

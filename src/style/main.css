@@ -21,7 +21,7 @@
 
 .form-main,
 .form-edit {
-	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-sm;
+	@apply grow m-4 p-1 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-xs;
 }
 
 .form-main-frame {

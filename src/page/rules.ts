@@ -706,7 +706,7 @@ function createOpacityRules(): Record<string, PageRuleItem> {
 // ============================================================================
 
 const SHADOW_RULES: Record<string, PageRuleItem> = {
-	"shadow-sm": {
+	"shadow-xs": {
 		style: "box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);",
 	},
 	shadow: {

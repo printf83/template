@@ -85,7 +85,7 @@
 
 /* Color Variants */
 .btn-primary {
-	@apply bg-neutral-900 text-white hover:bg-neutral-800 focus-visible:outline-neutral-900 shadow-sm;
+	@apply bg-neutral-900 text-white hover:bg-neutral-800 focus-visible:outline-neutral-900 shadow-xs;
 }
 
 .btn-secondary {
@@ -93,5 +93,5 @@
 }
 
 .btn-danger {
-	@apply bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 shadow-sm;
+	@apply bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600 shadow-xs;
 }

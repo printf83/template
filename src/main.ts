@@ -19,12 +19,14 @@ import {
 	attachUploadAsset,
 } from "./script/asset";
 import { db } from "./script/db";
+import { attachBtnUserKey } from "./script/user";
 
 const getAllElement = () => {
 	const iframe = getElementById<HTMLIFrameElement>("iframe");
 
 	const btnDownloadPdf = getElementById<HTMLButtonElement>("btnDownloadPdf");
 	const btnPrintAll = getElementById<HTMLButtonElement>("btnPrintAll");
+	const btnUserKey = getElementById<HTMLButtonElement>("btnUserKey");
 	const btnFaq = getElementById<HTMLButtonElement>("btnFaq");
 	const btnEditorReadFile =
 		getElementById<HTMLButtonElement>("btnEditorReadFile");
@@ -64,6 +66,7 @@ const getAllElement = () => {
 		iframe,
 		btnDownloadPdf,
 		btnPrintAll,
+		btnUserKey,
 		btnFaq,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
@@ -150,6 +153,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		iframe,
 		btnDownloadPdf,
 		btnPrintAll,
+		btnUserKey,
 		btnFaq,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
@@ -181,6 +185,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	attachBtnPrintAll(btnPrintAll, iframe);
 	attachBtnDownloadPdf(btnDownloadPdf, btnEditor, btnPrintAll, iframe);
+	attachBtnUserKey(btnUserKey);
 	attachBtnFaq(btnFaq);
 	attachCopyFile(btnEditorReadFile);
 	attachDownloadFile(btnEditorDownloadFile);

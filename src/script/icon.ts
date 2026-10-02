@@ -34,6 +34,7 @@ import {
 	Table,
 	ScrollText,
 	FileCodeCorner,
+	ShieldLock,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -75,6 +76,7 @@ export const renderIcons = () => {
 			Table,
 			ScrollText,
 			FileCodeCorner,
+			ShieldLock,
 		},
 	});
 };

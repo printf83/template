@@ -1,3 +1,6 @@
+import type { Data } from "../type/data";
+import { db } from "./db";
+
 /** Dynamically mounts hidden input[type="file"], prompts user, and cleans up */
 export function selectFile(accept: string): Promise<File | null> {
 	return new Promise((resolve) => {
@@ -228,6 +231,9 @@ export function detectValueType(value?: string): ValueType {
 
 // Dynamic load default data
 export async function initData() {
+	const cacheData = await db.read<Data<any>>("current-data");
+	if (cacheData) return cacheData;
+
 	const { data } = await import("../data/template_letter");
 	return data;
 }

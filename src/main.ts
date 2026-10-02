@@ -206,6 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditorSave
 	) {
 		const interfaceState = await db.read<"main" | "editor">("interface");
+
 		if (interfaceState === "editor") {
 			setEditData(getCurrentData());
 			setInterface("editor", ctlMain, ctlEditor, formMain, formEditor);
@@ -222,11 +223,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 		});
 
-		btnEditorSave.addEventListener("click", () => {
+		btnEditorSave.addEventListener("click", async () => {
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			const editedData = getEditData();
 			if (editedData) {
 				setCurrentData(editedData);
+				await db.write("current-data", editedData);
 				genPage(editedData, iframe);
 			}
 		});

@@ -1,5 +1,12 @@
 <div class="asset-list-item" data-key="{{key}}" data-value="{{value}}">
-	<i data-icon="{{icon}}"></i>
-	<div {{{bgStyle}}}>{{preview}}</div>
-	<span title="{{key}}">{{key}}</span>
+	<div class="asset-item-control">
+		<div class="asset-item-icon">
+			<i data-icon="{{icon}}"></i>
+		</div>
+		<div class="asset-item-delete">
+			<i data-icon="trash"></i>
+		</div>
+	</div>
+	<div class="asset-item-preview" {{{bgStyle}}}>{{preview}}</div>
+	<div class="asset-item-title" title="{{key}}">{{key}}</div>
 </div>

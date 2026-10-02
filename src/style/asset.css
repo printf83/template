@@ -19,15 +19,35 @@
 	focus:bg-neutral-50 focus:border-zinc-400 focus:text-neutral-700 focus:ring-4 focus:ring-zinc-900/5;
 }
 
-.asset-list > .asset-list-item > span {
+.asset-list .asset-item-title {
 	@apply w-full text-center text-xs truncate;
 }
 
-.asset-list > .asset-list-item > div {
+.asset-list .asset-item-preview {
 	@apply w-full h-full flex justify-center items-center grow bg-cover bg-center bg-no-repeat text-center text-[0.5rem] text-ellipsis;
 }
 
-.asset-list > .asset-list-item > svg,
-.asset-list > .asset-list-item > i[data-icon] {
-	@apply size-4 absolute right-1;
+.asset-list .asset-item-control {
+	@apply absolute right-1;
+}
+
+.asset-list .asset-item-control div {
+	@apply p-0.5 rounded;
+}
+
+.asset-list .asset-item-control .asset-item-delete {
+	@apply hidden text-red-600 bg-red-100;
+}
+
+.asset-list .asset-item-control:hover .asset-item-delete {
+	@apply block;
+}
+
+.asset-list .asset-item-control:hover .asset-item-icon {
+	@apply hidden;
+}
+
+.asset-list .asset-item-control svg,
+.asset-list .asset-item-control i[data-icon] {
+	@apply size-4;
 }

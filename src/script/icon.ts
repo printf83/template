@@ -33,6 +33,7 @@ import {
 	SwatchBook,
 	Table,
 	ScrollText,
+	FileCodeCorner,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -73,6 +74,7 @@ export const renderIcons = () => {
 			SwatchBook,
 			Table,
 			ScrollText,
+			FileCodeCorner,
 		},
 	});
 };

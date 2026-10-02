@@ -5,6 +5,7 @@ import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
 export interface PickedFileResult {
 	fileName: string;
 	fileType: string;
+	extention: string;
 	content: string; // Base64 for images, text for code/data
 }
 
@@ -119,7 +120,7 @@ export async function readTextFromSystemClipboard(): Promise<string | null> {
  * copies it directly to the clipboard, and returns the metadata.
  */
 export async function pickFile(
-	fileFormat = ".html,.htm,.csv,.json,.css,.js,image/*",
+	fileFormat = ".html,.htm,.csv,.json,.css,.txt,.js,image/*",
 ): Promise<PickedFileResult | null> {
 	const file = await selectFile(fileFormat);
 	if (!file) return null;
@@ -140,14 +141,27 @@ export async function pickFile(
 		if (!confirmed) return null;
 	}
 
+	// 2. Parse file name and extension safely
+	const lastDotIndex = file.name.lastIndexOf(".");
+	const hasExtension = lastDotIndex > 0;
+
+	const fileNameWithoutExt = hasExtension
+		? file.name.substring(0, lastDotIndex)
+		: file.name;
+
+	const extension = hasExtension
+		? file.name.substring(lastDotIndex + 1).toLowerCase()
+		: "";
+
 	const isImage = isImageFile(file);
 
-	// 2. Read content safely
+	// 3. Read content safely
 	const content = isImage ? await readAsBase64(file) : await file.text();
 
 	return {
-		fileName: file.name,
+		fileName: fileNameWithoutExt, // Base name without extension
 		fileType: file.type || (isImage ? "image" : "text/plain"),
+		extention: extension, // Extracted extension (e.g. "json")
 		content,
 	};
 }

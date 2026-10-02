@@ -5,89 +5,9 @@ import { css } from "@codemirror/lang-css";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { ayuLight as codeTheme } from "thememirror";
+import type { ValueType } from "./utils";
 
-export type EditorLanguage =
-	| "json"
-	| "javascript"
-	| "css"
-	| "html"
-	| "image"
-	| "csv"
-	| "text";
-
-export function detectValueType(value?: string): EditorLanguage {
-	if (!value || typeof value !== "string") {
-		return "text";
-	}
-
-	const trimmed = value.trim();
-	if (!trimmed) return "text";
-
-	// 1. Image Base64 Data URL
-	if (/^data:image\/[a-zA-Z+.-]+;base64,/i.test(trimmed)) {
-		return "image";
-	}
-
-	// 2. JSON (Must start/end with brackets and parse successfully)
-	if (
-		(trimmed.startsWith("{") && trimmed.endsWith("}")) ||
-		(trimmed.startsWith("[") && trimmed.endsWith("]"))
-	) {
-		try {
-			JSON.parse(trimmed);
-			return "json";
-		} catch {
-			// Invalid JSON, fall through to other checks
-		}
-	}
-
-	// 3. HTML (Contains DOCTYPE or HTML tag structure)
-	if (
-		/^\s*<!DOCTYPE\s+html/i.test(trimmed) ||
-		/<[a-z][\s\S]*>/i.test(trimmed)
-	) {
-		return "html";
-	}
-
-	// 4. CSS (Matches selector/at-rule with property: value block)
-	if (
-		/^\s*(@[a-z-]+|[a-z0-9_.\-#*:\s,>+~\[\]="']+)\s*\{[\s\S]*:[^;]+;?[\s\S]*\}/i.test(
-			trimmed,
-		)
-	) {
-		return "css";
-	}
-
-	// 5. JavaScript (Contains key JS declaration keywords or syntax constructs)
-	const jsPatterns = [
-		/\b(const|let|var|function|return|import|export|class|async|await)\b/,
-		/=>\s*[\{\(]|\bconsole\.(log|error|warn)\b/,
-		/document\.(querySelector|getElementById|addEventListener)/,
-		/window\.[a-zA-Z_$]/,
-	];
-	if (jsPatterns.some((pattern) => pattern.test(trimmed))) {
-		return "javascript";
-	}
-
-	// 6. CSV (At least 2 lines with consistent comma/semicolon delimiter count)
-	const lines = trimmed
-		.split(/\r?\n/)
-		.filter((line) => line.trim().length > 0);
-	if (lines.length >= 2) {
-		const delimiter = trimmed.includes(";") ? ";" : ",";
-		const expectedCols = lines[0].split(delimiter).length;
-
-		if (
-			expectedCols > 1 &&
-			lines.every((line) => line.split(delimiter).length === expectedCols)
-		) {
-			return "csv";
-		}
-	}
-
-	// 7. Default Fallback
-	return "text";
-}
+export type EditorLanguage = ValueType;
 
 interface EditorOptions {
 	container: HTMLElement;
@@ -129,7 +49,7 @@ export function createCodeEditor({
 			basicSetup,
 			languageCompartment.of(getLanguageExtension(language)),
 			codeTheme,
-			EditorView.lineWrapping,
+			// EditorView.lineWrapping,
 			EditorView.theme({
 				"&": { height: "100%" },
 				".cm-scroller": {

@@ -4,107 +4,145 @@ import {
 	readTextFromSystemClipboard,
 } from "./copy";
 import { Toast } from "./toast";
-import { initIcons, renderTemplate } from "./utils";
+import {
+	detectValueType,
+	escapeSymbol,
+	initIcons,
+	renderTemplate,
+	trimAll,
+} from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
 import assetListItemChild from "../html/editor/asset-item-child.html?raw";
 import { Modal } from "./modal";
-import { createCodeEditor, detectValueType } from "./editor";
+import { createCodeEditor } from "./editor";
 import assetEditorHtml from "../html/editor/asset-edit.html?raw";
+
+const ICON_MAP: Record<string, string> = {
+	image: "image",
+	html: "file-code-corner",
+	javascript: "scroll-text",
+	json: "file-braces-corner",
+	css: "swatch-book",
+	csv: "table",
+};
 
 function genPreview(value?: string): string {
 	if (!value) return "";
+	return escapeSymbol(trimAll(value).slice(0, 80));
+}
 
-	// Simple escaping for text content
-	return value
-		.slice(0, 50)
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#039;");
+export interface AssetData {
+	key: string;
+	value: string;
+}
+
+export async function showAssetEditor(
+	data: AssetData,
+): Promise<AssetData | null> {
+	const assetEditor = document.createElement("div");
+	assetEditor.innerHTML = assetEditorHtml;
+
+	const assetEditorKey =
+		assetEditor.querySelector<HTMLInputElement>("#asset-key");
+	const assetEditorValue =
+		assetEditor.querySelector<HTMLDivElement>("#asset-value");
+
+	if (!assetEditorKey || !assetEditorValue) return null;
+
+	assetEditorKey.value = data.key;
+
+	const valueType = detectValueType(data.value);
+	let codeEditor: any = null;
+
+	// Wait for the modal promise
+	const result = await Modal.show<boolean>({
+		body: assetEditor,
+		size: "min-w-[600px]!",
+		onShow: () => {
+			// Mount code editor only after DOM attachment
+			codeEditor = createCodeEditor({
+				container: assetEditorValue,
+				language: valueType,
+				initialValue: data.value,
+			});
+
+			// Safely focus editor after modal renders
+			requestAnimationFrame(() => {
+				if (!data.key) {
+					assetEditorKey.focus();
+				} else {
+					if (codeEditor?.focus) {
+						codeEditor.focus();
+					} else if (codeEditor?.view?.focus) {
+						codeEditor.view.focus();
+					}
+				}
+			});
+		},
+	});
+
+	let returnData: AssetData | null = null;
+
+	if (result && codeEditor) {
+		const key = assetEditorKey.value.trim();
+		const value = codeEditor.getValue() || "";
+
+		if (key) {
+			returnData = { key, value };
+		}
+	}
+
+	// Always destroy instance to prevent memory leaks
+	codeEditor?.destroy?.();
+
+	return returnData;
 }
 
 function attachAssetEditor(item: HTMLDivElement) {
 	if (!item) return;
 
-	item.addEventListener("dblclick", async () => {
+	item.addEventListener("click", async (e) => {
+		// Ignore clicks originating from the delete control
+		const target = e.target as HTMLElement;
+		if (target.closest(".asset-item-control")) return;
+
 		const key = item.dataset.key || "";
 		const value = item.dataset.value || "";
 
-		const assetEditor = document.createElement("div");
-		assetEditor.innerHTML = assetEditorHtml;
+		const result = await showAssetEditor({ key, value });
 
-		const assetEditorKey =
-			assetEditor.querySelector<HTMLInputElement>("#asset-key");
-		const assetEditorValue =
-			assetEditor.querySelector<HTMLDivElement>("#asset-value");
+		if (result) {
+			item.dataset.key = result.key;
+			item.dataset.value = result.value;
 
-		if (!assetEditorKey || !assetEditorValue) return;
+			// Re-render inner markup with updated key and value
+			item.innerHTML = genItem(assetListItemChild, {
+				key: result.key,
+				value: result.value,
+			});
 
-		const valueType = detectValueType(value);
-
-		const codeEditor = createCodeEditor({
-			container: assetEditorValue,
-			language: valueType,
-		});
-
-		assetEditorKey.value = key;
-		codeEditor.setValue(value);
-
-		const modalPromise = Modal.show({
-			body: assetEditor,
-			size: "min-w-[600px]!",
-			onShow: () => {
-				setTimeout(() => {
-					codeEditor.refresh();
-				}, 500);
-			},
-		});
-
-		const result = await modalPromise;
-
-		if (result && codeEditor) {
-			const key = assetEditorKey.value;
-			const value = codeEditor.getValue() || "";
-
-			item.dataset.key = key;
-			item.dataset.value = value;
-			codeEditor.destroy();
-
-			//need to replace item
-			const temp = genItem(assetListItemChild, { key, value });
-			item.innerHTML = temp;
 			initIcons();
+			// Re-bind delete listener to newly created DOM elements
+			attachAssetDelete(item);
 		}
+	});
+}
+
+function attachAssetDelete(item: HTMLDivElement) {
+	if (!item) return;
+
+	const del = item.querySelector(".asset-item-control");
+	if (!del) return;
+
+	del.addEventListener("click", (e) => {
+		e.stopPropagation(); // Stop event bubbling to item click listener
+		item.remove();
 	});
 }
 
 function genItem(template: string, data?: { key?: string; value?: string }) {
 	const type = detectValueType(data?.value);
-
-	let icon = "file-text";
-	switch (type) {
-		case "image":
-			icon = "image";
-			break;
-		case "html":
-			icon = "code-xml";
-			break;
-		case "javascript":
-			icon = "scroll-text";
-			break;
-		case "json":
-			icon = "file-braces-corner";
-			break;
-		case "css":
-			icon = "swatch-book";
-			break;
-		case "csv":
-			icon = "table";
-			break;
-		default:
-			icon = "file-text";
-	}
+	const icon = ICON_MAP[type] ?? "file-text";
 
 	const bgStyle =
 		type === "image"
@@ -132,21 +170,25 @@ function addItem(
 
 	const temp = genItem(assetListItem, data);
 
-	// Append directly to the container
 	list.insertAdjacentHTML("beforeend", temp);
 
 	const item = list.lastElementChild as HTMLDivElement;
 	if (item) {
 		attachAssetEditor(item);
+		attachAssetDelete(item);
 	}
 }
 
 export function attachAddAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
-	btn.addEventListener("click", () => {
-		addItem(list);
-		initIcons();
+	btn.addEventListener("click", async () => {
+		const result = await showAssetEditor({ key: "", value: "" });
+
+		if (result) {
+			addItem(list, result);
+			initIcons();
+		}
 	});
 }
 
@@ -167,7 +209,13 @@ export function attachUploadAsset(
 			});
 
 			initIcons();
-		} catch (error) {}
+		} catch (error) {
+			const message =
+				error instanceof Error
+					? error.message
+					: "Failed to upload file.";
+			Toast.error(message);
+		}
 	});
 }
 
@@ -205,7 +253,6 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 	if (!btn || !list) return;
 
 	btn.addEventListener("click", async () => {
-		// 1. Read clipboard content
 		const value = await readTextFromSystemClipboard();
 		if (!value) {
 			Toast.warning("Clipboard is empty or access was denied.");
@@ -215,7 +262,6 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 		try {
 			const data = JSON.parse(value);
 
-			// 2. Validate that parsed data is a valid key-value object (and not an array/primitive)
 			if (
 				typeof data !== "object" ||
 				data === null ||
@@ -226,7 +272,6 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 				);
 			}
 
-			// 4. Update dictionary items
 			setAssetData(list, data, true);
 
 			Toast.success(
@@ -249,7 +294,6 @@ export function setAssetData(
 ) {
 	if (!list) return;
 
-	// Clear existing items
 	if (!append) {
 		list.querySelectorAll("div.asset-list-item").forEach((el) =>
 			el.remove(),
@@ -269,13 +313,13 @@ export function getAssetData(list: HTMLDivElement): Record<string, string> {
 	if (!list) return {};
 
 	const result: Record<string, string> = {};
-	const items = list.querySelectorAll<HTMLLabelElement>(".asset-list-item");
+	const items = list.querySelectorAll<HTMLElement>(".asset-list-item");
 
 	items.forEach((item) => {
 		const key = item.dataset.key?.trim();
 		const value = item.dataset.value?.trim();
 
-		if (key && key !== undefined && value && value !== undefined) {
+		if (key && value) {
 			result[key] = value;
 		}
 	});

@@ -5,11 +5,11 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-DHtghQfT.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-Dg0_dEaN.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CChPA71y.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-DJQi9WlF.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-By9u6NQl.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
@@ -21,6 +21,14 @@
 		<span>FAQ</span>
 	</button>
 	<div class="join">
+		<button
+			id="btnUserKey"
+			class="btn-secondary btn-square"
+			title="User Key"
+		>
+			<i data-icon="ShieldLock"></i>
+			<span class="sr-only">User Key</span>
+		</button>
 		<button id="btnPrintAll" class="btn-secondary btn-square" title="Print">
 			<i data-icon="printer"></i>
 			<span class="sr-only">Print</span>
@@ -98,13 +106,12 @@
 <div class="tab-panel">
 	<div class="form-container">
 		<div class="form-field">
-			<label
+			<div
 				class="form-label"
 				data-filename="data"
 				data-filetype=".json,.csv"
-				data-filemime="text/plain"
 			>
-				<span>Data</span>
+				<label>Data</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -118,10 +125,10 @@
 	</div>
 </div>
 
-			</label>
+			</div>
 			<div
 				id="data-editor"
-				class="form-code min-h-[calc(100svh-175px)] max-h-[calc(100svh-175px)]"
+				class="form-code h-[calc(100svh-205px)]"
 			></div>
 		</div>
 	</div>
@@ -135,12 +142,12 @@
 <div class="tab-panel">
 	<div class="form-container">
 		<div class="form-field">
-			<label
+			<div
 				class="form-label"
 				data-filename="template"
 				data-filetype=".html"
-				data-filemime="text/html"
-				><span>Html</span>
+			>
+				<label>Html</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -153,20 +160,17 @@
 		</button>
 	</div>
 </div>
-</label>
+
+			</div>
 			<div
 				id="html-editor"
-				class="form-code min-h-[calc(100svh-460px)] max-h-[calc(100svh-460px)]"
+				class="form-code h-[calc(100svh-545px)]"
 			></div>
 		</div>
 
 		<div class="form-field">
-			<label
-				class="form-label"
-				data-filename="style"
-				data-filetype=".css"
-				data-filemime="text/css"
-				><span>Style</span>
+			<div class="form-label" data-filename="style" data-filetype=".css">
+				<label>Style</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -179,17 +183,14 @@
 		</button>
 	</div>
 </div>
-</label>
-			<div id="style-editor" class="form-code min-h-24 max-h-24"></div>
+
+			</div>
+			<div id="style-editor" class="form-code h-32"></div>
 		</div>
 
 		<div class="form-field">
-			<label
-				class="form-label"
-				data-filename="script"
-				data-filetype=".js"
-				data-filemime="text/javascript"
-				><span>Script</span>
+			<div class="form-label" data-filename="script" data-filetype=".js">
+				<label>Script</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -202,8 +203,9 @@
 		</button>
 	</div>
 </div>
-</label>
-			<div id="script-editor" class="form-code min-h-24 max-h-24"></div>
+
+			</div>
+			<div id="script-editor" class="form-code h-32"></div>
 		</div>
 	</div>
 </div>
@@ -252,9 +254,7 @@
 		</div>
 	</div>
 
-	<div
-		class="asset-list-scrollbar min-h-[calc(100svh-225px)] max-h-[calc(100svh-225px)]"
-	>
+	<div class="asset-list-scrollbar h-[calc(100svh-225px)]">
 		<div class="asset-list" id="assetList"></div>
 	</div>
 </div>
@@ -285,7 +285,7 @@
 				</div>
 			</div>
 			<div
-				class="w-28 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-sm"
+				class="w-28 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-xs"
 			>
 				<div
 					id="thumb-prev-editor"
@@ -301,7 +301,7 @@
 			</div>
 		</div>
 
-		<h2 class="text-sm -mb-2">Nationality</h2>
+		<h2 class="text-sm font-semibold -mb-2">Nationality</h2>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label">Malaysian</label>
@@ -332,7 +332,7 @@
 			</div>
 		</div>
 
-		<h2 class="text-sm -mb-2">Sex</h2>
+		<h2 class="text-sm font-semibold -mb-2">Sex</h2>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label">Male</label>

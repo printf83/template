@@ -5,15 +5,60 @@ import { css } from "@codemirror/lang-css";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { ayuLight as codeTheme } from "thememirror";
-import type { ValueType } from "./utils";
+import { getFileMetadata, type ValueType } from "./utils";
+import { pickFile } from "./copy";
+import { downloadFile } from "./download";
 
 export type EditorLanguage = ValueType;
 
 interface EditorOptions {
-	container: HTMLElement;
+	container: HTMLDivElement;
 	initialValue?: string;
 	language?: EditorLanguage;
 	onChange?: (value: string) => void;
+}
+
+function attachUploadDownload(
+	container: HTMLDivElement,
+	view: EditorView,
+	language: EditorLanguage,
+) {
+	if (!container || !view) return;
+
+	const prevSibling = container.previousElementSibling as HTMLLabelElement;
+	const fileName = prevSibling.dataset.filename as string;
+	const btnUpload = prevSibling.querySelector(".btn-code-upload");
+	const btnDownload = prevSibling.querySelector(".btn-code-download");
+
+	if (btnUpload) {
+		btnUpload.addEventListener("click", async () => {
+			const { fileType } = getFileMetadata(language);
+			const fileContent = await pickFile(
+				fileType === ".txt" ? "" : fileType,
+			);
+			if (fileContent) {
+				view.dispatch({
+					changes: {
+						from: 0,
+						to: view.state.doc.length,
+						insert: fileContent.content,
+					},
+				});
+			}
+		});
+	}
+
+	if (btnDownload) {
+		btnDownload.addEventListener("click", async () => {
+			const content = view.state.doc.toString();
+			const { fileType, fileMime } = getFileMetadata(language, content);
+			downloadFile(
+				content,
+				fileMime,
+				`${fileName || "download"}${fileType}`,
+			);
+		});
+	}
 }
 
 export function createCodeEditor({
@@ -85,6 +130,8 @@ export function createCodeEditor({
 		],
 		parent: container,
 	});
+
+	attachUploadDownload(container, view, language);
 
 	return {
 		refresh: () => {

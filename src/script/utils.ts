@@ -89,6 +89,68 @@ export type ValueType =
 	| "csv"
 	| "text";
 
+export function getFileMetadata(
+	language: ValueType,
+	value: string = "",
+): { fileType: string; fileMime: string } {
+	let fileType = ".txt";
+	let fileMime = "text/plain";
+
+	switch (language) {
+		case "html":
+			fileType = ".html";
+			fileMime = "text/html";
+			break;
+		case "css":
+			fileType = ".css";
+			fileMime = "text/css";
+			break;
+		case "javascript":
+			fileType = ".js";
+			fileMime = "text/javascript";
+			break;
+		case "json":
+			fileType = ".json";
+			fileMime = "application/json";
+			break;
+		case "csv":
+			fileType = ".csv";
+			fileMime = "text/csv";
+			break;
+		case "image":
+			// Extract image MIME and sub-type from Base64 string (e.g., "data:image/png;base64,...")
+			const match = value.match(
+				/^data:(image\/([a-zA-Z0-9+.-]+));base64,/i,
+			);
+
+			if (match) {
+				fileMime = match[1]; // e.g. "image/png" or "image/svg+xml"
+				const subType = match[2].toLowerCase(); // e.g. "png", "jpeg", "svg+xml"
+
+				// Normalize extension mapping
+				if (subType === "jpeg") {
+					fileType = ".jpg";
+				} else if (subType === "svg+xml") {
+					fileType = ".svg";
+				} else {
+					fileType = `.${subType}`; // .png, .webp, .gif, .bmp
+				}
+			} else {
+				fileType = ".png";
+				fileMime = "image/png";
+			}
+			break;
+
+		case "text":
+		default:
+			fileType = ".txt";
+			fileMime = "text/plain";
+			break;
+	}
+
+	return { fileType, fileMime };
+}
+
 export function detectValueType(value?: string): ValueType {
 	if (!value || typeof value !== "string") {
 		return "text";

@@ -3,7 +3,7 @@
 }
 
 .asset-list-scrollbar {
-	@apply overflow-y-auto p-2;
+	@apply overflow-y-auto p-2 pt-0;
 }
 
 .asset-list {

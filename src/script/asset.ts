@@ -58,6 +58,7 @@ export async function showAssetEditor(
 	const result = await Modal.show<boolean>({
 		body: assetEditor,
 		size: "min-w-[600px]!",
+		confirmText: "Save",
 		onShow: () => {
 			// Mount code editor only after DOM attachment
 			codeEditor = createCodeEditor({

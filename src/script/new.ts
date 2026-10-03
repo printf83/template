@@ -53,6 +53,8 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 				command2: () => import("../data/template_command_2"),
 				picture: () => import("../data/template_picture"),
 				asset: () => import("../data/template_asset"),
+				style: () => import("../data/template_style"),
+				script: () => import("../data/template_script"),
 				letter: () => import("../data/template_letter"),
 				t100: () => import("../data/template_100"),
 				t500: () => import("../data/template_500"),

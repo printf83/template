@@ -1,6 +1,7 @@
 import { Modal } from "./modal";
+import { Toast } from "./toast";
 import userKeyForm from "../html/user.html?raw";
-import { getUserName } from "./db";
+import { getUserName, login, logout } from "./auth";
 
 function attachKeyReturn(elem: HTMLInputElement, callback: () => void) {
 	if (!elem) return;
@@ -15,7 +16,6 @@ function attachKeyReturn(elem: HTMLInputElement, callback: () => void) {
 
 async function showLogin() {
 	const container = document.createElement("div");
-
 	container.innerHTML = userKeyForm;
 
 	const userNameInput = container.querySelector(
@@ -49,42 +49,53 @@ async function showLogin() {
 			const userPass = userPassInput.value;
 
 			if (userName && userPass) {
-				// Constructs target URL dynamically matching origin (e.g. http://localhost:5173 or production domain)
-				const targetUrl = new URL("/template/", window.location.origin);
+				const loginResult = await login(userName, userPass);
 
-				targetUrl.searchParams.set("uname", userName);
-				targetUrl.searchParams.set("upass", userPass);
-
-				window.location.href = targetUrl.toString();
+				switch (loginResult.status) {
+					case "registered":
+						Toast.success(
+							`User "${loginResult.uname}" successfully registered!`,
+						);
+						break;
+					case "welcome":
+						Toast.success(`Welcome back, ${loginResult.uname}!`);
+						break;
+					case "invalid_password":
+						Toast.error("Incorrect password!");
+						break;
+					case "guest":
+						Toast.info("Signed in as Guest");
+						break;
+				}
 			}
 		}
 	}
 }
 
-async function logout() {
+async function handleLogout() {
 	const result = await Modal.confirm(
-		"You will be sign in as guest",
+		"You will be signed in as guest",
 		"Sign Out?",
 	);
 	if (result) {
-		const targetUrl = new URL("/template/", window.location.origin);
-
-		targetUrl.searchParams.delete("uname");
-		targetUrl.searchParams.delete("upass");
-
-		window.location.href = targetUrl.toString();
+		await logout();
+		Toast.info("Signed in as Guest");
 	}
 }
 
-export function attachBtnUserKey(btn: HTMLButtonElement) {
+export function attachBtnUserKey(
+	btn: HTMLButtonElement,
+	onAuthChange?: () => void,
+) {
 	if (!btn) return;
 
 	btn.addEventListener("click", async () => {
 		const currentUserName = getUserName();
 		if (!currentUserName || currentUserName === "Guest") {
-			showLogin();
+			await showLogin();
 		} else {
-			await logout();
+			await handleLogout();
 		}
+		onAuthChange?.();
 	});
 }

@@ -18,10 +18,13 @@ import {
 	attachPasteAsset,
 	attachUploadAsset,
 } from "./script/asset";
-import { db, getUserName } from "./script/db";
+import { db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
+import { getAuthContext, getUserName } from "./script/auth";
 
 const getAllElement = () => {
+	const loadingElem = getElementById<HTMLDivElement>("loading");
+	const mainElem = getElementById<HTMLDivElement>("main");
 	const iframe = getElementById<HTMLIFrameElement>("iframe");
 
 	const btnDownloadPdf = getElementById<HTMLButtonElement>("btnDownloadPdf");
@@ -64,6 +67,8 @@ const getAllElement = () => {
 	const assetList = getElementById<HTMLDivElement>("assetList");
 
 	return {
+		loadingElem,
+		mainElem,
 		iframe,
 		btnDownloadPdf,
 		btnPrintAll,
@@ -152,6 +157,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 	initEditor();
 
 	const {
+		loadingElem,
+		mainElem,
 		iframe,
 		btnDownloadPdf,
 		btnPrintAll,
@@ -182,16 +189,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 		assetList,
 	} = getAllElement();
 
-	const data = await initData();
+	// Initialize auth state/session first before querying storage
+	await getAuthContext();
 	btnUserKeyName.innerText = getUserName();
 
+	const data = await initData();
 	const currentData = setCurrentData(data);
 
 	genPage(currentData, iframe);
 
+	attachBtnUserKey(btnUserKey, async () => {
+		// 1. Update the display name
+		if (btnUserKeyName) {
+			btnUserKeyName.innerText = getUserName();
+		}
+
+		// 2. Fetch data from the newly authenticated user's database cache
+		const freshData = await initData();
+		const updatedData = setCurrentData(freshData);
+
+		// 3. Re-render the template with the new user's data
+		genPage(updatedData, iframe);
+
+		// 4. Update editor state if the user is currently on the editor view
+		if (!formEditor.classList.contains("hidden")) {
+			setEditData(getCurrentData());
+		}
+	});
+
 	attachBtnPrintAll(btnPrintAll, iframe);
 	attachBtnDownloadPdf(btnDownloadPdf, btnEditor, btnPrintAll, iframe);
-	attachBtnUserKey(btnUserKey);
 	attachBtnFaq(btnFaq);
 	attachCopyFile(btnEditorReadFile);
 	attachDownloadFile(btnEditorDownloadFile);
@@ -243,7 +270,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 				genPage(editedData, iframe);
 			}
 		});
+	}
 
-		document.body.style = "";
+	// Hide loading screen and display main layout
+	if (loadingElem && mainElem) {
+		mainElem.style.display = "block";
+
+		// Clean up loading element from DOM after fade-out transition completes
+		setTimeout(() => {
+			loadingElem.remove();
+		}, 300);
 	}
 });

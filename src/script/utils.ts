@@ -1,5 +1,6 @@
 import type { Data } from "../type/data";
-import { db, getUserName } from "./db";
+import { getUserName } from "./auth";
+import { db } from "./db";
 
 /** Dynamically mounts hidden input[type="file"], prompts user, and cleans up */
 export function selectFile(accept: string): Promise<File | null> {

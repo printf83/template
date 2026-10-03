@@ -1,6 +1,5 @@
 import { Toast } from "./toast";
 
-const APP_SALT = "app-salt";
 const DEFAULT_USER_TOKEN = {
 	uname: "Guest",
 	upass: "user-passphrase-or-token",
@@ -10,8 +9,14 @@ const REGISTERED_USERS_KEY = "app_registered_users";
 
 type Token = { uname: string; upass: string };
 
+// Stores user metadata: unameHash -> { salt: string, verifier: string }
+interface UserMetadata {
+	salt: string;
+	verifier: string; // Encrypted string used to verify if upass is correct
+}
+
 // ----------------------------------------------------------------------------
-// MULTI-USER HELPERS
+// MULTI-USER HELPERS & CRYPTO
 // ----------------------------------------------------------------------------
 
 /**
@@ -21,13 +26,11 @@ async function hashToken(token: string): Promise<string> {
 	const msgUint8 = new TextEncoder().encode(token);
 	const hashBuffer = await window.crypto.subtle.digest("SHA-256", msgUint8);
 	const hashArray = Array.from(new Uint8Array(hashBuffer));
-
-	// Convert bytes to hex string
 	return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** Map of unameHash -> upassHash stored in localStorage */
-function getRegisteredUsers(): Record<string, string> {
+/** Get registered users map from localStorage */
+function getRegisteredUsers(): Record<string, UserMetadata> {
 	try {
 		const stored = localStorage.getItem(REGISTERED_USERS_KEY);
 		return stored ? JSON.parse(stored) : {};
@@ -36,21 +39,17 @@ function getRegisteredUsers(): Record<string, string> {
 	}
 }
 
-async function registerUser(uname: string, upass: string): Promise<void> {
-	if (uname === DEFAULT_USER_TOKEN.uname) return;
-
-	const unameHash = await hashToken(uname);
-	const upassHash = await hashToken(upass);
-	const users = getRegisteredUsers();
-
-	users[unameHash] = upassHash;
+function saveRegisteredUsers(users: Record<string, UserMetadata>): void {
 	localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
 }
 
 /**
- * Raw key derivation from a password string.
+ * Derives an AES-GCM CryptoKey using PBKDF2 with user-specific salt.
  */
-async function deriveRawKey(passphrase: string): Promise<CryptoKey> {
+async function deriveRawKey(
+	passphrase: string,
+	saltString: string,
+): Promise<CryptoKey> {
 	const enc = new TextEncoder();
 	const keyMaterial = await window.crypto.subtle.importKey(
 		"raw",
@@ -63,7 +62,7 @@ async function deriveRawKey(passphrase: string): Promise<CryptoKey> {
 	return window.crypto.subtle.deriveKey(
 		{
 			name: "PBKDF2",
-			salt: enc.encode(APP_SALT),
+			salt: enc.encode(saltString),
 			iterations: 100000,
 			hash: "SHA-256",
 		},
@@ -79,11 +78,10 @@ async function deriveRawKey(passphrase: string): Promise<CryptoKey> {
 // ----------------------------------------------------------------------------
 
 let userName: string | null = null;
-let effectiveToken: Token | null = null;
 let userKey: CryptoKey | null = null;
 let userCacheName: string | null = null;
 
-export function getUserName() {
+export function getUserName(): string {
 	return userName || DEFAULT_USER_TOKEN.uname;
 }
 
@@ -93,61 +91,82 @@ async function processAuthentication(): Promise<{
 }> {
 	const rawToken = getUrlToken() || DEFAULT_USER_TOKEN;
 
+	// Guest Mode
 	if (rawToken.uname === DEFAULT_USER_TOKEN.uname) {
 		userName = DEFAULT_USER_TOKEN.uname;
-		effectiveToken = DEFAULT_USER_TOKEN;
-		const guestKey = await deriveRawKey(DEFAULT_USER_TOKEN.upass);
-		const guestCache = `app-cache-guest-${await hashToken(DEFAULT_USER_TOKEN.upass)}`;
+		const guestSalt = `salt-${DEFAULT_USER_TOKEN.uname}`;
+		const guestKey = await deriveRawKey(
+			DEFAULT_USER_TOKEN.upass,
+			guestSalt,
+		);
+		const guestCache = `app-cache-guest`;
 		return { key: guestKey, cacheName: guestCache };
 	}
 
 	const registeredUsers = getRegisteredUsers();
 	const incomingUnameHash = await hashToken(rawToken.uname);
-	const incomingUpassHash = await hashToken(rawToken.upass);
+	const userMeta = registeredUsers[incomingUnameHash];
+	const userCache = `app-cache-${incomingUnameHash}`;
 
-	// Create a UNIQUE cache name per user using BOTH username hash and password hash
-	const userSpecificCacheName = `app-cache-${incomingUnameHash}-${incomingUpassHash}`;
+	// Case 1: Brand new user -> Register user with a unique salt
+	if (!userMeta) {
+		const userSalt = `salt-${incomingUnameHash}`;
+		const key = await deriveRawKey(rawToken.upass, userSalt);
 
-	const savedUpassHash = registeredUsers[incomingUnameHash];
+		// Create a verification payload encrypted with the user's derived key
+		const verifierPayload = await encryptData("AUTH_VERIFIED", key);
 
-	// Case 1: Brand new username -> Register user & store password hash
-	if (!savedUpassHash) {
-		await registerUser(rawToken.uname, rawToken.upass);
+		registeredUsers[incomingUnameHash] = {
+			salt: userSalt,
+			verifier: JSON.stringify(verifierPayload),
+		};
+		saveRegisteredUsers(registeredUsers);
+
 		userName = rawToken.uname;
-		effectiveToken = rawToken;
-
 		Toast.success(`User "${rawToken.uname}" successfully registered!`);
 		console.log(`User "${rawToken.uname}" successfully registered!`);
 
-		const key = await deriveRawKey(rawToken.upass);
-		return { key, cacheName: userSpecificCacheName };
+		return { key, cacheName: userCache };
 	}
 
-	// Case 2: Registered user -> Check password match
-	if (savedUpassHash === incomingUpassHash) {
-		// Correct Password
-		userName = rawToken.uname;
-		effectiveToken = rawToken;
+	// Case 2: Registered User -> Verify password using stored verifier payload
+	try {
+		const candidateKey = await deriveRawKey(rawToken.upass, userMeta.salt);
+		const verifierPayload = JSON.parse(
+			userMeta.verifier,
+		) as EncryptedPayload;
 
-		Toast.success(`Welcome back, ${rawToken.uname}!`);
-		console.log(`Welcome back, ${rawToken.uname}!`);
+		// Attempt decryption test
+		const decryptedCheck = await decryptData<string>(
+			verifierPayload,
+			candidateKey,
+		);
 
-		const key = await deriveRawKey(rawToken.upass);
-		return { key, cacheName: userSpecificCacheName };
-	} else {
-		// Wrong Password -> Fallback to Guest
+		if (decryptedCheck === "AUTH_VERIFIED") {
+			userName = rawToken.uname;
+			Toast.success(`Welcome back, ${rawToken.uname}!`);
+			console.log(`Welcome back, ${rawToken.uname}!`);
+
+			return { key: candidateKey, cacheName: userCache };
+		} else {
+			throw new Error("Invalid verifier payload");
+		}
+	} catch {
+		// Decryption failed -> Wrong password
 		console.warn(
-			`[auth] Wrong upass for known user "${rawToken.uname}". Falling back to guest token.`,
+			`[auth] Incorrect password for "${rawToken.uname}". Falling back to guest mode.`,
 		);
 
 		userName = DEFAULT_USER_TOKEN.uname;
-		effectiveToken = DEFAULT_USER_TOKEN;
-
 		Toast.error("Incorrect password! Falling back to guest session.");
-		console.error("Incorrect password! Falling back to guest session.");
 
-		const guestKey = await deriveRawKey(DEFAULT_USER_TOKEN.upass);
-		const guestCache = `app-cache-guest-${await hashToken(DEFAULT_USER_TOKEN.upass)}`;
+		const guestSalt = `salt-${DEFAULT_USER_TOKEN.uname}`;
+		const guestKey = await deriveRawKey(
+			DEFAULT_USER_TOKEN.upass,
+			guestSalt,
+		);
+		const guestCache = `app-cache-guest`;
+
 		return { key: guestKey, cacheName: guestCache };
 	}
 }
@@ -198,6 +217,10 @@ async function getUserKey(): Promise<CryptoKey> {
 	const auth = await ensureAuth();
 	return auth.key;
 }
+
+// ----------------------------------------------------------------------------
+// ENCRYPTION & DECRYPTION HELPERS
+// ----------------------------------------------------------------------------
 
 interface EncryptedPayload {
 	iv: number[];

@@ -5,29 +5,34 @@
 		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-Dg0_dEaN.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-D0rAaEuA.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CChPA71y.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-By9u6NQl.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-BqA1iJ2o.css">
 	</head>
 	<body class="print:hidden">
 		<div class="main">
 			<div class="header">
 				<h1 class="text-2xl font-semibold text-shadow-xs rainbow-animated">template</h1>
 <div class="btn-group" id="ctlMain">
-	<button id="btnFaq" class="btn-secondary">
-		<i data-icon="circle-question-mark"></i>
-		<span>FAQ</span>
+	<button
+		id="btnUserKey"
+		class="btn-secondary"
+		title="Private & Encrypted Storage "
+	>
+		<i data-icon="ShieldLock"></i>
+		<span id="btnUserKeyName">...</span>
 	</button>
+
 	<div class="join">
 		<button
-			id="btnUserKey"
+			id="btnFaq"
 			class="btn-secondary btn-square"
-			title="User Key"
+			title="Frequently Asked Questions"
 		>
-			<i data-icon="ShieldLock"></i>
-			<span class="sr-only">User Key</span>
+			<i data-icon="circle-question-mark"></i>
+			<span class="sr-only">Frequently Asked Questions</span>
 		</button>
 		<button id="btnPrintAll" class="btn-secondary btn-square" title="Print">
 			<i data-icon="printer"></i>
@@ -272,12 +277,12 @@
 		<div class="flex flex-row gap-3">
 			<div class="grow flex flex-col gap-3">
 				<div class="form-field">
-					<label class="form-label">Title</label>
+					<label class="form-label" for="title-editor">Title</label>
 					<input type="text" class="form-input" id="title-editor" />
 				</div>
 
 				<div class="form-field">
-					<label class="form-label">Language</label>
+					<label class="form-label" for="lang-editor">Language</label>
 					<select class="form-select" id="lang-editor">
 						<option value="EN">English</option>
 						<option value="MY">Bahasa Melayu</option>
@@ -304,7 +309,9 @@
 		<h2 class="text-sm font-semibold -mb-2">Nationality</h2>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
-				<label class="form-label">Malaysian</label>
+				<label class="form-label" for="nationality-citizen-editor"
+					>Malaysian</label
+				>
 				<input
 					type="text"
 					class="form-input"
@@ -313,7 +320,9 @@
 				/>
 			</div>
 			<div class="form-field col-span-1">
-				<label class="form-label">Non-Malaysian</label>
+				<label class="form-label" for="nationality-noncitizen-editor"
+					>Non-Malaysian</label
+				>
 				<input
 					type="text"
 					class="form-input"
@@ -322,7 +331,9 @@
 				/>
 			</div>
 			<div class="form-field col-span-1">
-				<label class="form-label">Unknown</label>
+				<label class="form-label" for="nationality-unknown-editor"
+					>Unknown</label
+				>
 				<input
 					type="text"
 					class="form-input"
@@ -335,7 +346,7 @@
 		<h2 class="text-sm font-semibold -mb-2">Sex</h2>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
-				<label class="form-label">Male</label>
+				<label class="form-label" for="sex-male-editor">Male</label>
 				<input
 					type="text"
 					class="form-input"
@@ -344,7 +355,7 @@
 				/>
 			</div>
 			<div class="form-field col-span-1">
-				<label class="form-label">Female</label>
+				<label class="form-label" for="sex-female-editor">Female</label>
 				<input
 					type="text"
 					class="form-input"
@@ -353,7 +364,9 @@
 				/>
 			</div>
 			<div class="form-field col-span-1">
-				<label class="form-label">Unknown</label>
+				<label class="form-label" for="sex-unknown-editor"
+					>Unknown</label
+				>
 				<input
 					type="text"
 					class="form-input"

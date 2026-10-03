@@ -183,9 +183,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 	} = getAllElement();
 
 	const data = await initData();
-	const currentData = setCurrentData(data);
-
 	btnUserKeyName.innerText = getUserName();
+
+	const currentData = setCurrentData(data);
 
 	genPage(currentData, iframe);
 

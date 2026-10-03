@@ -1,5 +1,5 @@
 import type { Data } from "../type/data";
-import { db } from "./db";
+import { db, getUserName } from "./db";
 
 /** Dynamically mounts hidden input[type="file"], prompts user, and cleans up */
 export function selectFile(accept: string): Promise<File | null> {
@@ -232,7 +232,13 @@ export function detectValueType(value?: string): ValueType {
 // Dynamic load default data
 export async function initData() {
 	const cacheData = await db.read<Data<any>>("current-data");
-	if (cacheData) return cacheData;
+
+	//no need to return cache data if under development
+	//and the user is guest
+	//because i currently edit the template
+	const IS_UNDER_DEVELOPMENT =
+		getUserName() === "Guest" && import.meta.env.DEV;
+	if (!IS_UNDER_DEVELOPMENT && cacheData) return cacheData;
 
 	const { data } = await import("../data/template_letter");
 	return data;

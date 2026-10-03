@@ -2,6 +2,17 @@ import { Modal } from "./modal";
 import userKeyForm from "../html/user.html?raw";
 import { getUserName } from "./db";
 
+function attachKeyReturn(elem: HTMLInputElement, callback: () => void) {
+	if (!elem) return;
+
+	elem.addEventListener("keypress", (e) => {
+		if (e.code === "Enter") {
+			e.preventDefault();
+			callback();
+		}
+	});
+}
+
 async function showLogin() {
 	const container = document.createElement("div");
 
@@ -11,19 +22,31 @@ async function showLogin() {
 		"#user-name",
 	) as HTMLInputElement;
 
-	const userKeyInput = container.querySelector(
+	const userPassInput = container.querySelector(
 		"#user-password",
 	) as HTMLInputElement;
 
-	if (userNameInput && userKeyInput) {
+	if (userNameInput && userPassInput) {
+		attachKeyReturn(userNameInput, () => {
+			userPassInput.focus();
+		});
+
+		attachKeyReturn(userPassInput, () => {
+			const confirmBtn = container
+				.closest("dialog")
+				?.querySelector<HTMLButtonElement>(".btn-confirm");
+
+			confirmBtn?.click();
+		});
+
 		const result = await Modal.show({
 			body: container,
-			confirmText: "Continue",
+			confirmText: "Sign In",
 		});
 
 		if (result) {
 			const userName = userNameInput.value.trim();
-			const userPass = userKeyInput.value;
+			const userPass = userPassInput.value;
 
 			if (userName && userPass) {
 				// Constructs target URL dynamically matching origin (e.g. http://localhost:5173 or production domain)

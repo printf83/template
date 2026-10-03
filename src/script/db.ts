@@ -2,7 +2,7 @@ import { Toast } from "./toast";
 
 const DEFAULT_USER_TOKEN = {
 	uname: "Guest",
-	upass: "user-passphrase-or-token",
+	upass: "guest",
 };
 
 const REGISTERED_USERS_KEY = "app_registered_users";
@@ -153,9 +153,7 @@ async function processAuthentication(): Promise<{
 		}
 	} catch {
 		// Decryption failed -> Wrong password
-		console.warn(
-			`[auth] Incorrect password for "${rawToken.uname}". Falling back to guest mode.`,
-		);
+		console.warn(`[auth] Incorrect password for "${rawToken.uname}".`);
 
 		userName = DEFAULT_USER_TOKEN.uname;
 		Toast.error("Incorrect password! Falling back to guest session.");

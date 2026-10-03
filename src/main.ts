@@ -243,5 +243,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				genPage(editedData, iframe);
 			}
 		});
+
+		document.body.style = "";
 	}
 });

@@ -18,7 +18,7 @@ import {
 	attachPasteAsset,
 	attachUploadAsset,
 } from "./script/asset";
-import { db } from "./script/db";
+import { db, getUserName } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 
 const getAllElement = () => {
@@ -27,6 +27,7 @@ const getAllElement = () => {
 	const btnDownloadPdf = getElementById<HTMLButtonElement>("btnDownloadPdf");
 	const btnPrintAll = getElementById<HTMLButtonElement>("btnPrintAll");
 	const btnUserKey = getElementById<HTMLButtonElement>("btnUserKey");
+	const btnUserKeyName = getElementById<HTMLSpanElement>("btnUserKeyName");
 	const btnFaq = getElementById<HTMLButtonElement>("btnFaq");
 	const btnEditorReadFile =
 		getElementById<HTMLButtonElement>("btnEditorReadFile");
@@ -67,6 +68,7 @@ const getAllElement = () => {
 		btnDownloadPdf,
 		btnPrintAll,
 		btnUserKey,
+		btnUserKeyName,
 		btnFaq,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
@@ -154,6 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnDownloadPdf,
 		btnPrintAll,
 		btnUserKey,
+		btnUserKeyName,
 		btnFaq,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
@@ -181,6 +184,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	const data = await initData();
 	const currentData = setCurrentData(data);
+
+	btnUserKeyName.innerText = getUserName();
+
 	genPage(currentData, iframe);
 
 	attachBtnPrintAll(btnPrintAll, iframe);

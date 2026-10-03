@@ -9,25 +9,33 @@ export function attachBtnUserKey(btn: HTMLButtonElement) {
 
 		container.innerHTML = userKeyForm;
 
-		const userKeyInput = container.querySelector(
-			"#user-key",
+		const userNameInput = container.querySelector(
+			"#user-name",
 		) as HTMLInputElement;
 
-		if (userKeyInput) {
+		const userKeyInput = container.querySelector(
+			"#user-password",
+		) as HTMLInputElement;
+
+		if (userNameInput && userKeyInput) {
 			const result = await Modal.show({
 				body: container,
 				confirmText: "Continue",
 			});
 
 			if (result) {
-				const userKey = userKeyInput.value.trim();
-				if (userKey) {
+				const userName = userNameInput.value.trim();
+				const userPass = userKeyInput.value;
+
+				if (userName && userPass) {
 					// Constructs target URL dynamically matching origin (e.g. http://localhost:5173 or production domain)
 					const targetUrl = new URL(
 						"/template/",
 						window.location.origin,
 					);
-					targetUrl.searchParams.set("uid", userKey);
+
+					targetUrl.searchParams.set("uname", userName);
+					targetUrl.searchParams.set("upass", userPass);
 
 					window.location.href = targetUrl.toString();
 				}

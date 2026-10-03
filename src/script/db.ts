@@ -1,39 +1,18 @@
+import { Toast } from "./toast";
+
 const APP_SALT = "app-salt";
-const DEFAULT_USER_TOKEN = "user-passphrase-or-token";
+const DEFAULT_USER_TOKEN = {
+	uname: "Guest",
+	upass: "user-passphrase-or-token",
+};
+
+const REGISTERED_USERS_KEY = "app_registered_users";
+
+type Token = { uname: string; upass: string };
 
 // ----------------------------------------------------------------------------
-// KEY DERIVATION & CRYPTO HELPERS
+// MULTI-USER HELPERS
 // ----------------------------------------------------------------------------
-
-/**
- * Derives an AES-GCM CryptoKey from a passphrase using PBKDF2.
- */
-async function deriveKey(
-	passphrase: string,
-	salt: string = APP_SALT,
-): Promise<CryptoKey> {
-	const enc = new TextEncoder();
-	const keyMaterial = await window.crypto.subtle.importKey(
-		"raw",
-		enc.encode(passphrase),
-		"PBKDF2",
-		false,
-		["deriveKey"],
-	);
-
-	return window.crypto.subtle.deriveKey(
-		{
-			name: "PBKDF2",
-			salt: enc.encode(salt),
-			iterations: 100000,
-			hash: "SHA-256",
-		},
-		keyMaterial,
-		{ name: "AES-GCM", length: 256 },
-		false,
-		["encrypt", "decrypt"],
-	);
-}
 
 /**
  * Hashes a string using SHA-256 to produce a clean hex digest string.
@@ -47,42 +26,177 @@ async function hashToken(token: string): Promise<string> {
 	return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-let userCacheName: string | null = null;
-async function getCacheName(): Promise<string> {
-	if (userCacheName) return userCacheName;
-
-	const token = getUrlToken() || DEFAULT_USER_TOKEN;
-	const tokenHash = await hashToken(token);
-	userCacheName = `app-cache-${tokenHash}`;
-
-	return userCacheName;
+/** Map of unameHash -> upassHash stored in localStorage */
+function getRegisteredUsers(): Record<string, string> {
+	try {
+		const stored = localStorage.getItem(REGISTERED_USERS_KEY);
+		return stored ? JSON.parse(stored) : {};
+	} catch {
+		return {};
+	}
 }
 
-function getUrlToken(): string | null {
-	const url = new URL(window.location.href);
-	const token = url.searchParams.get("uid");
+async function registerUser(uname: string, upass: string): Promise<void> {
+	if (uname === DEFAULT_USER_TOKEN.uname) return;
 
-	if (token) {
-		// Remove 'uid' parameter from URL without reloading the page
-		url.searchParams.delete("uid");
+	const unameHash = await hashToken(uname);
+	const upassHash = await hashToken(upass);
+	const users = getRegisteredUsers();
+
+	users[unameHash] = upassHash;
+	localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
+}
+
+/**
+ * Raw key derivation from a password string.
+ */
+async function deriveRawKey(passphrase: string): Promise<CryptoKey> {
+	const enc = new TextEncoder();
+	const keyMaterial = await window.crypto.subtle.importKey(
+		"raw",
+		enc.encode(passphrase),
+		"PBKDF2",
+		false,
+		["deriveKey"],
+	);
+
+	return window.crypto.subtle.deriveKey(
+		{
+			name: "PBKDF2",
+			salt: enc.encode(APP_SALT),
+			iterations: 100000,
+			hash: "SHA-256",
+		},
+		keyMaterial,
+		{ name: "AES-GCM", length: 256 },
+		false,
+		["encrypt", "decrypt"],
+	);
+}
+
+// ----------------------------------------------------------------------------
+// STATE & AUTH MANAGEMENT
+// ----------------------------------------------------------------------------
+
+let userName: string | null = null;
+let effectiveToken: Token | null = null;
+let userKey: CryptoKey | null = null;
+let userCacheName: string | null = null;
+
+export function getUserName() {
+	return userName || DEFAULT_USER_TOKEN.uname;
+}
+
+async function processAuthentication(): Promise<{
+	key: CryptoKey;
+	cacheName: string;
+}> {
+	const rawToken = getUrlToken() || DEFAULT_USER_TOKEN;
+
+	if (rawToken.uname === DEFAULT_USER_TOKEN.uname) {
+		userName = DEFAULT_USER_TOKEN.uname;
+		effectiveToken = DEFAULT_USER_TOKEN;
+		const guestKey = await deriveRawKey(DEFAULT_USER_TOKEN.upass);
+		const guestCache = `app-cache-guest-${await hashToken(DEFAULT_USER_TOKEN.upass)}`;
+		return { key: guestKey, cacheName: guestCache };
+	}
+
+	const registeredUsers = getRegisteredUsers();
+	const incomingUnameHash = await hashToken(rawToken.uname);
+	const incomingUpassHash = await hashToken(rawToken.upass);
+
+	// Create a UNIQUE cache name per user using BOTH username hash and password hash
+	const userSpecificCacheName = `app-cache-${incomingUnameHash}-${incomingUpassHash}`;
+
+	const savedUpassHash = registeredUsers[incomingUnameHash];
+
+	// Case 1: Brand new username -> Register user & store password hash
+	if (!savedUpassHash) {
+		await registerUser(rawToken.uname, rawToken.upass);
+		userName = rawToken.uname;
+		effectiveToken = rawToken;
+
+		Toast.success(`User "${rawToken.uname}" successfully registered!`);
+		console.log(`User "${rawToken.uname}" successfully registered!`);
+
+		const key = await deriveRawKey(rawToken.upass);
+		return { key, cacheName: userSpecificCacheName };
+	}
+
+	// Case 2: Registered user -> Check password match
+	if (savedUpassHash === incomingUpassHash) {
+		// Correct Password
+		userName = rawToken.uname;
+		effectiveToken = rawToken;
+
+		Toast.success(`Welcome back, ${rawToken.uname}!`);
+		console.log(`Welcome back, ${rawToken.uname}!`);
+
+		const key = await deriveRawKey(rawToken.upass);
+		return { key, cacheName: userSpecificCacheName };
+	} else {
+		// Wrong Password -> Fallback to Guest
+		console.warn(
+			`[auth] Wrong upass for known user "${rawToken.uname}". Falling back to guest token.`,
+		);
+
+		userName = DEFAULT_USER_TOKEN.uname;
+		effectiveToken = DEFAULT_USER_TOKEN;
+
+		Toast.error("Incorrect password! Falling back to guest session.");
+		console.error("Incorrect password! Falling back to guest session.");
+
+		const guestKey = await deriveRawKey(DEFAULT_USER_TOKEN.upass);
+		const guestCache = `app-cache-guest-${await hashToken(DEFAULT_USER_TOKEN.upass)}`;
+		return { key: guestKey, cacheName: guestCache };
+	}
+}
+
+let authPromise: Promise<{ key: CryptoKey; cacheName: string }> | null = null;
+
+async function ensureAuth() {
+	if (!authPromise) {
+		authPromise = processAuthentication();
+	}
+	const result = await authPromise;
+	userKey = result.key;
+	userCacheName = result.cacheName;
+	return result;
+}
+
+let urlToken: Token | null = null;
+function getUrlToken(): Token | null {
+	if (urlToken) return urlToken;
+
+	const url = new URL(window.location.href);
+	const uname = url.searchParams.get("uname");
+	const upass = url.searchParams.get("upass");
+
+	if (uname && upass) {
+		url.searchParams.delete("uname");
+		url.searchParams.delete("upass");
 		window.history.replaceState(
 			{},
 			"",
 			url.pathname + url.search + url.hash,
 		);
-	}
 
-	return token;
+		urlToken = { uname, upass };
+		return urlToken;
+	}
+	return null;
 }
 
-let userKey: CryptoKey | null = null;
-async function getUserKey() {
-	if (userKey !== null) return userKey;
+async function getCacheName(): Promise<string> {
+	if (userCacheName) return userCacheName;
+	const auth = await ensureAuth();
+	return auth.cacheName;
+}
 
-	const token = getUrlToken() || DEFAULT_USER_TOKEN;
-	userKey = await deriveKey(token);
-
-	return userKey;
+async function getUserKey(): Promise<CryptoKey> {
+	if (userKey) return userKey;
+	const auth = await ensureAuth();
+	return auth.key;
 }
 
 interface EncryptedPayload {
@@ -129,9 +243,6 @@ async function decryptData<T>(
 // ENCRYPTED DB IMPLEMENTATION
 // ----------------------------------------------------------------------------
 
-/**
- * Reads and decrypts JSON data from the browser Cache API.
- */
 async function read<T = unknown>(keyName: string): Promise<T | null> {
 	try {
 		const cacheName = await getCacheName();
@@ -151,9 +262,6 @@ async function read<T = unknown>(keyName: string): Promise<T | null> {
 	}
 }
 
-/**
- * Encrypts and writes JSON-serializable data to the browser Cache API.
- */
 async function write<T = unknown>(keyName: string, data: T): Promise<boolean> {
 	try {
 		const cacheName = await getCacheName();
@@ -174,9 +282,6 @@ async function write<T = unknown>(keyName: string, data: T): Promise<boolean> {
 	}
 }
 
-/**
- * Deletes a single item from the specified cache.
- */
 async function del(keyName: string): Promise<boolean> {
 	try {
 		const cacheName = await getCacheName();
@@ -188,12 +293,8 @@ async function del(keyName: string): Promise<boolean> {
 	}
 }
 
-/**
- * Completely clears and deletes the specified cache store.
- */
 async function clear(): Promise<boolean> {
 	const cacheName = await getCacheName();
-
 	try {
 		return await caches.delete(cacheName);
 	} catch (error) {

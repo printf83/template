@@ -168,18 +168,6 @@ export const NUMBER_CONFIG = {
 		zero: "Zero",
 		point: "point",
 		andCents: "and Cents",
-		digits: [
-			"Zero",
-			"One",
-			"Two",
-			"Three",
-			"Four",
-			"Five",
-			"Six",
-			"Seven",
-			"Eight",
-			"Nine",
-		],
 		units: [
 			"",
 			"One",
@@ -217,24 +205,12 @@ export const NUMBER_CONFIG = {
 			"Ninety",
 		],
 		hundred: "Hundred",
-		thousand: "Thousand",
+		scales: ["", "Thousand", "Million", "Billion", "Trillion"],
 	},
 	MY: {
 		zero: "Kosong",
 		point: "perpuluhan",
 		andCents: "dan Sen",
-		digits: [
-			"Kosong",
-			"Satu",
-			"Dua",
-			"Tiga",
-			"Empat",
-			"Lima",
-			"Enam",
-			"Tujuh",
-			"Lapan",
-			"Sembilan",
-		],
 		units: [
 			"",
 			"Satu",
@@ -247,23 +223,14 @@ export const NUMBER_CONFIG = {
 			"Lapan",
 			"Sembilan",
 		],
-		tens: [
-			"",
-			"",
-			"Dua Puluh",
-			"Tiga Puluh",
-			"Empat Puluh",
-			"Lima Puluh",
-			"Enam Puluh",
-			"Tujuh Puluh",
-			"Lapan Puluh",
-			"Sembilan Puluh",
-		],
 		hundred: "Ratus",
 		puluh: "Puluh",
 		belas: "Belas",
 		sepuluh: "Sepuluh",
-		thousand: "Ribu",
+		seratus: "Seratus",
+		sebelas: "Sebelas",
+		seribu: "Seribu",
+		scales: ["", "Ribu", "Juta", "Bilion", "Trilion"],
 	},
 };
 
@@ -291,55 +258,91 @@ const numberToWords = {
 			return res.trim();
 		}
 
-		if (num < 1000) return convertGroup(num);
+		let absNum = Math.abs(Math.floor(num));
+		let scaleIdx = 0;
+		const parts: string[] = [];
 
-		const thousands = Math.floor(num / 1000);
-		const remainder = num % 1000;
-
-		let result = `${convertGroup(thousands)} ${cfg.thousand}`;
-		if (remainder > 0) {
-			result += ` ${convertGroup(remainder)}`;
+		while (absNum > 0) {
+			const group = absNum % 1000;
+			if (group > 0) {
+				const groupStr = convertGroup(group);
+				const scaleStr = cfg.scales[scaleIdx] || "";
+				parts.unshift(`${groupStr}${scaleStr ? " " + scaleStr : ""}`);
+			}
+			absNum = Math.floor(absNum / 1000);
+			scaleIdx++;
 		}
-		return result.trim();
+
+		return parts.join(" ").trim();
 	},
+
 	MY: (num: number): string => {
 		const cfg = NUMBER_CONFIG.MY;
 		if (num === 0) return cfg.zero;
 
 		function convertGroup(n: number): string {
+			if (n === 0) return "";
+			if (n === 10) return cfg.sepuluh;
+			if (n === 11) return cfg.sebelas;
+
 			let res = "";
+
 			if (n >= 100) {
 				const hundred = Math.floor(n / 100);
-				res += `${cfg.units[hundred]} ${cfg.hundred} `;
+				if (hundred === 1) {
+					res += `${cfg.seratus} `;
+				} else {
+					res += `${cfg.units[hundred]} ${cfg.hundred} `;
+				}
 				n %= 100;
 			}
+
 			if (n >= 20) {
 				const ten = Math.floor(n / 10);
 				res += `${cfg.units[ten]} ${cfg.puluh} `;
 				n %= 10;
-			} else if (n >= 11) {
+			} else if (n >= 12) {
 				res += `${cfg.units[n - 10]} ${cfg.belas} `;
 				n = 0;
 			} else if (n === 10) {
 				res += `${cfg.sepuluh} `;
 				n = 0;
+			} else if (n === 11) {
+				res += `${cfg.sebelas} `;
+				n = 0;
 			}
+
 			if (n > 0) {
 				res += `${cfg.units[n]} `;
 			}
+
 			return res.trim();
 		}
 
-		if (num < 1000) return convertGroup(num);
+		let absNum = Math.abs(Math.floor(num));
+		let scaleIdx = 0;
+		const parts: string[] = [];
 
-		const thousands = Math.floor(num / 1000);
-		const remainder = num % 1000;
+		while (absNum > 0) {
+			const group = absNum % 1000;
+			if (group > 0) {
+				const groupStr = convertGroup(group);
+				const scaleStr = cfg.scales[scaleIdx] || "";
 
-		let result = `${convertGroup(thousands)} ${cfg.thousand}`;
-		if (remainder > 0) {
-			result += ` ${convertGroup(remainder)}`;
+				// Handle Malay "Seribu" rule for 1,000 - 1,999 range
+				if (scaleIdx === 1 && groupStr === cfg.units[1]) {
+					parts.unshift(cfg.seribu);
+				} else {
+					parts.unshift(
+						`${groupStr}${scaleStr ? " " + scaleStr : ""}`,
+					);
+				}
+			}
+			absNum = Math.floor(absNum / 1000);
+			scaleIdx++;
 		}
-		return result.trim();
+
+		return parts.join(" ").trim();
 	},
 };
 
@@ -367,34 +370,48 @@ function formatMoneyText(val: unknown, lang: SupportedLang): string {
 	return intWords;
 }
 
-/** Formats number to text based on language */
+/** Formats number to text based on language (handles negatives, integers, and decimals) */
 function formatNumberText(val: unknown, langKey: SupportedLang): string {
 	const strVal = String(val ?? "").trim();
 	const num = parseFloat(strVal);
 	if (isNaN(num)) return strVal;
 
 	const cfg = NUMBER_CONFIG[langKey];
-	const parts = strVal.split(".");
-	const intPart = Math.abs(parseInt(parts[0], 10) || 0);
-	const intWords = numberToWords[langKey](intPart);
 
-	// Decimals are pronounced digit-by-digit (e.g. 1.02 -> One point Zero Two)
+	// Separate sign, integer part, and decimal part
+	const isNegative = num < 0;
+	const parts = Math.abs(num).toString().split(".");
+	const intPart = parseInt(parts[0], 10) || 0;
+
+	// Convert integer part to words
+	let result = numberToWords[langKey](intPart);
+
+	// Decimals are pronounced digit-by-digit (e.g., 1.02 -> One point Zero Two / Satu perpuluhan Kosong Dua)
 	if (parts.length > 1 && parts[1].length > 0) {
 		const fracWords = parts[1]
 			.split("")
 			.map((char) => {
 				const digit = parseInt(char, 10);
-				return isNaN(digit) ? "" : cfg.digits[digit];
+				if (isNaN(digit)) return "";
+
+				// Map digit to units array (units[0] fallback for zero)
+				return digit === 0 ? cfg.zero : cfg.units[digit];
 			})
 			.filter(Boolean)
 			.join(" ");
 
 		if (fracWords) {
-			return `${intWords} ${cfg.point} ${fracWords}`;
+			result = `${result} ${cfg.point} ${fracWords}`;
 		}
 	}
 
-	return intWords;
+	// Prefix negative numbers if applicable
+	if (isNegative) {
+		const negativePrefix = langKey === "MY" ? "Negatif" : "Minus";
+		result = `${negativePrefix} ${result}`;
+	}
+
+	return result;
 }
 
 // ============================================================================
@@ -559,15 +576,11 @@ function executeHelper<T extends readonly SchemaItem[]>(
 			const unknownLabel = data.sex?.unknown || SEX_CONFIG[l].unknown;
 
 			const clean = String(val ?? "").replace(/\D/g, "");
-
-			// Validate 12-digit length and birth date validity in one step			const clean = String(val ?? "").replace(/\D/g, "");
 			if (clean.length !== 12 || !parseDateNric(clean)) {
 				return unknownLabel;
 			}
 
 			const lastDigit = parseInt(clean.slice(-1), 10);
-
-			// 3. Odd = Male (1, 3, 5, 7, 9), Even = Female (0, 2, 4, 6, 8)
 			return lastDigit % 2 !== 0 ? maleLabel : femaleLabel;
 		}
 		case "abbr": {

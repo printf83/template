@@ -218,7 +218,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 	});
 
 	attachBtnPrintAll(btnPrintAll, iframe);
-	attachBtnDownloadPdf(btnDownloadPdf, btnEditor, btnPrintAll, iframe);
+	attachBtnDownloadPdf(
+		btnDownloadPdf,
+		[btnEditor, btnPrintAll, btnUserKey],
+		iframe,
+	);
 	attachBtnFaq(btnFaq);
 	attachCopyFile(btnEditorReadFile);
 	attachDownloadFile(btnEditorDownloadFile);

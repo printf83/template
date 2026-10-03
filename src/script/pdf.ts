@@ -122,17 +122,20 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 
 function setButtonLoading(
 	btn: HTMLButtonElement,
-	btnSetting: HTMLButtonElement,
-	btnPrint: HTMLButtonElement,
+	btns: HTMLButtonElement[],
 	isLoading: boolean,
 ) {
 	const iconEl = btn.querySelector("[data-icon]");
 	if (!iconEl) return;
 
 	btn.disabled = isLoading;
-	btnSetting.disabled = isLoading;
-	btnPrint.disabled = isLoading;
 	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
+
+	if (btns && btns.length > 0) {
+		btns.forEach((i) => {
+			i.disabled = isLoading;
+		});
+	}
 
 	// Re-render Lucide icons to swap SVG
 	initIcons();
@@ -140,11 +143,10 @@ function setButtonLoading(
 
 export function attachBtnDownloadPdf(
 	btn: HTMLButtonElement,
-	btnSetting: HTMLButtonElement,
-	btnPrint: HTMLButtonElement,
+	btns: HTMLButtonElement[],
 	iframe: HTMLIFrameElement,
 ) {
-	if (!btn || !btnSetting || !btnPrint || !iframe) return;
+	if (!btn || !iframe) return;
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
@@ -172,7 +174,7 @@ export function attachBtnDownloadPdf(
 			return;
 		}
 
-		setButtonLoading(btn, btnSetting, btnPrint, true);
+		setButtonLoading(btn, btns, true);
 		const filename = iframe.dataset["filename"];
 
 		try {
@@ -180,7 +182,7 @@ export function attachBtnDownloadPdf(
 		} catch (error) {
 			console.error("PDF generation failed:", error);
 		} finally {
-			setButtonLoading(btn, btnSetting, btnPrint, false);
+			setButtonLoading(btn, btns, false);
 		}
 	});
 }

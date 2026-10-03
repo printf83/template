@@ -114,7 +114,7 @@ function parseArbitraryClass<T extends readonly SchemaItem[]>(
 		if (data.asset && value in data.asset) {
 			if (data.asset[value].startsWith("data:")) {
 				return {
-					style: `background-image: url("${data.asset[value]}")`,
+					style: `background-image: url("${data.asset[value]}");`,
 				};
 			}
 		}

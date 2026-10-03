@@ -20,10 +20,20 @@ export class Toast {
 		if (!this.container) {
 			this.container = document.createElement("div");
 			this.container.id = "toast-container";
+			this.container.setAttribute("popover", "manual");
 			this.container.className =
-				"fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none";
+				"fixed bottom-5 right-5 z-[9999] flex flex-col gap-2 max-w-sm w-full pointer-events-none bg-transparent border-0 p-0 m-0";
 			document.body.appendChild(this.container);
 		}
+
+		// Refresh Top Layer stacking order every time getContainer is called
+		try {
+			this.container.hidePopover();
+		} catch {
+			// Safe catch if container was not open yet
+		}
+		this.container.showPopover();
+
 		return this.container;
 	}
 

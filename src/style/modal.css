@@ -1,9 +1,9 @@
 .modal {
-	@apply m-auto p-0 border-0 rounded-xl max-w-sm w-[90%] bg-white shadow-2xl overflow-hidden backdrop:bg-black/5 transition-all;
+	@apply m-auto p-0 border-0 rounded-xl max-w-sm w-[90%] bg-white shadow-2xl backdrop:bg-black/5 transition-all;
 }
 
 .modal-content {
-	@apply flex flex-col;
+	@apply flex flex-col overflow-hidden rounded-xl;
 }
 
 .modal-header {

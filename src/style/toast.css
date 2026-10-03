@@ -1,3 +1,7 @@
+#toast-container:popover-open {
+	@apply fixed bottom-5 right-5 top-auto left-auto p-0 m-0 border-0 bg-transparent flex flex-col gap-2 max-w-sm w-full pointer-events-none;
+}
+
 .toast {
 	@apply pointer-events-auto flex items-center justify-between gap-3 p-3 rounded-xl border shadow-lg transition-all duration-300 transform;
 }

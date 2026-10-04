@@ -14,7 +14,7 @@ import {
 import assetListItem from "../html/editor/asset-item.html?raw";
 import assetListItemChild from "../html/editor/asset-item-child.html?raw";
 import { Modal } from "./modal";
-import { createCodeEditor } from "./editor";
+import { createCodeEditor, type CreatedEditorState } from "./editor";
 import assetEditorHtml from "../html/editor/asset-edit.html?raw";
 
 const ICON_MAP: Record<string, string> = {
@@ -66,7 +66,7 @@ export async function showAssetEditor(
 	assetEditorKey.value = data.key;
 
 	const valueType = detectValueType(data.value);
-	let codeEditor: any = null;
+	let codeEditor: CreatedEditorState | null = null;
 
 	// Wait for the modal promise
 	const result = await Modal.show<boolean>({
@@ -86,9 +86,7 @@ export async function showAssetEditor(
 				if (!data.key) {
 					assetEditorKey.focus();
 				} else {
-					if (codeEditor?.focus) {
-						codeEditor.focus();
-					} else if (codeEditor?.view?.focus) {
+					if (codeEditor && codeEditor.view) {
 						codeEditor.view.focus();
 					}
 				}
@@ -96,11 +94,13 @@ export async function showAssetEditor(
 		},
 	});
 
+	const activeEditor = codeEditor as CreatedEditorState | null;
+
 	let returnData: AssetData | null = null;
 
-	if (result && codeEditor) {
+	if (result && activeEditor) {
 		const key = assetEditorKey.value.trim();
-		const value = codeEditor.getValue() || "";
+		const value = activeEditor.getValue() || "";
 
 		if (key) {
 			returnData = { key, value };
@@ -108,7 +108,7 @@ export async function showAssetEditor(
 	}
 
 	// Always destroy instance to prevent memory leaks
-	codeEditor?.destroy?.();
+	if (activeEditor) activeEditor.destroy();
 
 	return returnData;
 }

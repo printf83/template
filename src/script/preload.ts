@@ -45,7 +45,7 @@ export type TargetKey = keyof typeof targets;
 /**
  * Safely loads a template module by key with automatic retry logic.
  */
-export async function loadTargetModule<T = any>(
+export async function loadTargetModule<T = unknown>(
 	key: TargetKey,
 	retries = 2,
 ): Promise<T> {

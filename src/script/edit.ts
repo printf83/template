@@ -180,7 +180,7 @@ function escapeCsvField(val: unknown): string {
  * - Handles JS objects/arrays (checks for nested objects that require JSON).
  */
 export function detectIsJson(
-	val: Record<string, any> | Record<string, any>[],
+	val: Record<string, unknown> | Record<string, unknown>[],
 ): boolean {
 	// 1. Single plain object -> must be JSON
 	if (!Array.isArray(val)) {

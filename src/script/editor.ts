@@ -19,6 +19,15 @@ interface EditorOptions {
 	onChange?: (value: string) => void;
 }
 
+export interface CreatedEditorState {
+	refresh: () => void;
+	getValue: () => string;
+	setValue: (text: string) => void;
+	setLanguage: (newLanguage: EditorLanguage) => void;
+	destroy: () => void;
+	view: EditorView;
+}
+
 function attachUploadDownload(container: HTMLDivElement, view: EditorView) {
 	if (!container || !view) return;
 
@@ -66,7 +75,7 @@ export function createCodeEditor({
 	initialValue = "",
 	language = "html",
 	onChange,
-}: EditorOptions) {
+}: EditorOptions): CreatedEditorState {
 	const languageCompartment = new Compartment();
 
 	// Select language syntax extension

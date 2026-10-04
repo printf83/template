@@ -5,6 +5,11 @@ import { Toast } from "./toast";
 import newList from "../html/editor/new-list.html?raw";
 import newListItem from "../html/editor/new-item.html?raw";
 import { renderTemplate } from "./utils";
+import {
+	getPreloadTemplateTargets,
+	loadTargetModule,
+	type TargetKey,
+} from "./preload"; // Import loadTargetModule
 
 export function attachEditorNew(btn: HTMLButtonElement) {
 	if (!btn) return;
@@ -41,53 +46,50 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 			size: "max-w-3xl!",
 		});
 
-		// 3. Start fetching dynamic imports while modal is visible
+		// 3. Define target keys list
+		const targetKeys: TargetKey[] = getPreloadTemplateTargets();
+
 		let templateMap: Record<string, Data<SchemaItem[]>> = {};
 
+		// Fetch modules in parallel using loadTargetModule with retries
 		const fetchTemplatesTask = (async () => {
-			const targets = {
-				csv: () => import("../data/template_csv"),
-				json: () => import("../data/template_json"),
-				function: () => import("../data/template_function"),
-				command: () => import("../data/template_command"),
-				command2: () => import("../data/template_command_2"),
-				picture: () => import("../data/template_picture"),
-				asset: () => import("../data/template_asset"),
-				style: () => import("../data/template_style"),
-				script: () => import("../data/template_script"),
-				letter: () => import("../data/template_letter"),
-				t100: () => import("../data/template_100"),
-				t500: () => import("../data/template_500"),
-				t1K: () => import("../data/template_1K"),
-			};
+			try {
+				const entries = await Promise.all(
+					targetKeys.map(async (key) => {
+						const mod = await loadTargetModule<{
+							data: Data<SchemaItem[]>;
+						}>(key);
+						return [key, mod.data] as const;
+					}),
+				);
 
-			const entries = await Promise.all(
-				Object.entries(targets).map(async ([key, load]) => [
-					key,
-					(await load()).data,
-				]),
-			);
+				templateMap = Object.fromEntries(entries);
 
-			templateMap = Object.fromEntries(entries);
+				// Render list items once imports complete
+				const templateItems = Object.entries(templateMap)
+					.map(([key, d], index) => {
+						return renderTemplate(newListItem, {
+							bgStyle: d.thumb
+								? `style="background-image: url('${d.thumb}')"`
+								: "",
+							title: d.title,
+							key: key,
+							isChecked: index === 0 ? "checked" : "",
+						});
+					})
+					.join("");
 
-			// Render list items once imports complete
-			const templateItems = Object.entries(templateMap)
-				.map(([key, d], index) => {
-					return renderTemplate(newListItem, {
-						bgStyle: d.thumb
-							? `style="background-image: url('${d.thumb}')"`
-							: "",
-						title: d.title,
-						key: key,
-						isChecked: index === 0 ? "checked" : "",
-					});
-				})
-				.join("");
-
-			// Replace loading spinner with loaded template list
-			const listEl = formEl.querySelector(".thumb-list");
-			if (listEl) {
-				listEl.innerHTML = templateItems;
+				// Replace loading spinner with loaded template list
+				const listEl = formEl.querySelector(".thumb-list");
+				if (listEl) {
+					listEl.innerHTML = templateItems;
+				}
+			} catch (error) {
+				const msg =
+					error instanceof Error
+						? error.message
+						: "Failed to load templates.";
+				Toast.error(msg);
 			}
 		})();
 

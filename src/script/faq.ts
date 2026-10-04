@@ -1,12 +1,15 @@
 import { Modal } from "./modal";
+import { getPreloadFaqTarget, loadTargetModule } from "./preload"; // Import loadTargetModule
 
 export function attachBtnFaq(btn: HTMLButtonElement) {
 	if (!btn) return;
 
 	btn.addEventListener("click", async () => {
 		try {
-			// Dynamically import faq.txt only when the user clicks
-			const faqModule = await import("../assets/faq.html?raw");
+			// Safely fetch faq content with retries via loadTargetModule
+			const faqModule = await loadTargetModule<{ default: string }>(
+				getPreloadFaqTarget(),
+			);
 			const faqText = faqModule.default;
 
 			Modal.show({

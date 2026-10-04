@@ -21,6 +21,7 @@ import {
 import { db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
+import { preloadTemplates } from "./script/preload";
 
 const getAllElement = () => {
 	const loadingElem = getElementById<HTMLDivElement>("loading");
@@ -285,4 +286,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			loadingElem.remove();
 		}, 300);
 	}
+
+	preloadTemplates();
 });

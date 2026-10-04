@@ -25,7 +25,7 @@ export function render<T extends readonly SchemaItem[]>(
 	const systemStyle = `
 	@media screen {
 		body {
-			--scale: clamp(0.5, tan(atan2(100vw, 900px)), 1);
+			--scale: clamp(0.5, tan(atan2(100vw, 1000px)), 1);
 			transform: scale(var(--scale));
 			transform-origin: top center;
 			margin-bottom: calc((1 - var(--scale)) * -100%);

@@ -33,5 +33,5 @@
 
 /* Active Tab Panel */
 .tab-radio:checked + .tab-btn + .tab-panel {
-	@apply flex flex-col w-full grow basis-full overflow-x-auto h-[calc(100svh-140px)];
+	@apply flex flex-col w-full grow basis-full overflow-hidden h-[calc(100svh-190px)] sm:h-[calc(100svh-140px)];
 }

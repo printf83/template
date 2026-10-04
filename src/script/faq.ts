@@ -15,8 +15,8 @@ export function attachBtnFaq(btn: HTMLButtonElement) {
 			Modal.show({
 				title: "Frequently Asked Questions",
 				type: "question",
-				body: `<div class="max-h-[calc(100svh-460px)] bg-neutral-50 border border-neutral-200 rounded-lg overflow-y-auto p-2 inset-shadow-xs">${faqText}</div>`,
-				size: "min-w-[600px]!",
+				body: `<div class="max-h-[calc(100svh-460px)] min-h-75 bg-neutral-50 border border-neutral-200 rounded-lg overflow-y-auto p-2 inset-shadow-xs">${faqText}</div>`,
+				size: "max-w-[600px]!",
 				confirmText: "Okay",
 				showCancel: false,
 			});

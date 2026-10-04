@@ -71,7 +71,7 @@ export async function showAssetEditor(
 	// Wait for the modal promise
 	const result = await Modal.show<boolean>({
 		body: assetEditor,
-		size: "max-w-3xl!",
+		size: "max-w-xl!",
 		confirmText: "Save",
 		onShow: () => {
 			// Mount code editor only after DOM attachment

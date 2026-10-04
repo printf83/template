@@ -150,7 +150,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 		// 2. Open Modal immediately!
 		const modalPromise = Modal.show({
 			body: formEl,
-			confirmText: "Use This Template",
+			confirmText: "Use This",
 			size: "max-w-3xl!",
 		});
 

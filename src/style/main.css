@@ -12,12 +12,19 @@
 @import "rainbow.css";
 @import "faq.css";
 
+body,
+dialog {
+	-webkit-user-select: none; /* Safari / WebKit */
+	-ms-user-select: none; /* IE 10+ / Edge Legacy */
+	user-select: none; /* Standard (Chrome, Firefox, Opera, Edge) */
+}
+
 .main {
 	@apply bg-neutral-100 flex flex-col justify-between h-svh;
 }
 
 .header {
-	@apply grow-0 flex justify-between items-center px-4 pt-4;
+	@apply grow-0 flex flex-col sm:flex-row gap-4 justify-between items-center px-4 pt-4;
 }
 
 .form-main,
@@ -30,5 +37,5 @@
 }
 
 .form-main-frame {
-	@apply min-w-full h-[calc(100svh-90px)] border-none;
+	@apply min-w-full h-[calc(100svh-142px)] sm:h-[calc(100svh-88px)] border-none;
 }

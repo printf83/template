@@ -1,3 +1,5 @@
+import { registerSW } from "virtual:pwa-register";
+
 import "./style/main.css";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
@@ -22,11 +24,13 @@ import { db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
 import { preloadTemplates } from "./script/preload";
+import { Modal } from "./script/modal";
 
 const getAllElement = () => {
 	const loadingElem = getElementById<HTMLDivElement>("loading");
 	const mainElem = getElementById<HTMLDivElement>("main");
 	const iframe = getElementById<HTMLIFrameElement>("iframe");
+	const version = getElementById<HTMLSpanElement>("version");
 
 	const btnDownloadPdf = getElementById<HTMLButtonElement>("btnDownloadPdf");
 	const btnPrintAll = getElementById<HTMLButtonElement>("btnPrintAll");
@@ -73,6 +77,7 @@ const getAllElement = () => {
 		loadingElem,
 		mainElem,
 		iframe,
+		version,
 		btnDownloadPdf,
 		btnPrintAll,
 		btnUserKey,
@@ -164,6 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		loadingElem,
 		mainElem,
 		iframe,
+		version,
 		btnDownloadPdf,
 		btnPrintAll,
 		btnUserKey,
@@ -193,6 +199,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnPasteAsset,
 		assetList,
 	} = getAllElement();
+
+	if (version) version.textContent = `v${import.meta.env.PACKAGE_VERSION}`;
 
 	// Initialize auth state/session first before querying storage
 	await getAuthContext();
@@ -293,4 +301,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 
 	preloadTemplates();
+
+	// Register PWA Service Worker
+	const updateSW = registerSW({
+		async onNeedRefresh() {
+			const result = await Modal.confirm(
+				"New content available. Reload to update?",
+				"Update Found!",
+			);
+			if (result) {
+				updateSW(true);
+			}
+		},
+		onOfflineReady() {
+			console.log("App is ready to work offline.");
+		},
+	});
 });

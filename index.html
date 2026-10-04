@@ -2,14 +2,14 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/template/favicon.svg" />
+		<link rel="icon" type="image/png" href="/template/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-CKYpF_Dm.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-Cy7Q1s8J.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
-		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-DQ8rvkJC.js">
-		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CChPA71y.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-DtEWjNt4.css">
+		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-QvLpX17T.js">
+		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-NrzVujfF.js">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-CwY5H0k8.css">
 	</head>
 	<body class="print:hidden">
 		<div id="loading">
@@ -72,6 +72,14 @@
 			<span class="sr-only">Read File</span>
 		</button>
 		<button
+			id="btnEditorSave"
+			class="btn-secondary btn-square"
+			title="Save"
+		>
+			<i data-icon="save"></i>
+			<span class="sr-only">Save</span>
+		</button>
+		<button
 			id="btnEditorUploadFile"
 			class="btn-secondary btn-square"
 			title="Upload"
@@ -96,9 +104,9 @@
 			<span class="sr-only">Cancel</span>
 		</button>
 	</div>
-	<button id="btnEditorSave" class="btn-primary">
-		<i data-icon="save"></i>
-		<span>Save</span>
+	<button id="btnEditorGenerate" class="btn-primary">
+		<i data-icon="send-horizontal"></i>
+		<span>Generate</span>
 	</button>
 </div>
 

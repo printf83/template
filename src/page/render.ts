@@ -1,6 +1,9 @@
 import type { Data, SchemaItem } from "../type/data.d";
 import { html } from "./html";
 import { style } from "./style";
+import systemStyle from "../assets/system.css?raw";
+import systemScript from "../assets/system.js?raw";
+import systemHtml from "../assets/system.html?raw";
 
 /**
  * Minifies HTML by stripping CRLF, tabs, extra spaces, and whitespace between tags.
@@ -21,86 +24,6 @@ export function render<T extends readonly SchemaItem[]>(
 	script?: string;
 } {
 	if (!data) return {};
-
-	const systemStyle = `
-	@media screen {
-		body {
-			--scale: clamp(0.5, tan(atan2(100vw, 1000px)), 1);
-			transform: scale(var(--scale));
-			transform-origin: top center;
-			margin-bottom: calc((1 - var(--scale)) * -100%);
-		}
-	}
-	
-	
-	`;
-	// PAGE CONTROL CSS
-	// #pageControlContainer {
-	// 	display: none;
-	// 	position: fixed;
-	// 	z-index: 9999;
-	// 	display: none;
-	// 	pointer-events: auto;
-	// }
-
-	// #pageControlContainer .page-control-body {
-	// 	padding: 0.25rem 0.5rem;
-	// 	display: flex;
-	// 	flex: col;
-	// 	gap: 0.25rem;
-	// }
-
-	// @meida print {
-	// 	#pageControlContainer {
-	// 		display: none !important;
-	// 	}
-	// }
-
-	const systemScript = "";
-	// const systemScript = `
-	// document.addEventListener("DOMContentLoaded", () => {
-	// 	const pageControlContainer = document.getElementById("pageControlContainer");
-	// 	if (!pageControlContainer) return;
-
-	// 	pageControlContainer.addEventListener("mouseenter", () => {
-	// 		pageControlContainer.style.display = "inline-block";
-	// 	});
-
-	// 	document.addEventListener("mouseover", (event) => {
-	// 		const page = event.target.closest(".page");
-
-	// 		if (page && !page.contains(event.relatedTarget)) {
-	// 			page.classList.add("page-hovered");
-
-	// 			const rect = page.getBoundingClientRect();
-
-	// 			pageControlContainer.style.top = (rect.top + window.pageYOffset) + "px";
-	// 			pageControlContainer.style.left = (rect.left + window.pageXOffset) + "px";
-	// 			pageControlContainer.style.display = "inline-block";
-	// 		}
-	// 	});
-
-	// 	document.addEventListener("mouseout", (event) => {
-	// 		const page = event.target.closest(".page");
-
-	// 		if (page && !page.contains(event.relatedTarget)) {
-	// 			if (!pageControlContainer.contains(event.relatedTarget)) {
-	// 				page.classList.remove("page-hovered");
-	// 				pageControlContainer.style.display = null;
-	// 			}
-	// 		}
-	// 	});
-	// });
-	// `;
-
-	const systemHtml = ``;
-	// const systemHtml = `
-	// <div id="pageControlContainer">
-	// 	<div class="page-control-body">
-	// 		<div>Print</div> | <div>PDF</div>
-	// 	</div>
-	// </div>
-	// `;
 
 	const generatedHtml = html(data);
 

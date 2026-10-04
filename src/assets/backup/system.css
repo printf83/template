@@ -1,0 +1,29 @@
+@media screen {
+	body {
+		--scale: clamp(0.5, tan(atan2(100vw, 1000px)), 1);
+		transform: scale(var(--scale));
+		transform-origin: top center;
+		margin-bottom: calc((1 - var(--scale)) * -100%);
+	}
+}
+
+/* #pageControlContainer {
+	display: none;
+	position: fixed;
+	z-index: 9999;
+	display: none;
+	pointer-events: auto;
+}
+
+#pageControlContainer .page-control-body {
+	padding: 0.25rem 0.5rem;
+	display: flex;
+	flex: col;
+	gap: 0.25rem;
+}
+
+@media print {
+	#pageControlContainer {
+		display: none !important;
+	}
+} */

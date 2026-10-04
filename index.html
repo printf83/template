@@ -5,11 +5,11 @@
 		<link rel="icon" type="image/png" href="/template/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-Cy7Q1s8J.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-COeM4YbT.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-QvLpX17T.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-NrzVujfF.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-CwY5H0k8.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-CwAiG1i9.css">
 	</head>
 	<body class="print:hidden">
 		<div id="loading">
@@ -129,7 +129,7 @@
 				data-filename="data"
 				data-filetype=".json,.csv"
 			>
-				<label>Data</label>
+				<label for="data-editor">Data</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -165,7 +165,7 @@
 				data-filename="template"
 				data-filetype=".html"
 			>
-				<label>Html</label>
+				<label for="html-editor">Html</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -188,7 +188,7 @@
 
 		<div class="form-field">
 			<div class="form-label" data-filename="style" data-filetype=".css">
-				<label>Style</label>
+				<label for="style-editor">Style</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -208,7 +208,7 @@
 
 		<div class="form-field">
 			<div class="form-label" data-filename="script" data-filetype=".js">
-				<label>Script</label>
+				<label for="script-editor">Script</label>
 				<div>
 	<div class="join">
 		<button class="btn-secondary btn-xs btn-code-download" title="Download">
@@ -287,7 +287,7 @@
 </label>
 <div class="tab-panel">
 	<div class="form-container">
-		<div class="flex flex-row gap-3">
+		<div class="flex flex-row gap-3 justify-center">
 			<div class="grow flex flex-col gap-3">
 				<div class="form-field">
 					<label class="form-label" for="title-editor">Title</label>
@@ -303,23 +303,20 @@
 				</div>
 			</div>
 			<div
-				class="w-28 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-xs"
+				class="w-28 h-36 p-1 border border-zinc-200 rounded-lg shadow-xs"
 			>
 				<div
 					id="thumb-prev-editor"
 					class="w-full h-full rounded-sm bg-no-repeat bg-center cursor-pointer"
 				>
-					<input
-						type="text"
-						class="hidden"
-						id="thumb-editor"
-						placeholder="data:image/png;base64,"
-					/>
+					<input type="hidden" id="thumb-editor" />
 				</div>
 			</div>
 		</div>
 
-		<h2 class="text-sm font-semibold -mb-2">Nationality</h2>
+		<div class="divider-start text-sm text-zinc-800 -mb-2 mt-1">
+			Nationality
+		</div>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label" for="nationality-citizen-editor"
@@ -356,7 +353,7 @@
 			</div>
 		</div>
 
-		<h2 class="text-sm font-semibold -mb-2">Sex</h2>
+		<div class="divider-start text-sm text-zinc-800 -mb-2 mt-1">Sex</div>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label" for="sex-male-editor">Male</label>
@@ -419,7 +416,7 @@
 		</div>
 	</div>
 
-	<div class="abbr-list-scrollbar max-h-[calc(100svh-570px)]">
+	<div class="abbr-list-scrollbar max-h-[calc(100svh-575px)]">
 		<div class="abbr-list" id="abbrList"></div>
 	</div>
 </div>

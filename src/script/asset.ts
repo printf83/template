@@ -173,7 +173,7 @@ function genItem(template: string, data?: { key?: string; value?: string }) {
 
 	const bgStyle =
 		type === "image"
-			? `style="background-image: url('${data?.value}');"`
+			? `style="background-image: url('${data?.value}');${!data?.value?.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
 			: "";
 
 	const preview = type !== "image" ? genPreview(data?.value) : "";

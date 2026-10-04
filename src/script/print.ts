@@ -1,5 +1,6 @@
 import { db } from "./db";
 import { Modal } from "./modal";
+import { formatDuration, formatNumber } from "./utils";
 
 // Define constant threshold in milliseconds (e.g., 5 seconds = 5000ms)
 const WARNING_LARGE_PRINT_TIME = 5000;
@@ -47,28 +48,6 @@ async function readPrintSpeed() {
 
 	// 3. Compute and return per-page average
 	return Math.floor(totalPrintSpeed / totalPrintCount);
-}
-
-/** Formats numbers with localized thousands separators (e.g. 1,000 or 1.000 based on browser locale) */
-function formatNumber(num: number): string {
-	return new Intl.NumberFormat().format(num);
-}
-
-/** Formats seconds into human-readable duration (e.g. "1 minute 5 seconds" or "45 seconds") */
-function formatDuration(totalSeconds: number): string {
-	const seconds = Math.round(totalSeconds);
-	if (seconds < 60) {
-		return `${seconds} ${seconds === 1 ? "second" : "seconds"}`;
-	}
-
-	const minutes = Math.floor(seconds / 60);
-	const remainingSeconds = seconds % 60;
-
-	const minText = `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
-	if (remainingSeconds === 0) return minText;
-
-	const secText = `${remainingSeconds} ${remainingSeconds === 1 ? "second" : "seconds"}`;
-	return `${minText} ${secText}`;
 }
 
 /**

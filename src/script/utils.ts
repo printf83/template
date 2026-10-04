@@ -258,4 +258,33 @@ export const getElementById = <T extends HTMLElement = HTMLElement>(
 	return document.getElementById(id) as T;
 };
 
+/** Formats numbers with localized thousands separators (e.g. 1,000 or 1.000 based on browser locale) */
+export function formatNumber(num: number): string {
+	return new Intl.NumberFormat().format(num);
+}
+
+/** Formats seconds into human-readable duration (e.g. "1 minute 5 seconds" or "45 seconds") */
+export function formatDuration(totalSeconds: number): string {
+	const ms = Math.round(totalSeconds * 1000);
+
+	// Show in milliseconds if less than 1 second (1000 ms)
+	if (ms < 1000) {
+		return `${ms} ms`;
+	}
+
+	const seconds = Math.round(totalSeconds);
+	if (seconds < 60) {
+		return `${seconds} ${seconds === 1 ? "second" : "seconds"}`;
+	}
+
+	const minutes = Math.floor(seconds / 60);
+	const remainingSeconds = seconds % 60;
+
+	const minText = `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
+	if (remainingSeconds === 0) return minText;
+
+	const secText = `${remainingSeconds} ${remainingSeconds === 1 ? "second" : "seconds"}`;
+	return `${minText} ${secText}`;
+}
+
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit

@@ -10,8 +10,8 @@
 	@apply flex flex-wrap justify-start place-content-start gap-2;
 }
 
-.asset-list > .asset-list-item {
-	@apply relative w-26 h-32 p-1 
+.asset-list .asset-list-item {
+	@apply relative w-28 h-36 p-1 
 	overflow-hidden select-none
 	flex flex-col justify-between items-center
 	rounded-sm cursor-pointer
@@ -24,7 +24,7 @@
 }
 
 .asset-list .asset-item-preview {
-	@apply w-full h-full flex justify-center items-center grow bg-cover bg-center bg-no-repeat text-center text-[0.5rem] text-ellipsis;
+	@apply w-full h-full flex justify-center items-center grow bg-center bg-no-repeat text-center text-[0.5rem] text-ellipsis;
 }
 
 .asset-list .asset-item-control {

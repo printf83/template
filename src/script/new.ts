@@ -21,7 +21,9 @@ function renderItem(
 ) {
 	return renderTemplate(newListItem, {
 		del: allowDelete ? newListItemDelete : "",
-		bgStyle: d.thumb ? `style="background-image: url('${d.thumb}')"` : "",
+		bgStyle: d.thumb
+			? `style="background-image: url('${d.thumb}');${allowDelete && !d.thumb.startsWith("data:image/svg") ? "background-size:contain;" : ""}"`
+			: "",
 		title: d.title,
 		key: key,
 		isChecked: isChecked ? "checked" : "",
@@ -29,7 +31,7 @@ function renderItem(
 }
 
 function divider(label: string, id?: string) {
-	return `<div ${id ? `id="${id}"` : ""} class="w-full text-xs border-b border-zinc-200 py-1 my-1 font-semibold text-zinc-500">${label}</div>`;
+	return `<div ${id ? `id="${id}"` : ""} class="divider">${label}</div>`;
 }
 
 function attachDeleteItem(
@@ -42,7 +44,7 @@ function attachDeleteItem(
 	dels.forEach((elem) => {
 		elem.addEventListener("click", async (ev) => {
 			ev.preventDefault();
-			ev.stopPropagation(); // Prevents radio selection or double-click from triggering
+			ev.stopPropagation();
 
 			const target = ev.currentTarget as HTMLElement;
 			const container = target.closest(".new-item") as HTMLLabelElement;

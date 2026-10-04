@@ -333,7 +333,14 @@ export function setEditData<T extends readonly SchemaItem[]>(
 
 	// Thumbnail
 	const elem = getElementById<HTMLDivElement>("thumb-prev-editor");
-	if (elem) elem.style.backgroundImage = `url("${data.thumb}")` || "";
+	if (elem) {
+		elem.style.backgroundImage = `url("${data.thumb}")` || "";
+		if (data.thumb?.startsWith("data:image/svg")) {
+			elem.classList.remove("bg-contain");
+		} else {
+			elem.classList.add("bg-contain");
+		}
+	}
 
 	// Input Fields
 	setValue("title-editor", data.title);

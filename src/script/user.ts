@@ -7,9 +7,11 @@ function attachKeyReturn(elem: HTMLInputElement, callback: () => void) {
 	if (!elem) return;
 
 	elem.addEventListener("keypress", (e) => {
-		if (e.code === "Enter") {
+		if (e.code === "Enter" || e.code === "NumpadEnter") {
 			e.preventDefault();
 			callback();
+		} else {
+			console.log(e.code);
 		}
 	});
 }

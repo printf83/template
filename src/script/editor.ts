@@ -70,6 +70,20 @@ function attachUploadDownload(container: HTMLDivElement, view: EditorView) {
 	}
 }
 
+function attachLabelClick(container: HTMLDivElement, view: EditorView) {
+	const id = container.getAttribute("id");
+	if (id) {
+		const label = document.querySelector(
+			`label[for="${id}"]`,
+		) as HTMLLabelElement;
+		if (label) {
+			label.addEventListener("click", () => {
+				view.focus();
+			});
+		}
+	}
+}
+
 export function createCodeEditor({
 	container,
 	initialValue = "",
@@ -141,6 +155,7 @@ export function createCodeEditor({
 	});
 
 	attachUploadDownload(container, view);
+	attachLabelClick(container, view);
 
 	return {
 		refresh: () => {

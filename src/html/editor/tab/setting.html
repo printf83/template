@@ -5,7 +5,7 @@
 </label>
 <div class="tab-panel">
 	<div class="form-container">
-		<div class="flex flex-row gap-3">
+		<div class="flex flex-row gap-3 justify-center">
 			<div class="grow flex flex-col gap-3">
 				<div class="form-field">
 					<label class="form-label" for="title-editor">Title</label>
@@ -21,23 +21,20 @@
 				</div>
 			</div>
 			<div
-				class="w-28 bg-neutral-50 border border-zinc-200 rounded-lg p-1 shadow-xs"
+				class="w-28 h-36 p-1 border border-zinc-200 rounded-lg shadow-xs"
 			>
 				<div
 					id="thumb-prev-editor"
 					class="w-full h-full rounded-sm bg-no-repeat bg-center cursor-pointer"
 				>
-					<input
-						type="text"
-						class="hidden"
-						id="thumb-editor"
-						placeholder="data:image/png;base64,"
-					/>
+					<input type="hidden" id="thumb-editor" />
 				</div>
 			</div>
 		</div>
 
-		<h2 class="text-sm font-semibold -mb-2">Nationality</h2>
+		<div class="divider-start text-sm text-zinc-800 -mb-2 mt-1">
+			Nationality
+		</div>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label" for="nationality-citizen-editor"
@@ -74,7 +71,7 @@
 			</div>
 		</div>
 
-		<h2 class="text-sm font-semibold -mb-2">Sex</h2>
+		<div class="divider-start text-sm text-zinc-800 -mb-2 mt-1">Sex</div>
 		<div class="grid grid-cols-3 gap-2">
 			<div class="form-field col-span-1">
 				<label class="form-label" for="sex-male-editor">Male</label>

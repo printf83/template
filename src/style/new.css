@@ -1,0 +1,52 @@
+.new-list {
+	@apply p-2 flex flex-wrap justify-start place-content-start
+	gap-2 overflow-y-auto inset-shadow-xs
+    rounded-lg border border-zinc-200 bg-neutral-50;
+}
+
+.new-list .new-item-title {
+	@apply w-full text-center text-xs truncate;
+}
+
+.new-list .new-item {
+	@apply relative
+	w-26 h-32 justify-end pb-1 bg-center bg-no-repeat
+	p-1 overflow-hidden select-none
+	flex flex-col items-center rounded-sm cursor-pointer
+	bg-white text-neutral-400 border border-zinc-200 hover:bg-neutral-50 hover:text-neutral-900 shadow-xs
+	has-checked:bg-neutral-50 has-checked:border-zinc-400 has-checked:text-neutral-700 has-checked:ring-4 has-checked:ring-zinc-900/5;
+}
+
+.new-list input[type="radio"] {
+	@apply hidden;
+}
+
+.new-list .loading {
+	@apply flex w-full h-full gap-3 justify-center items-center;
+}
+
+.new-list .loading i[data-icon],
+.new-list .loading svg {
+	@apply size-6;
+}
+
+.new-list .new-item-control {
+	@apply absolute right-1 top-1;
+}
+
+.new-list .new-item-control div {
+	@apply p-0.5 rounded;
+}
+
+.new-list .new-item-control .new-item-delete {
+	@apply hidden text-red-600 bg-red-100;
+}
+
+.new-list .new-item:hover .new-item-delete {
+	@apply block;
+}
+
+.new-list .new-item-control svg,
+.new-list .new-item-control i[data-icon] {
+	@apply size-4;
+}

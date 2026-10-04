@@ -9,6 +9,9 @@ const templateTargets = {
 	style: () => import("../data/template_style"),
 	script: () => import("../data/template_script"),
 	letter: () => import("../data/template_letter"),
+};
+
+const testTargets = {
 	t100: () => import("../data/template_100"),
 	t500: () => import("../data/template_500"),
 	t1K: () => import("../data/template_1K"),
@@ -21,11 +24,16 @@ const othersTargets = {
 
 const targets = {
 	...templateTargets,
+	...testTargets,
 	...othersTargets,
 };
 
 export function getPreloadTemplateTargets(): TargetKey[] {
 	return Object.keys(templateTargets) as TargetKey[];
+}
+
+export function getPreloadTestTargets(): TargetKey[] {
+	return Object.keys(testTargets) as TargetKey[];
 }
 
 export function getPreloadDefaultTemplateTarget(): TargetKey {

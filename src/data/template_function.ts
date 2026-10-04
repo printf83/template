@@ -59,7 +59,7 @@ export const data = createData({
 		engineer: "eng",
 	},
 	asset: {
-		"file-1": "",
+		"text-1": "text-1",
 	},
 	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>ID : <span class="font-semibold">{{id}}</span></div>

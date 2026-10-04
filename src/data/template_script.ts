@@ -29,7 +29,7 @@ export const data = createData({
 		long: "short",
 	},
 	asset: {
-		"file-1": "",
+		"text-1": "text-1",
 	},
 	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>Col1 : <span class="font-semibold" onclick="customScript(this);">{{col1}} [CLICK ME]</span></div>

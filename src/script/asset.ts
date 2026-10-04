@@ -149,9 +149,21 @@ function attachAssetDelete(item: HTMLDivElement) {
 	const del = item.querySelector(".asset-item-control");
 	if (!del) return;
 
-	del.addEventListener("click", (e) => {
+	del.addEventListener("click", async (e: Event) => {
 		e.stopPropagation(); // Stop event bubbling to item click listener
-		item.remove();
+
+		const target = e.target as HTMLDivElement;
+		const title = target
+			.closest(".asset-list-item")
+			?.getAttribute("data-key");
+
+		const result = await Modal.confirm(
+			`Are you sure to remove this <b>${title}</b> asset?`,
+			"Remove asset?",
+		);
+		if (result) {
+			item.remove();
+		}
 	});
 }
 

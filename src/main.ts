@@ -6,7 +6,7 @@ import { getEditData, initEditor, setEditData } from "./script/edit";
 import { attachCopyFile, attachUploadThumb } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
-import { attachEditorNew } from "./script/new";
+import { attachEditorNew, attachEditorSave } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
 import { getElementById, initData, initIcons } from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
@@ -41,6 +41,7 @@ const getAllElement = () => {
 	const btnEditorUploadFile = getElementById<HTMLButtonElement>(
 		"btnEditorUploadFile",
 	);
+	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
 	const btnEditorNew = getElementById<HTMLButtonElement>("btnEditorNew");
 
 	const inputThumbEditor = getElementById<HTMLInputElement>("thumb-editor");
@@ -54,7 +55,8 @@ const getAllElement = () => {
 	const btnEditor = getElementById<HTMLButtonElement>("btnEditor");
 	const btnEditorCancel =
 		getElementById<HTMLButtonElement>("btnEditorCancel");
-	const btnEditorSave = getElementById<HTMLButtonElement>("btnEditorSave");
+	const btnEditorGenerate =
+		getElementById<HTMLButtonElement>("btnEditorGenerate");
 
 	const btnAddAbbr = getElementById<HTMLButtonElement>("btnAddAbbr");
 	const btnCopyAbbr = getElementById<HTMLButtonElement>("btnCopyAbbr");
@@ -79,6 +81,7 @@ const getAllElement = () => {
 		btnEditorReadFile,
 		btnEditorDownloadFile,
 		btnEditorUploadFile,
+		btnEditorSave,
 		btnEditorNew,
 		inputThumbEditor,
 		prevThumbEditor,
@@ -88,7 +91,7 @@ const getAllElement = () => {
 		ctlEditor,
 		btnEditor,
 		btnEditorCancel,
-		btnEditorSave,
+		btnEditorGenerate,
 		btnAddAbbr,
 		btnCopyAbbr,
 		btnPasteAbbr,
@@ -169,6 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnEditorReadFile,
 		btnEditorDownloadFile,
 		btnEditorUploadFile,
+		btnEditorSave,
 		btnEditorNew,
 		inputThumbEditor,
 		prevThumbEditor,
@@ -178,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		ctlEditor,
 		btnEditor,
 		btnEditorCancel,
-		btnEditorSave,
+		btnEditorGenerate,
 		btnAddAbbr,
 		btnCopyAbbr,
 		btnPasteAbbr,
@@ -228,6 +232,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	attachCopyFile(btnEditorReadFile);
 	attachDownloadFile(btnEditorDownloadFile);
 	attachUploadFile(btnEditorUploadFile);
+	attachEditorSave(btnEditorSave);
 	attachEditorNew(btnEditorNew);
 	attachUploadThumb(prevThumbEditor, inputThumbEditor);
 	attachAddAbbr(btnAddAbbr, abbrList);
@@ -246,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		ctlEditor &&
 		btnEditor &&
 		btnEditorCancel &&
-		btnEditorSave
+		btnEditorGenerate
 	) {
 		const interfaceState = await db.read<"main" | "editor">("interface");
 
@@ -266,7 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 		});
 
-		btnEditorSave.addEventListener("click", async () => {
+		btnEditorGenerate.addEventListener("click", async () => {
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			const editedData = getEditData();
 			if (editedData) {

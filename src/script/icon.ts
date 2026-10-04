@@ -36,6 +36,7 @@ import {
 	FileCodeCorner,
 	ShieldLock,
 	ShieldCheck,
+	SendHorizontal,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -79,6 +80,7 @@ export const renderIcons = () => {
 			FileCodeCorner,
 			ShieldLock,
 			ShieldCheck,
+			SendHorizontal,
 		},
 	});
 };

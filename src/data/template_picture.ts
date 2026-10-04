@@ -38,7 +38,7 @@ export const data = createData({
 		binti: "bt",
 	},
 	asset: {
-		"file-1": "",
+		"text-1": "text-1",
 	},
 	template: `<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>Name : <span class="font-semibold">{{%abbr name}}</span></div>

@@ -4,6 +4,7 @@ import { getAssetData, setAssetData } from "./asset";
 import { createCodeEditor, type EditorLanguage } from "./editor";
 import { getAbbrData, setAbbrData } from "./abbr";
 import { getElementById } from "./utils";
+import { isDarkModeActive } from "./dark";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
 
@@ -14,20 +15,6 @@ const editorState: Partial<Record<EditorKey, CodeEditor>> = {};
 function formatJson(val: unknown): string {
 	if (val === undefined || val === null) return "{}";
 	return typeof val === "string" ? val : JSON.stringify(val, null, 2);
-}
-
-/** Helper to detect if dark mode is active (class override or system preference) */
-export function getIsDarkMode(): boolean {
-	const hasDarkClass = document.documentElement.classList.contains("dark");
-	const prefersDark = window.matchMedia(
-		"(prefers-color-scheme: dark)",
-	).matches;
-
-	// Returns true if .dark class exists, or fallback to OS preference if class isn't toggled explicitly
-	return (
-		hasDarkClass ||
-		(!document.documentElement.classList.contains("light") && prefersDark)
-	);
 }
 
 export function initEditor() {
@@ -44,7 +31,7 @@ export function initEditor() {
 	// 1. Listen for OS / Browser Theme Changes
 	const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 	const handleSystemThemeChange = (_e: MediaQueryListEvent) => {
-		const isDark = getIsDarkMode();
+		const isDark = isDarkModeActive();
 		Object.entries(editorState).forEach(([_key, value]) => {
 			value.setTheme(isDark);
 		});
@@ -52,7 +39,7 @@ export function initEditor() {
 	mediaQuery.addEventListener("change", handleSystemThemeChange);
 
 	const observer = new MutationObserver(() => {
-		const isDark = getIsDarkMode();
+		const isDark = isDarkModeActive();
 		Object.entries(editorState).forEach(([_key, value]) => {
 			value.setTheme(isDark);
 		});
@@ -64,7 +51,7 @@ export function initEditor() {
 		attributeFilter: ["class"],
 	});
 
-	const isDark = getIsDarkMode();
+	const isDark = isDarkModeActive();
 
 	configs.forEach(({ key, id, language }) => {
 		const container = getElementById<HTMLDivElement>(id);

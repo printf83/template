@@ -1,7 +1,7 @@
 import { initIcons } from "./utils";
 
 /** Helper to check if dark mode is currently active */
-function isDarkModeActive(): boolean {
+export function isDarkModeActive(): boolean {
 	const savedTheme = localStorage.getItem("theme");
 
 	// Explicit user choice in localStorage takes priority

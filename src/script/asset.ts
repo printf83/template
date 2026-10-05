@@ -16,7 +16,7 @@ import assetListItemChild from "../html/editor/asset-item-child.html?raw";
 import { Modal } from "./modal";
 import { createCodeEditor, type CreatedEditorState } from "./editor";
 import assetEditorHtml from "../html/editor/asset-edit.html?raw";
-import { getIsDarkMode } from "./edit";
+import { isDarkModeActive } from "./dark";
 
 const ICON_MAP: Record<string, string> = {
 	image: "image",
@@ -75,7 +75,7 @@ export async function showAssetEditor(
 		size: "max-w-xl!",
 		confirmText: "Save",
 		onShow: () => {
-			const isDark = getIsDarkMode();
+			const isDark = isDarkModeActive();
 
 			// Mount code editor only after DOM attachment
 			codeEditor = createCodeEditor({
@@ -90,13 +90,13 @@ export async function showAssetEditor(
 				"(prefers-color-scheme: dark)",
 			);
 			const handleSystemThemeChange = (_e: MediaQueryListEvent) => {
-				const isDark = getIsDarkMode();
+				const isDark = isDarkModeActive();
 				codeEditor?.setTheme(isDark);
 			};
 			mediaQuery.addEventListener("change", handleSystemThemeChange);
 
 			const observer = new MutationObserver(() => {
-				const isDark = getIsDarkMode();
+				const isDark = isDarkModeActive();
 				codeEditor?.setTheme(isDark);
 			});
 

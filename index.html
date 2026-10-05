@@ -3,6 +3,23 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<script>
+			(function () {
+	const savedTheme = localStorage.getItem("theme");
+	const prefersDark = window.matchMedia(
+		"(prefers-color-scheme: dark)",
+	).matches;
+
+	if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+		document.documentElement.classList.add("dark");
+	} else {
+		document.documentElement.classList.remove("dark");
+	}
+})();
+;
+		</script>
+
 		<meta name="theme-color" content="#241f31" />
 <meta name="application-name" content="template" />
 
@@ -249,11 +266,11 @@
 />
 
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-Cqig8pSI.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-FlyTLdJs.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-QvLpX17T.js">
-		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-NrzVujfF.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-D44SPbd2.css">
+		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-DA2EnH88.js">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-DY2XW2Iz.css">
 	<link rel="manifest" href="/template/manifest.webmanifest"></head>
 	<body class="print:hidden">
 		<div id="loading">
@@ -295,6 +312,10 @@
 		>
 			<i data-icon="circle-question-mark"></i>
 			<span class="sr-only">Frequently Asked Questions</span>
+		</button>
+		<button id="btnTheme" class="btn-secondary btn-square" title="Print">
+			<i data-icon="contrast"></i>
+			<span class="sr-only">Mode</span>
 		</button>
 		<button id="btnPrintAll" class="btn-secondary btn-square" title="Print">
 			<i data-icon="printer"></i>
@@ -521,7 +542,11 @@
 					<i data-icon="upload"></i>
 					<span class="sr-only">Upload</span>
 				</button>
-				<button class="btn-primary btn-sm" id="btnAddAsset" title="Add">
+				<button
+					class="btn-secondary btn-sm"
+					id="btnAddAsset"
+					title="Add"
+				>
 					<i data-icon="plus"></i>
 					<span class="sr-only">Add</span>
 				</button>
@@ -562,11 +587,11 @@
 				</div>
 			</div>
 			<div
-				class="w-28 h-36 p-1 border border-zinc-200 rounded-xl shadow-xs"
+				class="p-1 border border-zinc-200 dark:border-zinc-800 dark:bg-zinc-900 rounded-xl shadow-xs"
 			>
 				<div
 					id="thumb-prev-editor"
-					class="w-full h-full rounded-sm bg-no-repeat bg-center cursor-pointer"
+					class="w-[85px] h-[123px] rounded-lg bg-no-repeat bg-center cursor-pointer"
 				>
 					<input type="hidden" id="thumb-editor" />
 				</div>
@@ -667,7 +692,11 @@
 					<i data-icon="clipboard"></i>
 					<span class="sr-only">Paste</span>
 				</button>
-				<button class="btn-primary btn-sm" id="btnAddAbbr" title="Add">
+				<button
+					class="btn-secondary btn-sm"
+					id="btnAddAbbr"
+					title="Add"
+				>
 					<i data-icon="plus"></i>
 					<span class="sr-only">Add</span>
 				</button>

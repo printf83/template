@@ -1,4 +1,4 @@
-import{t as e}from"./index-Cqig8pSI.js";var t=e({title:`CSV`,lang:`EN`,schema:[{key:`col1`,type:`string`},{key:`col2`,type:`string`},{key:`col3`,type:`string`}],data:[{col1:`row 1 col 1`,col2:`row 1 col 2`,col3:`row 1 col 3`},{col1:`row 2 col 1`,col2:`row 2 col 2`,col3:`row 2 col 3`},{col1:`row 3 col 1`,col2:`row 3 col 2`,col3:`row 3 col 3`}],abbr:{long:`short`},asset:{"text-1":`text-1`},template:`<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
+import{t as e}from"./index-FlyTLdJs.js";var t=e({title:`CSV`,lang:`EN`,schema:[{key:`col1`,type:`string`},{key:`col2`,type:`string`},{key:`col3`,type:`string`}],data:[{col1:`row 1 col 1`,col2:`row 1 col 2`,col3:`row 1 col 3`},{col1:`row 2 col 1`,col2:`row 2 col 2`,col3:`row 2 col 3`},{col1:`row 3 col 1`,col2:`row 3 col 2`,col3:`row 3 col 3`}],abbr:{long:`short`},asset:{"text-1":`text-1`},template:`<div class="page a4 page-m-[15mm] font-sans" contenteditable="true">
 	<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
 	<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
 	<div>Col3 : <span class="font-semibold">{{col3}}</span></div>

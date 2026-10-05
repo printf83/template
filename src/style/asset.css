@@ -1,5 +1,5 @@
 .asset-list-container {
-	@apply flex flex-col inset-shadow-xs rounded-lg border border-zinc-200 bg-neutral-50;
+	@apply flex flex-col inset-shadow-xs rounded-lg overflow-hidden border border-zinc-200 bg-neutral-50;
 }
 
 .asset-list-scrollbar {

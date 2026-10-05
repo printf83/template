@@ -1,8 +1,10 @@
 @media screen {
 	body {
-		--scale: clamp(0.5, tan(atan2(100vw, 1000px)), 1);
+		--scale: clamp(0.4, tan(atan2(100vw, 1200px)), 1);
+		--aspect-ratio: 14.141;
+
 		transform: scale(var(--scale));
 		transform-origin: top center;
-		margin-bottom: calc((1 - var(--scale)) * -100%);
+		margin-bottom: calc((1 - var(--scale)) * -100% * var(--aspect-ratio));
 	}
 }

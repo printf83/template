@@ -1,7 +1,11 @@
+.new-list-container {
+	@apply overflow-hidden inset-shadow-xs
+    rounded-lg border border-zinc-200 bg-neutral-50;
+}
+
 .new-list {
 	@apply p-2 flex flex-wrap justify-start place-content-start
-	gap-2 overflow-y-auto inset-shadow-xs
-    rounded-lg border border-zinc-200 bg-neutral-50;
+	gap-2 overflow-y-auto;
 }
 
 .new-list .new-item-title {

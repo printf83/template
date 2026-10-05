@@ -14,13 +14,15 @@
 	@apply relative p-1 
 	overflow-hidden select-none
 	flex flex-col justify-between items-center
-	rounded-sm cursor-pointer
-	bg-white dark:bg-zinc-950 text-neutral-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-zinc-100 shadow-xs
-	focus:bg-neutral-50 dark:focus:bg-zinc-900 focus:border-zinc-400 dark:focus:border-zinc-600 focus:text-neutral-700 dark:focus:text-zinc-300 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10;
+	rounded-sm cursor-pointer shadow-xs
+	bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900
+	focus:bg-neutral-50 dark:focus:bg-zinc-900 focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10;
 }
 
 .asset-list .asset-item-title {
-	@apply absolute bottom-2 w-full text-center text-xs truncate;
+	@apply absolute bottom-2 px-2 w-full text-center text-xs truncate
+	text-zinc-100
+	mix-blend-difference;
 }
 
 .asset-list .asset-item-preview {

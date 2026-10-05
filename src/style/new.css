@@ -9,16 +9,19 @@
 }
 
 .new-list .new-item-title {
-	@apply absolute bottom-2 w-full text-center text-xs truncate;
+	@apply absolute bottom-2 px-2 w-full text-center text-xs truncate
+	text-zinc-100
+	mix-blend-difference;
 }
 
 .new-list .new-item {
 	@apply relative
 	justify-end p-1 
 	overflow-hidden select-none
-	flex flex-col items-center rounded-sm cursor-pointer
-	bg-white dark:bg-zinc-950 text-neutral-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-zinc-100 shadow-xs
-	has-checked:bg-neutral-50 dark:has-checked:bg-zinc-900 has-checked:border-zinc-400 dark:has-checked:border-zinc-600 has-checked:text-neutral-700 dark:has-checked:text-zinc-300 has-checked:ring-4 has-checked:ring-zinc-900/5 dark:has-checked:ring-zinc-100/10;
+	flex flex-col items-center rounded-sm cursor-pointer shadow-xs
+	has-checked:text-neutral-700 dark:has-checked:text-zinc-300
+	bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900 
+	has-checked:bg-neutral-50 dark:has-checked:bg-zinc-900 has-checked:border-zinc-400 dark:has-checked:border-zinc-600 has-checked:ring-4 has-checked:ring-zinc-900/5 dark:has-checked:ring-zinc-100/10;
 }
 
 .new-list .new-item-preview {

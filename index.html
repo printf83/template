@@ -249,11 +249,11 @@
 />
 
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-DnDi_LGY.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-Cqig8pSI.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-hePW80VL.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-QvLpX17T.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-NrzVujfF.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-BlAYi2Tz.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-D44SPbd2.css">
 	<link rel="manifest" href="/template/manifest.webmanifest"></head>
 	<body class="print:hidden">
 		<div id="loading">
@@ -268,7 +268,12 @@
 		template
 	</h1>
 	<div>
-		<span id="version" class="version"></span>
+		<a
+			id="version"
+			class="version"
+			href="https://github.com/printf83/template"
+			target="_blank"
+		></a>
 	</div>
 </div>
 
@@ -491,7 +496,7 @@
 	<div class="flex justify-between items-center p-2">
 		<div class="text-sm font-semibold">Asset List</div>
 		<div>
-			<div class="join shadow-xs">
+			<div class="join">
 				<button
 					class="btn-secondary btn-square btn-sm"
 					id="btnCopyAsset"
@@ -645,7 +650,7 @@
 	<div class="flex justify-between items-center">
 		<div class="text-sm font-semibold">Abbreviation List</div>
 		<div>
-			<div class="join shadow-xs">
+			<div class="join">
 				<button
 					class="btn-secondary btn-square btn-sm"
 					id="btnCopyAbbr"
@@ -670,10 +675,11 @@
 		</div>
 	</div>
 
-	<div
-		class="abbr-list-scrollbar max-h-[calc(100svh-637px)] sm:max-h-[calc(100svh-587px)]"
-	>
-		<div class="abbr-list" id="abbrList"></div>
+	<div class="abbr-list-scrollbar">
+		<div
+			class="abbr-list max-h-[calc(100svh-637px)] sm:max-h-[calc(100svh-587px)]"
+			id="abbrList"
+		></div>
 	</div>
 </div>
 

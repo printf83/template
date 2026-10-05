@@ -28,7 +28,9 @@ dialog {
 }
 
 .version {
-	@apply font-mono text-[10px] px-2 py-1 bg-zinc-200 text-zinc-500 rounded-xl border border-zinc-300 shadow-xs;
+	@apply font-mono text-[10px] px-2 py-1 border rounded-xl shadow-xs
+	bg-zinc-50 text-zinc-800 border-zinc-200
+	hover:bg-blue-50 hover:text-blue-800 hover:border-blue-200;
 }
 
 .form-main,

@@ -1,6 +1,7 @@
 import type { jsPDF } from "jspdf";
 import { initIcons } from "./utils";
 import { savePrintSpeed, warningLargePrint } from "./print";
+import { Toast } from "./toast";
 
 const SUPPORTED_FORMATS = [
 	"a0",
@@ -150,7 +151,7 @@ export function attachBtnDownloadPdf(
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
-		const shouldProceed = await warningLargePrint(
+		const { shouldProceed, estimatedPrintSpeed } = await warningLargePrint(
 			iframe,
 			"Continue Generating PDF?",
 		);
@@ -170,16 +171,22 @@ export function attachBtnDownloadPdf(
 		);
 
 		if (pages.length === 0) {
-			console.warn("No .page elements found inside iframe.");
+			Toast.warning("Page not found.");
 			return;
 		}
+		const filename = iframe.dataset["filename"];
 
 		setButtonLoading(btn, btns, true);
-		const filename = iframe.dataset["filename"];
+		if (estimatedPrintSpeed > 0)
+			Toast.info(
+				"Please wait. Generating PDF file.",
+				estimatedPrintSpeed,
+			);
 
 		try {
 			await generatePDF(pages, filename);
 		} catch (error) {
+			Toast.error("PDF generation failed.");
 			console.error("PDF generation failed:", error);
 		} finally {
 			setButtonLoading(btn, btns, false);

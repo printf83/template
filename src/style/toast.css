@@ -9,7 +9,7 @@
 }
 
 .toast {
-	@apply pointer-events-auto flex items-center justify-between gap-3 p-3 rounded-xl border shadow transition-all duration-300 transform;
+	@apply pointer-events-auto overflow-hidden flex items-center justify-between gap-3 p-3 rounded-xl border shadow transition-all duration-300 transform;
 }
 
 .toast-body {
@@ -27,4 +27,25 @@
 
 .toast-close {
 	@apply bg-transparent border-0 text-gray-400 hover:text-gray-700 cursor-pointer p-0.5 rounded-md leading-none text-lg transition-colors;
+}
+
+.progress-container {
+	@apply absolute w-full h-0.5 bottom-0 left-0;
+}
+
+.progress {
+	@apply w-full h-0.5 rounded-full overflow-hidden;
+}
+
+.progress-bar {
+	@apply h-full origin-left animate-[timer_var(--duration)_linear_forwards];
+}
+
+@keyframes timer {
+	0% {
+		transform: scaleX(0);
+	}
+	100% {
+		transform: scaleX(1);
+	}
 }

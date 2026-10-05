@@ -58,13 +58,14 @@ async function readPrintSpeed() {
 export async function warningLargePrint(
 	iframe: HTMLIFrameElement,
 	title: string = "Continue Printing?",
-): Promise<boolean> {
-	if (!iframe) return true;
+): Promise<{ shouldProceed: boolean; estimatedPrintSpeed: number }> {
+	if (!iframe) return { shouldProceed: true, estimatedPrintSpeed: 0 };
 
 	const doc = iframe.contentDocument || iframe.contentWindow?.document;
 	const pagesLength = doc ? doc.querySelectorAll(".page").length : 0;
 
-	if (pagesLength === 0) return true;
+	if (pagesLength === 0)
+		return { shouldProceed: true, estimatedPrintSpeed: 0 };
 
 	const estimatePrintSpeed = await readPrintSpeed();
 	const currentEstimatedPrintSpeed = pagesLength * estimatePrintSpeed;
@@ -78,16 +79,25 @@ export async function warningLargePrint(
 		const result = await Modal.show({
 			title: title,
 			type: "warning",
-			body: `<p class="pb-4">This document has <strong>${formattedPages} pages</strong> to process and may take more than <strong>${formattedTime}</strong> to finish.</p>`,
+			body: `<p class="pb-4 text-center">This document has <strong>${formattedPages} pages</strong> to process and may take around <strong>${formattedTime}</strong> to finish.</p>`,
 			confirmText: "Yes, continue",
 			cancelText: "Cancel",
 		});
 
 		// Return true only if user confirmed the modal
-		return Boolean(result);
+		return {
+			shouldProceed: Boolean(result),
+			estimatedPrintSpeed: currentEstimatedPrintSpeed,
+		};
 	}
 
-	return true;
+	return {
+		shouldProceed: true,
+		estimatedPrintSpeed:
+			currentEstimatedPrintSpeed > WARNING_LARGE_PRINT_TIME
+				? currentEstimatedPrintSpeed
+				: 0,
+	};
 }
 
 export function attachBtnPrintAll(
@@ -98,7 +108,7 @@ export function attachBtnPrintAll(
 
 	btn.addEventListener("click", async () => {
 		// 1. Check for warning threshold before triggering print
-		const shouldProceed = await warningLargePrint(
+		const { shouldProceed } = await warningLargePrint(
 			iframe,
 			"Continue Printing?",
 		);

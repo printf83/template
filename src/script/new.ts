@@ -7,11 +7,6 @@ import newList from "../html/editor/new-list.html?raw";
 import newListItem from "../html/editor/new-item.html?raw";
 import newListItemDelete from "../html/editor/new-item-delete.html?raw";
 import { initIcons, renderTemplate } from "./utils";
-import {
-	getPreloadTemplateTargets,
-	getPreloadTestTargets,
-	loadTargetModule,
-} from "./preload";
 
 function renderItem(
 	d: Data<SchemaItem[]>,
@@ -154,35 +149,76 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 			size: "max-w-3xl!",
 		});
 
-		// 3. Define target keys list
-		const templateKeys = getPreloadTemplateTargets();
-		const testKeys = getPreloadTestTargets();
-
 		let allTemplatesMap: Record<string, Data<SchemaItem[]>> = {};
 
-		// Fetch user templates, system templates, and test modules in parallel
+		// Fetch user templates & load modules directly via dynamic import() in parallel
 		const fetchTemplatesTask = (async () => {
 			try {
-				const loadGroup = async (keys: typeof templateKeys) => {
-					const entries = await Promise.all(
-						keys.map(async (key) => {
-							const mod = await loadTargetModule<{
-								data: Data<SchemaItem[]>;
-							}>(key);
-							return [key, mod.data] as const;
-						}),
-					);
-					return Object.fromEntries(entries);
-				};
+				// Execute user DB read and module imports concurrently
+				const [userMapRaw, systemEntries, testEntries] =
+					await Promise.all([
+						db.read<Record<string, Data<SchemaItem[]>>>(
+							"user-template",
+						),
 
-				// Fetch user templates from DB & bundled modules concurrently
-				const [userMapRaw, templateMap, testMap] = await Promise.all([
-					db.read<Record<string, Data<SchemaItem[]>>>(
-						"user-template",
-					),
-					loadGroup(templateKeys),
-					loadGroup(testKeys),
-				]);
+						// Direct dynamic imports for System Templates
+						Promise.all([
+							import("../data/template_csv").then(
+								(m) => ["csv", m.data] as const,
+							),
+							import("../data/template_json").then(
+								(m) => ["json", m.data] as const,
+							),
+							import("../data/template_function").then(
+								(m) => ["function", m.data] as const,
+							),
+							import("../data/template_command").then(
+								(m) => ["command", m.data] as const,
+							),
+							import("../data/template_command_2").then(
+								(m) => ["command_2", m.data] as const,
+							),
+							import("../data/template_script").then(
+								(m) => ["script", m.data] as const,
+							),
+							import("../data/template_style").then(
+								(m) => ["style", m.data] as const,
+							),
+							import("../data/template_asset").then(
+								(m) => ["asset", m.data] as const,
+							),
+							import("../data/template_picture").then(
+								(m) => ["picture", m.data] as const,
+							),
+							import("../data/template_letter").then(
+								(m) => ["letter", m.data] as const,
+							),
+							// Add any additional system template paths here
+						]),
+
+						// Direct dynamic imports for Test Templates
+						Promise.all([
+							import("../data/template_100").then(
+								(m) => ["100", m.data] as const,
+							),
+							import("../data/template_500").then(
+								(m) => ["500", m.data] as const,
+							),
+							import("../data/template_1K").then(
+								(m) => ["1K", m.data] as const,
+							),
+							// Add any additional test template paths here
+						]),
+					]);
+
+				const templateMap: Record<
+					string,
+					Data<SchemaItem[]>
+				> = Object.fromEntries(systemEntries);
+				const testMap: Record<
+					string,
+					Data<SchemaItem[]>
+				> = Object.fromEntries(testEntries);
 
 				const userMap = userMapRaw || {};
 				const userEntries = Object.entries(userMap);

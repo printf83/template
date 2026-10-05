@@ -1,11 +1,6 @@
-import type { Data } from "../type/data";
+import type { Data, SchemaItem } from "../type/data";
 import { getUserName } from "./auth";
 import { db } from "./db";
-import {
-	getPreloadDefaultTemplateTarget,
-	getPreloadIconTarget,
-	loadTargetModule,
-} from "./preload";
 
 /** Dynamically mounts hidden input[type="file"], prompts user, and cleans up */
 export function selectFile(accept: string): Promise<File | null> {
@@ -47,9 +42,7 @@ export function selectFile(accept: string): Promise<File | null> {
 
 // Dynamic load icon
 export async function initIcons() {
-	const { renderIcons } = await loadTargetModule<{ renderIcons: () => void }>(
-		getPreloadIconTarget(),
-	);
+	const { renderIcons } = await import("../script/icon");
 	renderIcons();
 }
 
@@ -239,16 +232,13 @@ export function detectValueType(value?: string): ValueType {
 
 // Dynamic load default data
 export async function initData() {
-	const cacheData = await db.read<Data<any>>("current-data");
+	const cacheData = await db.read<Data<SchemaItem[]>>("current-data");
 
 	const IS_UNDER_DEVELOPMENT =
 		getUserName() === "Guest" && import.meta.env.DEV;
 	if (!IS_UNDER_DEVELOPMENT && cacheData) return cacheData;
 
-	// Use loadTargetModule for default template script
-	const { data } = await loadTargetModule<{ data: any }>(
-		getPreloadDefaultTemplateTarget(),
-	);
+	const { data } = await import("../data/template_letter");
 	return data;
 }
 

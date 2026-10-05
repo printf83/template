@@ -8,7 +8,7 @@ export interface ToastOptions {
 	duration?: number; // Duration in ms (default: DEFAULT_AUTO_DISMISS_DURATIONms, 0 = persistent)
 }
 
-const AUTO_CLOSE_DURATION = 60_000;
+const AUTO_CLOSE_DURATION = 5_000;
 
 export class Toast {
 	private static container: HTMLDivElement | null = null;

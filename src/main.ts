@@ -23,7 +23,6 @@ import {
 import { db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
-import { preloadTemplates } from "./script/preload";
 import { Modal } from "./script/modal";
 
 const getAllElement = () => {
@@ -299,8 +298,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			loadingElem.remove();
 		}, 300);
 	}
-
-	preloadTemplates();
 
 	// Register PWA Service Worker
 	const updateSW = registerSW({

@@ -28,12 +28,12 @@ dialog {
 }
 
 .version {
-	@apply font-mono text-[10px] px-2 py-1 bg-zinc-200 text-zinc-500 rounded-lg grow-0;
+	@apply font-mono text-[10px] px-2 py-1 bg-zinc-200 text-zinc-500 rounded-xl grow-0;
 }
 
 .form-main,
 .form-edit {
-	@apply grow m-4 bg-gray-200 border border-neutral-300 rounded-lg overflow-hidden inset-shadow-xs;
+	@apply grow m-4 bg-gray-200 border border-neutral-300 rounded-xl overflow-hidden inset-shadow-xs;
 }
 
 .form-edit {

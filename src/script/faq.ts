@@ -1,4 +1,5 @@
 import { Modal } from "./modal";
+import { Toast } from "./toast";
 
 export function attachBtnFaq(btn: HTMLButtonElement) {
 	if (!btn) return;
@@ -21,7 +22,9 @@ export function attachBtnFaq(btn: HTMLButtonElement) {
 				showCancel: false,
 			});
 		} catch (error) {
-			console.error("Failed to load FAQ module:", error);
+			const msg =
+				error instanceof Error ? error.message : "Unknown error.";
+			Toast.error(msg);
 		}
 	});
 }

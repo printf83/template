@@ -33,7 +33,8 @@
 }
 
 .new-list .loading {
-	@apply flex w-full h-full gap-3 justify-center items-center;
+	@apply flex w-full h-full gap-3 justify-center items-center
+	text-zinc-700 dark:text-zinc-300;
 }
 
 .new-list .loading i[data-icon],

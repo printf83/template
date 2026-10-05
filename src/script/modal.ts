@@ -168,7 +168,7 @@ export class Modal {
 	}
 
 	/** Quick helper for confirmation prompts */
-	static confirm(
+	static async confirm(
 		message: string,
 		title = "Confirm Action",
 		type: ModalType = "question",
@@ -183,17 +183,18 @@ export class Modal {
 	}
 
 	/** Quick helper for alert messages */
-	static alert(
+	static async alert(
 		message: string,
 		title = "Notice",
 		type: ModalType = "info",
 	): Promise<void> {
-		return this.show({
+		await this.show({
 			type,
 			title,
 			body: `<p class="pb-4 text-gray-700 dark:text-zinc-300 text-sm text-center">${message}</p>`,
 			showCancel: false,
 			confirmText: "OK",
-		}).then(() => undefined);
+		});
+		return undefined;
 	}
 }

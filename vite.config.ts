@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import injectHTML from "vite-plugin-html-inject";
 import { VitePWA } from "vite-plugin-pwa";
-import pkg from "./package.json";
+import pkg from "./package.json" with { type: "json" };
 
 export default defineConfig({
 	base: "/template/",

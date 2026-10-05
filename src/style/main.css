@@ -28,7 +28,7 @@ dialog {
 }
 
 .version {
-	@apply font-mono text-xs;
+	@apply font-mono text-[10px] px-2 py-1 bg-zinc-200 text-zinc-500 rounded-lg grow-0;
 }
 
 .form-main,

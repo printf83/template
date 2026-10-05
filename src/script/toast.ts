@@ -8,7 +8,7 @@ export interface ToastOptions {
 	duration?: number; // Duration in ms (default: DEFAULT_AUTO_DISMISS_DURATIONms, 0 = persistent)
 }
 
-const AUTO_CLOSE_DURATION = 5000;
+const AUTO_CLOSE_DURATION = 60_000;
 
 export class Toast {
 	private static container: HTMLDivElement | null = null;
@@ -21,8 +21,7 @@ export class Toast {
 			this.container = document.createElement("div");
 			this.container.id = "toast-container";
 			this.container.setAttribute("popover", "manual");
-			this.container.className =
-				"fixed bottom-5 right-5 z-[9999] flex flex-col gap-2 max-w-sm w-full pointer-events-none bg-transparent border-0 p-0 m-0";
+			this.container.className = "toast-container";
 			document.body.appendChild(this.container);
 		}
 

@@ -1,5 +1,11 @@
 #toast-container:popover-open {
-	@apply fixed bottom-5 right-5 top-auto left-auto p-0 m-0 border-0 bg-transparent flex flex-col gap-2 max-w-sm w-full pointer-events-none;
+	@apply fixed bottom-5 right-5 top-auto left-auto p-0 m-0 border-0 bg-transparent flex flex-col gap-2 
+	sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none;
+}
+
+.toast-container {
+	@apply fixed bottom-5 right-5 z-9999 flex flex-col gap-2 
+	sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none bg-transparent border-0 p-0 m-0;
 }
 
 .toast {
@@ -16,7 +22,7 @@
 }
 
 .toast-content {
-	@apply text-sm font-medium max-w-70;
+	@apply text-sm font-medium max-w-[calc(100svw-135px)] sm:max-w-72;
 }
 
 .toast-close {

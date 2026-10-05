@@ -1,10 +1,11 @@
 import { EditorView, basicSetup } from "codemirror";
-import { Compartment } from "@codemirror/state";
+import { Compartment, type Extension } from "@codemirror/state";
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
 import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
-import { ayuLight as codeTheme } from "thememirror";
+import { ayuLight } from "thememirror";
+import { oneDark } from "@codemirror/theme-one-dark";
 import { getFileMetadata, type ValueType } from "./utils";
 import { pickFile } from "./copy";
 import { downloadFile } from "./download";
@@ -16,6 +17,7 @@ interface EditorOptions {
 	container: HTMLDivElement;
 	initialValue?: string;
 	language?: EditorLanguage;
+	isDark?: boolean;
 	onChange?: (value: string) => void;
 }
 
@@ -24,6 +26,7 @@ export interface CreatedEditorState {
 	getValue: () => string;
 	setValue: (text: string) => void;
 	setLanguage: (newLanguage: EditorLanguage) => void;
+	setTheme: (isDark: boolean) => void;
 	destroy: () => void;
 	view: EditorView;
 }
@@ -88,9 +91,11 @@ export function createCodeEditor({
 	container,
 	initialValue = "",
 	language = "html",
+	isDark = false,
 	onChange,
 }: EditorOptions): CreatedEditorState {
 	const languageCompartment = new Compartment();
+	const themeCompartment = new Compartment();
 
 	// Select language syntax extension
 	const getLanguageExtension = (lang: EditorLanguage) => {
@@ -111,12 +116,16 @@ export function createCodeEditor({
 		}
 	};
 
+	const getThemeExtension = (dark: boolean): Extension => {
+		return dark ? oneDark : ayuLight;
+	};
+
 	const view = new EditorView({
 		doc: initialValue,
 		extensions: [
 			basicSetup,
 			languageCompartment.of(getLanguageExtension(language)),
-			codeTheme,
+			themeCompartment.of(getThemeExtension(isDark)),
 			// EditorView.lineWrapping,
 			EditorView.theme({
 				"&": { height: "100%" },
@@ -178,6 +187,13 @@ export function createCodeEditor({
 				effects: languageCompartment.reconfigure(
 					getLanguageExtension(newLanguage),
 				),
+			});
+		},
+
+		/** Toggle or set dark theme at runtime */
+		setTheme: (dark: boolean) => {
+			view.dispatch({
+				effects: themeCompartment.reconfigure(getThemeExtension(dark)),
 			});
 		},
 

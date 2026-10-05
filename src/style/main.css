@@ -12,6 +12,8 @@
 @import "rainbow.css";
 @import "faq.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 body,
 dialog {
 	-webkit-user-select: none; /* Safari / WebKit */
@@ -20,7 +22,7 @@ dialog {
 }
 
 .main {
-	@apply bg-neutral-100 flex flex-col justify-between h-svh;
+	@apply bg-neutral-100 dark:bg-zinc-950 flex flex-col justify-between h-svh transition-colors;
 }
 
 .header {
@@ -30,12 +32,14 @@ dialog {
 .version {
 	@apply font-mono text-[10px] px-2 py-1 border rounded-xl shadow-xs
 	bg-zinc-50 text-zinc-800 border-zinc-200
-	hover:bg-blue-50 hover:text-blue-800 hover:border-blue-200;
+	dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800
+	hover:bg-blue-50 hover:text-blue-800 hover:border-blue-200
+	dark:hover:bg-blue-950 dark:hover:text-blue-300 dark:hover:border-blue-800;
 }
 
 .form-main,
 .form-edit {
-	@apply grow m-4 bg-gray-200 border border-neutral-300 rounded-xl overflow-hidden inset-shadow-xs;
+	@apply grow m-4 bg-gray-200 dark:bg-zinc-900 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs;
 }
 
 .form-edit {

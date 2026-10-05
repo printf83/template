@@ -211,7 +211,9 @@ export function attachUploadThumb(
 			if (!fileContent) return;
 
 			input.value = fileContent.content;
-			target.style.backgroundImage = `url("${fileContent.content}")`;
+			target.style =
+				`background-image:url("${fileContent.content}");${!fileContent.content.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
+				"";
 		} catch (error) {
 			const message =
 				error instanceof Error

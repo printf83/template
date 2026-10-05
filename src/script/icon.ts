@@ -37,6 +37,9 @@ import {
 	ShieldLock,
 	ShieldCheck,
 	SendHorizontal,
+	Contrast,
+	SunMedium,
+	Moon,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -81,6 +84,9 @@ export const renderIcons = () => {
 			ShieldLock,
 			ShieldCheck,
 			SendHorizontal,
+			Contrast,
+			SunMedium,
+			Moon,
 		},
 	});
 };

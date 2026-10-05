@@ -11,7 +11,7 @@
 }
 
 .form-label {
-	@apply text-xs font-medium text-zinc-700 select-none flex items-center justify-between;
+	@apply text-xs font-medium text-zinc-700 dark:text-zinc-300 select-none flex items-center justify-between;
 }
 
 .form-label span {
@@ -19,15 +19,15 @@
 }
 
 .form-label .required {
-	@apply text-rose-500 ml-0.5 font-bold;
+	@apply text-rose-500 dark:text-rose-400 ml-0.5 font-bold;
 }
 
 .form-hint {
-	@apply text-[11px] leading-normal text-zinc-500 font-normal;
+	@apply text-[11px] leading-normal text-zinc-500 dark:text-zinc-400 font-normal;
 }
 
 .form-error {
-	@apply text-[11px] font-medium text-rose-600 flex items-center gap-1;
+	@apply text-[11px] font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1;
 }
 
 /* ==========================================================================
@@ -35,11 +35,11 @@
    ========================================================================== */
 
 @utility form-input {
-	@apply w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 
-           placeholder:text-zinc-400
-           hover:border-zinc-300
-           focus:border-zinc-400 focus:ring-4 focus:ring-zinc-900/5 focus:outline-none
-           disabled:cursor-not-allowed disabled:bg-zinc-50 disabled:text-zinc-400 disabled:border-zinc-200
+	@apply w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 
+           placeholder:text-zinc-400 dark:placeholder:text-zinc-500
+           hover:border-zinc-300 dark:hover:border-zinc-700
+           focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10 focus:outline-none
+           disabled:cursor-not-allowed disabled:bg-zinc-50 dark:disabled:bg-zinc-950 disabled:text-zinc-400 dark:disabled:text-zinc-600 disabled:border-zinc-200 dark:disabled:border-zinc-800
            transition-all duration-150 ease-in-out;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .form-code.focused {
-	@apply border-zinc-400 ring-4 ring-zinc-900/5 outline-none;
+	@apply border-zinc-400 dark:border-zinc-600 ring-4 ring-zinc-900/5 dark:ring-zinc-100/10 outline-none;
 }
 
 .form-textarea {
@@ -70,12 +70,16 @@
 	background-size: 1rem 1rem;
 }
 
+.dark .form-select {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
 /* Modern Dark-Pill File Input */
 .form-file {
-	@apply form-input py-1.5 px-2 text-xs text-zinc-500 cursor-pointer
+	@apply form-input py-1.5 px-2 text-xs text-zinc-500 dark:text-zinc-400 cursor-pointer
            file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0
-           file:text-xs file:font-medium file:bg-zinc-900 file:text-white
-           hover:file:bg-zinc-800 active:file:scale-[0.98] file:transition-all file:cursor-pointer;
+           file:text-xs file:font-medium file:bg-zinc-900 dark:file:bg-zinc-100 file:text-white dark:file:text-zinc-900
+           hover:file:bg-zinc-800 dark:hover:file:bg-zinc-200 active:file:scale-[0.98] file:transition-all file:cursor-pointer;
 }
 
 /* ==========================================================================
@@ -83,17 +87,17 @@
    ========================================================================== */
 
 .form-check {
-	@apply inline-flex items-center gap-2.5 cursor-pointer select-none text-sm font-medium text-zinc-700 hover:text-zinc-900 transition-colors;
+	@apply inline-flex items-center gap-2.5 cursor-pointer select-none text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors;
 }
 
 .form-checkbox {
-	@apply size-4 rounded border-zinc-300 text-zinc-900 bg-white
-           accent-zinc-900 focus:ring-2 focus:ring-zinc-900/10 focus:ring-offset-0 cursor-pointer transition-all;
+	@apply size-4 rounded border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-900
+           accent-zinc-900 dark:accent-zinc-100 focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/20 focus:ring-offset-0 cursor-pointer transition-all;
 }
 
 .form-radio {
-	@apply size-4 rounded-full border-zinc-300 text-zinc-900 bg-white
-           accent-zinc-900 focus:ring-2 focus:ring-zinc-900/10 focus:ring-offset-0 cursor-pointer transition-all;
+	@apply size-4 rounded-full border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-900
+           accent-zinc-900 dark:accent-zinc-100 focus:ring-2 focus:ring-zinc-900/10 dark:focus:ring-zinc-100/20 focus:ring-offset-0 cursor-pointer transition-all;
 }
 
 /* ==========================================================================
@@ -107,7 +111,7 @@
 .input-wrapper > [data-icon],
 .input-wrapper > svg,
 .input-wrapper > i {
-	@apply absolute size-4 text-zinc-400 pointer-events-none z-10 transition-colors duration-150;
+	@apply absolute size-4 text-zinc-400 dark:text-zinc-500 pointer-events-none z-10 transition-colors duration-150;
 }
 
 .input-wrapper > [data-icon]:first-child,
@@ -138,7 +142,7 @@
 .input-wrapper:focus-within > [data-icon],
 .input-wrapper:focus-within > svg,
 .input-wrapper:focus-within > i {
-	@apply text-zinc-900;
+	@apply text-zinc-900 dark:text-zinc-100;
 }
 
 /* ==========================================================================
@@ -197,6 +201,6 @@
 }
 
 .join-addon {
-	@apply inline-flex items-center px-3 text-xs font-semibold text-zinc-500 bg-zinc-100/80
-           border border-zinc-200 select-none whitespace-nowrap;
+	@apply inline-flex items-center px-3 text-xs font-semibold text-zinc-500 dark:text-zinc-400 bg-zinc-100/80 dark:bg-zinc-800/80
+           border border-zinc-200 dark:border-zinc-800 select-none whitespace-nowrap;
 }

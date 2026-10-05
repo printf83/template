@@ -26,27 +26,28 @@ export class Modal {
 				switch (options.type) {
 					case "error":
 						modalIconData = "circle-x";
-						modalIconClass = "text-red-400 bg-red-100 rounded-full";
+						modalIconClass =
+							"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-950/60 rounded-full";
 						break;
 					case "success":
 						modalIconData = "circle-check";
 						modalIconClass =
-							"text-emerald-400 bg-emerald-100 rounded-full";
+							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full";
 						break;
 					case "question":
 						modalIconData = "circle-question-mark";
 						modalIconClass =
-							"text-emerald-400 bg-emerald-100 rounded-full";
+							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full";
 						break;
 					case "info":
 						modalIconData = "info";
 						modalIconClass =
-							"text-blue-400 bg-blue-100 rounded-full";
+							"text-blue-500 dark:text-blue-400 bg-blue-100 dark:bg-blue-950/60 rounded-full";
 						break;
 					case "warning":
 						modalIconData = "circle-alert";
 						modalIconClass =
-							"text-amber-400 bg-amber-100 rounded-full";
+							"text-amber-500 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 rounded-full";
 						break;
 				}
 			}
@@ -175,7 +176,7 @@ export class Modal {
 		return this.show({
 			type,
 			title,
-			body: `<p class="pb-4 text-gray-700 text-sm text-center">${message}</p>`,
+			body: `<p class="pb-4 text-gray-700 dark:text-zinc-300 text-sm text-center">${message}</p>`,
 			showCancel: true,
 			confirmText: "Confirm",
 		}).then((res) => res === true);
@@ -190,7 +191,7 @@ export class Modal {
 		return this.show({
 			type,
 			title,
-			body: `<p class="pb-4 text-gray-700 text-sm text-center">${message}</p>`,
+			body: `<p class="pb-4 text-gray-700 dark:text-zinc-300 text-sm text-center">${message}</p>`,
 			showCancel: false,
 			confirmText: "OK",
 		}).then(() => undefined);

@@ -17,7 +17,7 @@ function renderItem(
 	return renderTemplate(newListItem, {
 		del: allowDelete ? newListItemDelete : "",
 		bgStyle: d.thumb
-			? `style="background-image: url('${d.thumb}');${allowDelete && !d.thumb.startsWith("data:image/svg") ? "background-size:contain;" : ""}"`
+			? `style="background-image: url('${d.thumb}');${allowDelete && !d.thumb.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
 			: "",
 		title: d.title,
 		key: key,

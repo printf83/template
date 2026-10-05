@@ -16,6 +16,7 @@ import assetListItemChild from "../html/editor/asset-item-child.html?raw";
 import { Modal } from "./modal";
 import { createCodeEditor, type CreatedEditorState } from "./editor";
 import assetEditorHtml from "../html/editor/asset-edit.html?raw";
+import { getIsDarkMode } from "./edit";
 
 const ICON_MAP: Record<string, string> = {
 	image: "image",
@@ -74,11 +75,35 @@ export async function showAssetEditor(
 		size: "max-w-xl!",
 		confirmText: "Save",
 		onShow: () => {
+			const isDark = getIsDarkMode();
+
 			// Mount code editor only after DOM attachment
 			codeEditor = createCodeEditor({
 				container: assetEditorValue,
 				language: valueType,
 				initialValue: data.value,
+				isDark,
+			});
+
+			// 1. Listen for OS / Browser Theme Changes
+			const mediaQuery = window.matchMedia(
+				"(prefers-color-scheme: dark)",
+			);
+			const handleSystemThemeChange = (_e: MediaQueryListEvent) => {
+				const isDark = getIsDarkMode();
+				codeEditor?.setTheme(isDark);
+			};
+			mediaQuery.addEventListener("change", handleSystemThemeChange);
+
+			const observer = new MutationObserver(() => {
+				const isDark = getIsDarkMode();
+				codeEditor?.setTheme(isDark);
+			});
+
+			// 2. Listen for HTML class toggles (e.g., user clicks a theme toggle button)
+			observer.observe(document.documentElement, {
+				attributes: true,
+				attributeFilter: ["class"],
 			});
 
 			// Safely focus editor after modal renders

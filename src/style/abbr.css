@@ -1,9 +1,5 @@
 .abbr-list .abbr-list-item {
-	@apply flex w-full;
-}
-
-.abbr-list .abbr-list-item {
-	@apply border-b border-zinc-200;
+	@apply flex w-full border-b border-zinc-200 dark:border-zinc-800;
 }
 
 .abbr-list .abbr-list-item:last-child {
@@ -16,14 +12,14 @@
 }
 
 .abbr-list .abbr-list-item button {
-	@apply hover:text-red-600 hover:bg-red-100;
+	@apply hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-950/50 dark:hover:text-red-400;
 }
 
 .abbr-list .abbr-list-item input {
-	@apply border-e border-zinc-200   
-           hover:border-zinc-200
-           hover:bg-neutral-50
-           focus:ring-0 focus:border-zinc-200;
+	@apply border-e border-zinc-200 dark:border-zinc-800   
+           hover:border-zinc-200 dark:hover:border-zinc-700
+           hover:bg-neutral-50 dark:hover:bg-zinc-800/50
+           focus:ring-0 focus:border-zinc-200 dark:focus:border-zinc-700;
 }
 
 .abbr-list {
@@ -31,11 +27,11 @@
 }
 
 .abbr-list-container {
-	@apply flex flex-col gap-2 p-2 inset-shadow-xs rounded-lg border border-zinc-200 bg-neutral-50;
+	@apply flex flex-col gap-2 p-2 inset-shadow-xs rounded-lg border border-zinc-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900;
 }
 
 .abbr-list-container .abbr-list-scrollbar {
-	@apply border border-zinc-200 rounded-lg overflow-hidden
-    shadow-xs bg-white
+	@apply border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden
+    shadow-xs bg-white dark:bg-zinc-950
     [&:not(:has(.abbr-list-item))]:hidden;
 }

@@ -1,5 +1,5 @@
 .modal {
-	@apply m-auto p-0 border-0 rounded-xl max-w-sm w-[90%] bg-white shadow-2xl backdrop:bg-black/5 transition-all;
+	@apply m-auto p-0 border-0 rounded-xl max-w-sm w-[90%] bg-white dark:bg-zinc-900 shadow-2xl backdrop:bg-black/50 transition-all;
 }
 
 .modal-content {
@@ -11,7 +11,7 @@
 }
 
 .modal-title {
-	@apply text-xl flex flex-col gap-2 justify-items-center items-center m-0 font-semibold text-gray-900;
+	@apply text-xl flex flex-col gap-2 justify-items-center items-center m-0 font-semibold text-gray-900 dark:text-zinc-100;
 }
 
 .modal-title [data-icon],
@@ -21,7 +21,7 @@
 
 .modal-close {
 	@apply absolute top-2 right-3
-	bg-transparent border-0 text-xl leading-none cursor-pointer text-gray-400 hover:text-gray-700 p-1 rounded-md transition-colors;
+	bg-transparent border-0 text-xl leading-none cursor-pointer text-gray-400 dark:text-zinc-500 hover:text-gray-700 dark:hover:text-zinc-300 p-1 rounded-md transition-colors;
 }
 
 .modal-body {

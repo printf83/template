@@ -1,15 +1,48 @@
 #toast-container:popover-open {
 	@apply fixed bottom-[20.5px] right-5 top-auto left-auto p-2 m-0 border-0 bg-transparent flex flex-col gap-2 
-	sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none;
+    sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none;
 }
 
 .toast-container {
 	@apply fixed bottom-[20.5px] right-5 z-9999 flex flex-col gap-2 
-	sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none bg-transparent border-0 p-2 m-0;
+    sm:max-w-sm w-[calc(100svw-40px)] pointer-events-none bg-transparent border-0 p-2 m-0;
 }
 
 .toast {
 	@apply pointer-events-auto overflow-hidden flex items-center justify-between gap-3 p-3 rounded-xl border shadow transition-all duration-300 transform;
+}
+
+/* Toast Type Variants */
+.toast-success {
+	@apply bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-200;
+}
+
+.toast-success .progress-bar {
+	@apply bg-emerald-800/30 dark:bg-emerald-400/30;
+}
+
+.toast-error {
+	@apply bg-red-50 dark:bg-red-950/80 border-red-200 dark:border-red-800/60 text-red-800 dark:text-red-200;
+}
+
+.toast-error .progress-bar {
+	@apply bg-red-800/30 dark:bg-red-400/30;
+}
+
+.toast-warning {
+	@apply bg-amber-50 dark:bg-amber-950/80 border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200;
+}
+
+.toast-warning .progress-bar {
+	@apply bg-amber-900/30 dark:bg-amber-400/30;
+}
+
+.toast-info {
+	@apply bg-blue-50 dark:bg-blue-950/80 border-blue-200 dark:border-blue-800/60 text-blue-800 dark:text-blue-200;
+}
+
+.toast-info .progress-bar {
+	@apply bg-blue-800/30 dark:bg-blue-400/30;
 }
 
 .toast-body {
@@ -22,11 +55,11 @@
 }
 
 .toast-content {
-	@apply text-sm font-medium max-w-[calc(100svw-150px)] sm:max-w-68.75;
+	@apply text-sm font-medium max-w-[calc(100svw-150px)] sm:max-w-68.75 text-inherit;
 }
 
 .toast-close {
-	@apply bg-transparent border-0 text-gray-400 hover:text-gray-700 cursor-pointer p-0.5 rounded-md leading-none text-lg transition-colors;
+	@apply bg-transparent border-0 text-gray-400 dark:text-zinc-500 hover:text-gray-700 dark:hover:text-zinc-200 cursor-pointer p-0.5 rounded-md leading-none text-lg transition-colors;
 }
 
 .progress-container {

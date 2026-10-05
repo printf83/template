@@ -24,6 +24,7 @@ import { db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
 import { Modal } from "./script/modal";
+import { attachBtnTheme } from "./script/dark";
 
 const getAllElement = () => {
 	const loadingElem = getElementById<HTMLDivElement>("loading");
@@ -35,6 +36,7 @@ const getAllElement = () => {
 	const btnPrintAll = getElementById<HTMLButtonElement>("btnPrintAll");
 	const btnUserKey = getElementById<HTMLButtonElement>("btnUserKey");
 	const btnUserKeyName = getElementById<HTMLSpanElement>("btnUserKeyName");
+	const btnTheme = getElementById<HTMLButtonElement>("btnTheme");
 	const btnFaq = getElementById<HTMLButtonElement>("btnFaq");
 	const btnEditorReadFile =
 		getElementById<HTMLButtonElement>("btnEditorReadFile");
@@ -81,6 +83,7 @@ const getAllElement = () => {
 		btnPrintAll,
 		btnUserKey,
 		btnUserKeyName,
+		btnTheme,
 		btnFaq,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
@@ -174,6 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		btnUserKey,
 		btnUserKeyName,
 		btnFaq,
+		btnTheme,
 		btnEditorReadFile,
 		btnEditorDownloadFile,
 		btnEditorUploadFile,
@@ -236,6 +240,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		iframe,
 	);
 	attachBtnFaq(btnFaq);
+	attachBtnTheme(btnTheme);
 	attachCopyFile(btnEditorReadFile);
 	attachDownloadFile(btnEditorDownloadFile);
 	attachUploadFile(btnEditorUploadFile);

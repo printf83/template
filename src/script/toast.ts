@@ -5,10 +5,17 @@ export type ToastType = "success" | "error" | "warning" | "info";
 export interface ToastOptions {
 	message: string;
 	type?: ToastType;
-	duration?: number; // Duration in ms (default: DEFAULT_AUTO_DISMISS_DURATIONms, 0 = persistent)
+	duration?: number; // Duration in ms (default: AUTO_CLOSE_DURATIONms, 0 = persistent)
 }
 
 const AUTO_CLOSE_DURATION = 5_000;
+
+const TOAST_ICONS: Record<ToastType, string> = {
+	success: "circle-check",
+	error: "circle-x",
+	warning: "circle-alert",
+	info: "info",
+};
 
 export class Toast {
 	private static container: HTMLDivElement | null = null;
@@ -54,61 +61,20 @@ export class Toast {
 		const container = this.getContainer();
 		const toast = document.createElement("div");
 
-		// Styling variants matching WCAG contrast standards
-		const typeStyles: Record<
-			ToastType,
-			{
-				bg: string;
-				border: string;
-				text: string;
-				progress: string;
-				icon: string;
-			}
-		> = {
-			success: {
-				bg: "bg-emerald-50",
-				border: "border-emerald-200",
-				text: "text-emerald-800",
-				progress: "bg-emerald-800/30",
-				icon: `circle-check`,
-			},
-			error: {
-				bg: "bg-red-50",
-				border: "border-red-200",
-				text: "text-red-800",
-				progress: "bg-red-800/30",
-				icon: `circle-x`,
-			},
-			warning: {
-				bg: "bg-amber-50",
-				border: "border-amber-200",
-				text: "text-amber-900",
-				progress: "bg-amber-900/30",
-				icon: `circle-alert`,
-			},
-			info: {
-				bg: "bg-blue-50",
-				border: "border-blue-200",
-				text: "text-blue-800",
-				progress: "bg-blue-800/30",
-				icon: `info`,
-			},
-		};
+		const icon = TOAST_ICONS[toastType];
 
-		const style = typeStyles[toastType];
-
-		// Layout & Initial animation state (hidden)
-		toast.className = `toast ${style.bg} ${style.border} ${style.text} translate-y-4 opacity-0 scale-95`;
+		// Layout, variant class, and initial animation state (hidden)
+		toast.className = `toast toast-${toastType} translate-y-4 opacity-0 scale-95`;
 
 		toast.innerHTML = `
             <div class="toast-body">
-                <i data-icon="${style.icon}"></i>
+                <i data-icon="${icon}"></i>
                 <div class="toast-content">${message}</div>
             </div>
-            <button type="button" class="toast-close ">&times;</button>
+            <button type="button" class="toast-close">&times;</button>
 			<div class="progress-container">
 				<div class="progress">
-					<div class="progress-bar ${style.progress}" style="--duration: ${duration}ms;"></div>
+					<div class="progress-bar" style="--duration: ${duration}ms;"></div>
 				</div>
 			</div>
         `;

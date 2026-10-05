@@ -1,5 +1,5 @@
 .tab-container {
-	@apply flex flex-wrap content-start h-full border border-neutral-300 bg-neutral-50 rounded-lg overflow-hidden shadow;
+	@apply flex flex-wrap content-start h-full border border-neutral-300 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900 rounded-lg overflow-hidden shadow;
 }
 
 /* Hide radio inputs */
@@ -10,25 +10,31 @@
 /* Tab Header Buttons (Row 1) */
 .tab-btn {
 	@apply order-1 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium
-           text-neutral-500 border-b-2 border-transparent transition-colors duration-150
-           hover:text-neutral-800 cursor-pointer select-none;
+           text-neutral-500 dark:text-zinc-400 border-b-2 border-transparent transition-colors duration-150
+           hover:text-neutral-800 dark:hover:text-zinc-200 cursor-pointer select-none;
 }
 
 /* Fix: Explicitly restrict icon sizing */
 .tab-btn [data-icon],
 .tab-btn svg,
 .tab-btn i {
-	@apply size-4 shrink-0 inline-block;
+	@apply size-4 shrink-0 inline-block text-neutral-400 dark:text-zinc-500 transition-colors;
 }
 
 /* Active Tab Button */
 .tab-radio:checked + .tab-btn {
-	@apply text-neutral-900 border-neutral-900 font-semibold bg-neutral-200/30;
+	@apply text-neutral-900 dark:text-zinc-100 border-neutral-900 dark:border-zinc-100 font-semibold bg-neutral-200/30 dark:bg-zinc-800/50;
+}
+
+.tab-radio:checked + .tab-btn [data-icon],
+.tab-radio:checked + .tab-btn svg,
+.tab-radio:checked + .tab-btn i {
+	@apply text-neutral-900 dark:text-zinc-100;
 }
 
 /* Tab Panels (Row 2: Hidden by default) */
 .tab-panel {
-	@apply order-2 hidden p-4 bg-white border-t border-neutral-200 overflow-y-auto;
+	@apply order-2 hidden p-4 bg-white dark:bg-zinc-950 border-t border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-zinc-200 overflow-y-auto;
 }
 
 /* Active Tab Panel */

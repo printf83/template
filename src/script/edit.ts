@@ -16,6 +16,20 @@ function formatJson(val: unknown): string {
 	return typeof val === "string" ? val : JSON.stringify(val, null, 2);
 }
 
+/** Helper to detect if dark mode is active (class override or system preference) */
+export function getIsDarkMode(): boolean {
+	const hasDarkClass = document.documentElement.classList.contains("dark");
+	const prefersDark = window.matchMedia(
+		"(prefers-color-scheme: dark)",
+	).matches;
+
+	// Returns true if .dark class exists, or fallback to OS preference if class isn't toggled explicitly
+	return (
+		hasDarkClass ||
+		(!document.documentElement.classList.contains("light") && prefersDark)
+	);
+}
+
 export function initEditor() {
 	// Explicitly type language as EditorLanguage
 	const configs: { key: EditorKey; id: string; language: EditorLanguage }[] =
@@ -27,10 +41,39 @@ export function initEditor() {
 			{ key: "asset", id: "asset-value", language: "json" },
 		];
 
+	// 1. Listen for OS / Browser Theme Changes
+	const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+	const handleSystemThemeChange = (_e: MediaQueryListEvent) => {
+		const isDark = getIsDarkMode();
+		Object.entries(editorState).forEach(([_key, value]) => {
+			value.setTheme(isDark);
+		});
+	};
+	mediaQuery.addEventListener("change", handleSystemThemeChange);
+
+	const observer = new MutationObserver(() => {
+		const isDark = getIsDarkMode();
+		Object.entries(editorState).forEach(([_key, value]) => {
+			value.setTheme(isDark);
+		});
+	});
+
+	// 2. Listen for HTML class toggles (e.g., user clicks a theme toggle button)
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
+
+	const isDark = getIsDarkMode();
+
 	configs.forEach(({ key, id, language }) => {
 		const container = getElementById<HTMLDivElement>(id);
 		if (container) {
-			editorState[key] = createCodeEditor({ container, language });
+			editorState[key] = createCodeEditor({
+				container,
+				language,
+				isDark,
+			});
 		}
 	});
 
@@ -334,12 +377,9 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	// Thumbnail
 	const elem = getElementById<HTMLDivElement>("thumb-prev-editor");
 	if (elem) {
-		elem.style.backgroundImage = `url("${data.thumb}")` || "";
-		if (data.thumb?.startsWith("data:image/svg")) {
-			elem.classList.remove("bg-contain");
-		} else {
-			elem.classList.add("bg-contain");
-		}
+		elem.style =
+			`background-image:url("${data.thumb}");${!data.thumb?.startsWith("data:image/svg") ? "background-size:cpver;" : ""}` ||
+			"";
 	}
 
 	// Input Fields

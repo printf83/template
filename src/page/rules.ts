@@ -66,7 +66,17 @@ const FRACTION_SCALE: Record<string, string> = {
 // SPACING
 // ============================================================================
 
-const SPACING_DIRECTIONS: Record<string, string[]> = {
+const MARGIN_DIRECTIONS: Record<string, string[]> = {
+	m: ["margin"],
+	mt: ["margin-top"],
+	mr: ["margin-right"],
+	mb: ["margin-bottom"],
+	ml: ["margin-left"],
+	mx: ["margin-left", "margin-right"],
+	my: ["margin-top", "margin-bottom"],
+};
+
+const PADDING_DIRECTIONS: Record<string, string[]> = {
 	p: ["padding"],
 	pt: ["padding-top"],
 	pb: ["padding-bottom"],
@@ -74,18 +84,34 @@ const SPACING_DIRECTIONS: Record<string, string[]> = {
 	pr: ["padding-right"],
 	px: ["padding-left", "padding-right"],
 	py: ["padding-top", "padding-bottom"],
-	m: ["margin"],
-	mt: ["margin-top"],
-	mb: ["margin-bottom"],
-	ml: ["margin-left"],
-	mr: ["margin-right"],
-	mx: ["margin-left", "margin-right"],
-	my: ["margin-top", "margin-bottom"],
 };
 
 function createSpacingRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {};
-	for (const [prefix, cssProps] of Object.entries(SPACING_DIRECTIONS)) {
+
+	// 1. Generate Margin Rules (Positive & Negative)
+	for (const [prefix, cssProps] of Object.entries(MARGIN_DIRECTIONS)) {
+		for (const [sizeKey, sizeVal] of Object.entries(SPACING_SCALE)) {
+			// Positive margin (e.g. m-4 -> margin: 1rem;)
+			const className = `${prefix}-${sizeKey}`;
+			const style = cssProps
+				.map((prop) => `${prop}: ${sizeVal};`)
+				.join(" ");
+			rules[className] = { style };
+
+			// Negative margin (e.g. -m-4 -> margin: -1rem;)
+			const negClassName = `-${prefix}-${sizeKey}`;
+			const negVal =
+				sizeVal === "0" || sizeVal === "0px" ? sizeVal : `-${sizeVal}`;
+			const negStyle = cssProps
+				.map((prop) => `${prop}: ${negVal};`)
+				.join(" ");
+			rules[negClassName] = { style: negStyle };
+		}
+	}
+
+	// 2. Generate Padding Rules (Positive Only)
+	for (const [prefix, cssProps] of Object.entries(PADDING_DIRECTIONS)) {
 		for (const [sizeKey, sizeVal] of Object.entries(SPACING_SCALE)) {
 			const className = `${prefix}-${sizeKey}`;
 			const style = cssProps
@@ -94,9 +120,9 @@ function createSpacingRules(): Record<string, PageRuleItem> {
 			rules[className] = { style };
 		}
 	}
+
 	return rules;
 }
-
 // ============================================================================
 // GAP
 // ============================================================================
@@ -1327,7 +1353,8 @@ export const rules: Record<string, PageRuleItem | PageRuleItem[]> =
 export const ARBITRARY_PROPERTIES: Record<string, string[]> = Object.freeze({
 	// Padding & Margin — reuses SPACING_DIRECTIONS instead of re-listing
 	// the same prefix → CSS-property mapping a second time.
-	...SPACING_DIRECTIONS,
+	...MARGIN_DIRECTIONS,
+	...PADDING_DIRECTIONS,
 
 	// Layout & Sizing
 	gap: ["gap"],

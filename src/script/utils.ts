@@ -238,7 +238,7 @@ export async function initData() {
 		getUserName() === "Guest" && import.meta.env.DEV;
 	if (!IS_UNDER_DEVELOPMENT && cacheData) return cacheData;
 
-	const { data } = await import("../data/template_letter");
+	const { data } = await import("../data/template_letter_bg");
 	return data;
 }
 

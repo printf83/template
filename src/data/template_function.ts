@@ -80,6 +80,12 @@ export const data = createData({
 		<span class="font-semibold">{{%number weight}} Kg</span>
 		<span class="italic">({{%titlecase %number_text weight}} Kilogram)</span>
 	</div>
+	<div class="flex gap-2">Current Date : 
+		<span class="font-semibold">{{%dd now}} {{%mmmm now}} {{%yyyy now}} ({{%date now}})</span>
+	</div>
+	<div class="flex gap-2">Current Time : 
+		<span class="font-semibold">{{%time now}}</span>
+	</div>
 </div>
 	`,
 	thumb: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBlcmNlbnQgcHJldmlldy1pY29uIj48bGluZSB4MT0iMTkiIHgyPSI1IiB5MT0iNSIgeTI9IjE5Ii8+PGNpcmNsZSBjeD0iNi41IiBjeT0iNi41IiByPSIyLjUiLz48Y2lyY2xlIGN4PSIxNy41IiBjeT0iMTcuNSIgcj0iMi41Ii8+PC9zdmc+",

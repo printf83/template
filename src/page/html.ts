@@ -422,6 +422,9 @@ function formatNumberText(val: unknown, langKey: SupportedLang): string {
 function parseDate(val: unknown): Date | null {
 	if (!val) return null;
 	if (val instanceof Date) return val;
+	if (typeof val === "string" && val.trim().toLowerCase() === "now") {
+		return new Date();
+	}
 	const d = new Date(String(val));
 	return isNaN(d.getTime()) ? null : d;
 }
@@ -811,7 +814,10 @@ function resolveValue(
 	// 1. Root-level direct access
 	if (path.startsWith("root.")) {
 		const realPath = path.slice(5);
-		return getByPath(rootRecord, realPath) ?? "";
+		const val = getByPath(rootRecord, realPath);
+		if (val !== undefined && val !== null) return val;
+		if (realPath === "now") return new Date();
+		return "";
 	}
 
 	// 2. Search local scope stack top-down
@@ -822,7 +828,12 @@ function resolveValue(
 		}
 	}
 
-	// 3. Fallback to empty string
+	// 3. Fallback for 'now' keyword when not explicitly provided in data
+	if (path === "now") {
+		return new Date();
+	}
+
+	// 4. Fallback to empty string
 	return "";
 }
 

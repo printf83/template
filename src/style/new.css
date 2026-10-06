@@ -47,7 +47,8 @@
 }
 
 .new-list .new-item-control div {
-	@apply p-1 overflow-hidden;
+	@apply p-1 overflow-hidden 
+	transition-all duration-150 ease-in-out;
 }
 
 .new-list .new-item-control .new-item-delete {

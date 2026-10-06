@@ -17,7 +17,7 @@ function renderItem(
 	return renderTemplate(newListItem, {
 		del: allowDelete ? newListItemDelete : "",
 		bgStyle: d.thumb
-			? `style="background-image: url('${d.thumb}');${allowDelete && !d.thumb.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
+			? `style="background-image: url('${d.thumb}');${!d.thumb.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
 			: "",
 		title: d.title,
 		key: key,
@@ -163,6 +163,17 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 
 						// Direct dynamic imports for System Templates
 						Promise.all([
+							import("../data/template_letter").then(
+								(m) => ["letter", m.data] as const,
+							),
+							import("../data/template_letter_bg").then(
+								(m) => ["letter_bg", m.data] as const,
+							),
+							// Add any additional system template paths here
+						]),
+
+						// Direct dynamic imports for Test Templates
+						Promise.all([
 							import("../data/template_csv").then(
 								(m) => ["csv", m.data] as const,
 							),
@@ -190,14 +201,6 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 							import("../data/template_picture").then(
 								(m) => ["picture", m.data] as const,
 							),
-							import("../data/template_letter").then(
-								(m) => ["letter", m.data] as const,
-							),
-							// Add any additional system template paths here
-						]),
-
-						// Direct dynamic imports for Test Templates
-						Promise.all([
 							import("../data/template_100").then(
 								(m) => ["100", m.data] as const,
 							),

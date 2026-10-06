@@ -46,7 +46,7 @@ function escapeClassName(className: string): string {
 	return className.replace(ESCAPE_REGEX, "\\$1");
 }
 
-/** Parses arbitrary classes like "p-[25px]" or "w-[50%]" */
+/** Parses arbitrary classes like "p-[25px]", "-m-[10px]", or "w-[50%]" */
 function parseArbitraryClass<T extends readonly SchemaItem[]>(
 	className: string,
 	data: Data<T>,
@@ -56,7 +56,7 @@ function parseArbitraryClass<T extends readonly SchemaItem[]>(
 
 	const [, isNeg, prefix, rawValue] = match;
 	const value = rawValue.replace(/_/g, " ");
-	const sign = isNeg ? "-" : "";
+	const signedValue = isNeg && !value.startsWith("-") ? `-${value}` : value;
 
 	// 1. @page Margin Utilities (page-m-[10mm], page-mt-[15mm], page-mx-[1in])
 	if (prefix.startsWith("page-m")) {
@@ -144,31 +144,31 @@ function parseArbitraryClass<T extends readonly SchemaItem[]>(
 			return { style: `border-spacing: 0px ${value};` };
 		case "rotate":
 			return {
-				style: `rotate: ${sign}${value}; transform: rotate(${sign}${value});`,
+				style: `rotate: ${signedValue}; transform: rotate(${signedValue});`,
 			};
 		case "scale":
 			return {
-				style: `scale: ${sign}${value}; transform: scale(${sign}${value});`,
+				style: `scale: ${signedValue}; transform: scale(${signedValue});`,
 			};
 		case "translate-x":
 			return {
-				style: `translate: ${sign}${value} 0; transform: translateX(${sign}${value});`,
+				style: `translate: ${signedValue} 0; transform: translateX(${signedValue});`,
 			};
 		case "translate-y":
 			return {
-				style: `translate: 0 ${sign}${value}; transform: translateY(${sign}${value});`,
+				style: `translate: 0 ${signedValue}; transform: translateY(${signedValue});`,
 			};
 		case "inset":
 			return {
-				style: `top: ${value}; right: ${value}; bottom: ${value}; left: ${value};`,
+				style: `top: ${signedValue}; right: ${signedValue}; bottom: ${signedValue}; left: ${signedValue};`,
 			};
 		case "top":
 		case "right":
 		case "bottom":
 		case "left":
-			return { style: `${prefix}: ${sign}${value};` };
+			return { style: `${prefix}: ${signedValue};` };
 		case "z":
-			return { style: `z-index: ${sign}${value};` };
+			return { style: `z-index: ${signedValue};` };
 		case "grid-cols":
 			return { style: `grid-template-columns: ${value};` };
 		case "flex":
@@ -188,7 +188,7 @@ function parseArbitraryClass<T extends readonly SchemaItem[]>(
 	const props = ARBITRARY_PROPERTIES[prefix];
 	if (!props) return null;
 
-	const style = props.map((prop) => `${prop}: ${value};`).join(" ");
+	const style = props.map((prop) => `${prop}: ${signedValue};`).join(" ");
 	return { style };
 }
 

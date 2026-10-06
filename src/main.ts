@@ -20,7 +20,7 @@ import {
 	attachPasteAsset,
 	attachUploadAsset,
 } from "./script/asset";
-import { db } from "./script/db";
+import { clearAllStorage, db } from "./script/db";
 import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
 import { Modal } from "./script/modal";
@@ -163,7 +163,7 @@ const setInterface = (
 	}
 };
 
-function updateUserName(
+async function updateUserName(
 	btnUserKey: HTMLButtonElement,
 	btnUserKeyName: HTMLSpanElement,
 ) {
@@ -183,6 +183,9 @@ function updateUserName(
 	if (i) {
 		i.replaceWith(icon);
 	}
+
+	const { usageMB, quotaMB } = await db.usage();
+	btnUserKey.title = `Storage usage ${((usageMB / quotaMB) * 100).toFixed(2)}%`;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -324,6 +327,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 			loadingElem.remove();
 		}, 300);
 	}
+
+	// Register Ctrl+Delete (or Cmd+Delete on Mac) to clear all storage
+	document.addEventListener("keydown", async (e: KeyboardEvent) => {
+		// 1. Prevent shortcut while typing in input fields or textareas
+		const target = e.target as HTMLElement | null;
+		if (
+			target &&
+			(target.tagName === "INPUT" ||
+				target.tagName === "TEXTAREA" ||
+				target.isContentEditable)
+		) {
+			return;
+		}
+
+		// 2. Check for Ctrl+Delete (or Cmd+Delete on Mac) and ignore held-down key repeats
+		if (
+			(e.ctrlKey || e.metaKey) &&
+			(e.code === "Delete" || e.key === "Delete") &&
+			!e.repeat
+		) {
+			e.preventDefault();
+
+			const confirm = await Modal.confirm(
+				"Are you sure you want to clear all data and reload the page?",
+				"Clear Data",
+				"warning",
+			);
+
+			if (confirm) {
+				const result = await clearAllStorage();
+				if (result) window.location.reload();
+			}
+		}
+	});
 
 	// Register PWA Service Worker
 	const updateSW = registerSW({

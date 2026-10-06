@@ -3,15 +3,15 @@ import { Toast } from "./toast";
 import userKeyForm from "../html/user.html?raw";
 import { getUserName, login, logout } from "./auth";
 
-function attachKeyReturn(elem: HTMLInputElement, callback: () => void) {
+function attachKeyReturn(elem: HTMLInputElement | null, callback: () => void) {
 	if (!elem) return;
 
-	elem.addEventListener("keypress", (e) => {
-		if (e.code === "Enter" || e.code === "NumpadEnter") {
+	elem.addEventListener("keydown", (e: KeyboardEvent) => {
+		if (e.isComposing) return;
+
+		if (e.key === "Enter") {
 			e.preventDefault();
 			callback();
-		} else {
-			console.log(e.code);
 		}
 	});
 }
@@ -76,8 +76,8 @@ async function showLogin() {
 
 async function handleLogout() {
 	const result = await Modal.confirm(
-		"You will be signed in as guest",
-		"Sign Out?",
+		"Are you sure you want to sign out? You will be signed in as a guest.",
+		"Sign Out",
 	);
 	if (result) {
 		await logout();

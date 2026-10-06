@@ -195,8 +195,8 @@ function attachAssetDelete(item: HTMLDivElement) {
 			?.getAttribute("data-key");
 
 		const result = await Modal.confirm(
-			`Are you sure to remove this <b>${title}</b> asset?`,
-			"Remove asset?",
+			`Are you sure you want to remove the <b>${title}</b> asset?`,
+			"Remove Asset",
 		);
 		if (result) {
 			item.remove();

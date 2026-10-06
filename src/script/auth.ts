@@ -78,7 +78,7 @@ async function deriveRawKey(
 	);
 }
 
-interface EncryptedPayload {
+export interface EncryptedPayload {
 	iv: number[];
 	cipher: number[];
 }

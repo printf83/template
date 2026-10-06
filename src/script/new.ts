@@ -56,8 +56,8 @@ function attachDeleteItem(
 			const title = titleSpan?.innerText || key || "this";
 
 			const confirmed = await Modal.confirm(
-				`Are you sure to remove this <b>${title}</b> template?`,
-				"Remove Template?",
+				`Are you sure you want to remove the <b>${title}</b> template?`,
+				"Remove Template",
 			);
 
 			if (!confirmed) return;
@@ -319,8 +319,8 @@ export function attachEditorSave(btn: HTMLButtonElement) {
 		}
 
 		const confirmed = await Modal.confirm(
-			`This will be saved as <b>${data.title}</b> in your custom template list.`,
-			"Save Template?",
+			`Do you want to save this as <b>${data.title}</b> in your custom template list?`,
+			"Save Template",
 		);
 
 		if (!confirmed) return;

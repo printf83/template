@@ -93,7 +93,7 @@ export async function uploadData<
 			type: "warning",
 			title: "Large File",
 			body: `<p class="pb-4">The selected file is <strong>${fileSizeMb} MB</strong>, which exceeds the recommended <strong>${limitMb} MB</strong> limit. Processing large files may temporarily freeze your browser tab.<br><br>Do you want to proceed?</p>`,
-			confirmText: "Yes, proceed",
+			confirmText: "Continue",
 			cancelText: "Cancel",
 		});
 

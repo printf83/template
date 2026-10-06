@@ -80,7 +80,7 @@ export async function warningLargePrint(
 			title: title,
 			type: "warning",
 			body: `<p class="pb-4 text-center">This document has <strong>${formattedPages} pages</strong> to process and may take around <strong>${formattedTime}</strong> to finish.</p>`,
-			confirmText: "Yes, continue",
+			confirmText: "Continue",
 			cancelText: "Cancel",
 		});
 

@@ -1,0 +1,1 @@
+var e=null;function t(){return e}function n(t){return e=t?structuredClone(t):null,e}function r(e){return e}export{t as n,n as r,r as t};

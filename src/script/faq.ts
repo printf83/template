@@ -12,7 +12,7 @@ export function attachBtnFaq(btn: HTMLButtonElement) {
 				title: "Frequently Asked Questions",
 				type: "question",
 				body: `
-				<div class="bg-neutral-50 border dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs">
+				<div class="bg-neutral-50 border dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs">
 					<div class="max-h-[calc(100svh-460px)] min-h-75 overflow-y-auto p-2">
 						${faqText}
 					</div>

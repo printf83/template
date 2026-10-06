@@ -37,6 +37,10 @@
 	@apply px-2;
 }
 
+.btn-xs.btn-square {
+	@apply px-1.5;
+}
+
 .btn-circle {
 	@apply rounded-full;
 }
@@ -63,7 +67,7 @@
 
 .btn-xs [data-icon],
 .btn-xs svg {
-	@apply size-3 shrink-0 inline-block;
+	@apply size-3.5 shrink-0 inline-block;
 }
 
 .btn-lg.btn-square,

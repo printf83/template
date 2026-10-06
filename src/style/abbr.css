@@ -27,7 +27,9 @@
 }
 
 .abbr-list-container {
-	@apply flex flex-col gap-2 p-2 inset-shadow-xs rounded-lg border border-zinc-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900;
+	@apply flex flex-col gap-3 p-3 inset-shadow-xs rounded-xl border 
+	border-zinc-200 dark:border-zinc-800 
+	bg-neutral-50 dark:bg-zinc-950;
 }
 
 .abbr-list-container .abbr-list-scrollbar {

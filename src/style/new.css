@@ -1,11 +1,13 @@
 .new-list-container {
 	@apply overflow-hidden inset-shadow-xs
-    rounded-lg border border-zinc-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900;
+    rounded-lg border border-zinc-200 dark:border-zinc-800 
+	bg-neutral-50 dark:bg-zinc-950;
 }
 
 .new-list {
-	@apply p-2 flex flex-wrap justify-start place-content-start
-	gap-2 overflow-y-auto;
+	@apply p-3 gap-3 
+	flex flex-wrap justify-start place-content-start
+	overflow-y-auto;
 }
 
 .new-list .new-item-title {

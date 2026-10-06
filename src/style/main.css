@@ -22,7 +22,8 @@ dialog {
 }
 
 .main {
-	@apply bg-neutral-100 dark:bg-zinc-950 flex flex-col justify-between h-svh transition-colors;
+	@apply bg-neutral-100 dark:bg-zinc-900 
+	flex flex-col justify-between h-svh transition-colors;
 }
 
 .header {
@@ -39,12 +40,12 @@ dialog {
 
 .form-main,
 .form-edit {
-	@apply grow m-4 bg-gray-200 dark:bg-zinc-900 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs
+	@apply grow m-4 bg-gray-200 dark:bg-zinc-950 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs
 	bg-repeat bg-center;
 }
 
 .form-edit {
-	@apply p-1;
+	@apply p-3;
 }
 
 .form-main-frame {

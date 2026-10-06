@@ -34,10 +34,16 @@
 
 /* Tab Panels (Row 2: Hidden by default) */
 .tab-panel {
-	@apply order-2 hidden p-4 bg-white dark:bg-zinc-950 border-t border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-zinc-200 overflow-y-auto;
+	@apply order-2 hidden p-4 overflow-y-auto
+	bg-white dark:bg-zinc-900 
+	border-t border-neutral-200 dark:border-zinc-800 
+	text-neutral-800 dark:text-zinc-200;
 }
 
 /* Active Tab Panel */
 .tab-radio:checked + .tab-btn + .tab-panel {
-	@apply flex flex-col w-full grow basis-full overflow-hidden h-[calc(100svh-190px)] sm:h-[calc(100svh-140px)];
+	@apply flex flex-col w-full grow basis-full overflow-hidden 
+	h-[calc(100svh-205px)] sm:h-[calc(100svh-158px)];
 }
+
+/* h-[calc(100svh-190px)] sm:h-[calc(100svh-140px)]; */

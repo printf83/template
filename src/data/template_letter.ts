@@ -64,7 +64,7 @@ Jalan Mat Salleh,
 	},
 	template: `<div class="page a4 page-mx-[15mm] page-mt-[10mm] font-sans relative" contenteditable="true">
 	{{#asset letter-head}}
-	<div class="h-[225mm]">
+	<div class="h-[222mm]">
 		<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
 		<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
 		<div>Col3 : <span class="font-semibold">{{col3}}</span></div>

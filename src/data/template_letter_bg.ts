@@ -35,8 +35,15 @@ export const data = createData({
 			col3: "row 3 col 3",
 		},
 	],
-	template:
-		'<div class="page a4 page-mx-[15mm] page-mt-[10mm] font-sans relative asset-[bg] bg-cover bg-center" contenteditable="true">\n\t{{#asset letter-head}}\n\t<div class="h-[225mm]">\n\t\t<div>Col1 : <span class="font-semibold">{{col1}}</span></div>\n\t\t<div>Col2 : <span class="font-semibold">{{col2}}</span></div>\n\t\t<div>Col3 : <span class="font-semibold">{{col3}}</span></div>\n\t</div>\n\t{{#asset letter-foot}}\n</div>\n\t',
+	template: `<div class="page a4 page-mx-[15mm] page-mt-[10mm] font-sans relative asset-[bg] bg-cover bg-center" contenteditable="true">
+	{{#asset letter-head}}
+	<div class="h-[222mm]">
+		<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
+		<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
+		<div>Col3 : <span class="font-semibold">{{col3}}</span></div>
+	</div>
+	{{#asset letter-foot}}
+</div>`,
 	style: "",
 	script: "",
 	abbr: {
@@ -45,15 +52,30 @@ export const data = createData({
 	asset: {
 		"company-name": "COMPANY NAME",
 		"company-reg": "A10000-B",
-		"company-address":
-			"No 123-130, Tech Park,\nJalan Mat Salleh,\n88100 Kota Kinabalu, Sabah",
+		"company-address": `No 123-130, Tech Park,
+Jalan Mat Salleh,
+88100 Kota Kinabalu, Sabah`,
 		"company-phone": "+6 000 000 0000",
 		"company-fax": "+6 000 000 0000",
 		"company-email": "admin@example.com",
-		"letter-head":
-			'<div class="flex flex-row justify-between gap-3 border-b pb-2 mb-5">\n\t<div class="flex flex-col">\n\t\t<h1 class="text-3xl font-bold text-shadow text-blue-900/80">{{#asset company-name}}</h1>\n\t\t<p class="text-sm">{{%br #asset company-address}}</p>\n\t\t<p class="text-sm">\n\t\t\tTel : <b>{{#asset company-phone}}</b> | \n\t\t\tFax : <b>{{#asset company-fax}}</b> | \n\t\t\tEmail : <b>{{#asset company-email}}</b>\n\t\t</p>\n\t</div>\n    <div class="w-32 h-32 p-2 flex">\n\t\t<div class="w-full h-full bg-contain bg-center bg-no-repeat asset-[company-logo]"></div>\n\t</div>\n</div>',
-		"letter-foot":
-			'<div class="text-xs flex flex-col items-center justify-center border-t pt-2 mt-5">\n\t<p class="text-blue-900/80 font-bold">{{#asset company-name}}</p>\n\t<p>Reg No : <b>{{#asset company-reg}}</b></p>\n</div>',
+		"letter-head": `<div class="flex flex-row justify-between gap-3 border-b pb-2 mb-5">
+	<div class="flex flex-col">
+		<h1 class="text-3xl font-bold text-shadow text-blue-900/80">{{#asset company-name}}</h1>
+		<p class="text-sm">{{%br #asset company-address}}</p>
+		<p class="text-sm">
+			Tel : <b>{{#asset company-phone}}</b> | 
+			Fax : <b>{{#asset company-fax}}</b> | 
+			Email : <b>{{#asset company-email}}</b>
+		</p>
+	</div>
+	<div class="w-32 h-32 p-2 flex">
+		<div class="w-full h-full bg-contain bg-center bg-no-repeat asset-[company-logo]"></div>
+	</div>
+</div>`,
+		"letter-foot": `<div class="text-xs flex flex-col items-center justify-center border-t pt-2 mt-5">
+	<p class="text-blue-900/80 font-bold">{{#asset company-name}}</p>
+	<p>Reg No : <b>{{#asset company-reg}}</b></p>
+</div>`,
 		"company-logo": await assetCompanyLogo(),
 		bg: await assetLetterBg(),
 	},

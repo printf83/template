@@ -15,7 +15,7 @@
 	overflow-hidden select-none
 	flex flex-col justify-between items-center
 	rounded-sm cursor-pointer shadow-xs
-	bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900
+	bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900
 	focus:bg-neutral-50 dark:focus:bg-zinc-900 focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10;
 }
 
@@ -34,11 +34,11 @@
 }
 
 .asset-list .asset-item-control div {
-	@apply p-0.5 rounded;
+	@apply p-1;
 }
 
 .asset-list .asset-item-control .asset-item-delete {
-	@apply hidden text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-950/60;
+	@apply hidden text-red-600 dark:text-red-400;
 }
 
 .asset-list .asset-item-control:hover .asset-item-delete {

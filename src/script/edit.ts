@@ -12,12 +12,55 @@ type EditorKey = "data" | "html" | "style" | "script" | "asset";
 
 const editorState: Partial<Record<EditorKey, CodeEditor>> = {};
 
+let globalObserver: MutationObserver | null = null;
+let globalMediaQuery: MediaQueryList | null = null;
+let globalThemeHandler: ((e: MediaQueryListEvent) => void) | null = null;
+
 function formatJson(val: unknown): string {
 	if (val === undefined || val === null) return "{}";
 	return typeof val === "string" ? val : JSON.stringify(val, null, 2);
 }
 
+let activeLangHandler: (() => void) | null = null;
+
 export function initEditor() {
+	// 1. Destroy existing editor instances
+	Object.keys(editorState).forEach((key) => {
+		const k = key as EditorKey;
+		if (editorState[k]) {
+			editorState[k]!.destroy();
+			delete editorState[k];
+		}
+	});
+
+	// 2. Clean up existing observers/listeners
+	if (globalObserver) globalObserver.disconnect();
+	if (globalMediaQuery && globalThemeHandler) {
+		globalMediaQuery.removeEventListener("change", globalThemeHandler);
+	}
+
+	// 3. Setup fresh listeners
+	globalMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+	globalThemeHandler = () => {
+		const isDark = isDarkModeActive();
+		Object.values(editorState).forEach((editor) =>
+			editor?.setTheme(isDark),
+		);
+	};
+	globalMediaQuery.addEventListener("change", globalThemeHandler);
+
+	globalObserver = new MutationObserver(() => {
+		const isDark = isDarkModeActive();
+		Object.values(editorState).forEach((editor) =>
+			editor?.setTheme(isDark),
+		);
+	});
+
+	globalObserver.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
+
 	// Explicitly type language as EditorLanguage
 	const configs: { key: EditorKey; id: string; language: EditorLanguage }[] =
 		[
@@ -27,29 +70,6 @@ export function initEditor() {
 			{ key: "script", id: "script-editor", language: "javascript" },
 			{ key: "asset", id: "asset-value", language: "json" },
 		];
-
-	// 1. Listen for OS / Browser Theme Changes
-	const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-	const handleSystemThemeChange = (_e: MediaQueryListEvent) => {
-		const isDark = isDarkModeActive();
-		Object.entries(editorState).forEach(([_key, value]) => {
-			value.setTheme(isDark);
-		});
-	};
-	mediaQuery.addEventListener("change", handleSystemThemeChange);
-
-	const observer = new MutationObserver(() => {
-		const isDark = isDarkModeActive();
-		Object.entries(editorState).forEach(([_key, value]) => {
-			value.setTheme(isDark);
-		});
-	});
-
-	// 2. Listen for HTML class toggles (e.g., user clicks a theme toggle button)
-	observer.observe(document.documentElement, {
-		attributes: true,
-		attributeFilter: ["class"],
-	});
 
 	const isDark = isDarkModeActive();
 
@@ -90,7 +110,12 @@ export function initEditor() {
 
 	const langEditor = getElementById<HTMLSelectElement>("lang-editor");
 	if (langEditor) {
-		langEditor.addEventListener("change", () => setPlaceholderBaseOnLang());
+		if (activeLangHandler) {
+			langEditor.removeEventListener("change", activeLangHandler);
+		}
+
+		activeLangHandler = () => setPlaceholderBaseOnLang();
+		langEditor.addEventListener("change", activeLangHandler);
 		setPlaceholderBaseOnLang();
 	}
 }
@@ -365,7 +390,7 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	const elem = getElementById<HTMLDivElement>("thumb-prev-editor");
 	if (elem) {
 		elem.style =
-			`background-image:url("${data.thumb}");${!data.thumb?.startsWith("data:image/svg") ? "background-size:cpver;" : ""}` ||
+			`background-image:url("${data.thumb}");${!data.thumb?.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
 			"";
 	}
 

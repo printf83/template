@@ -69,6 +69,8 @@ export async function showAssetEditor(
 	const valueType = detectValueType(data.value);
 	let codeEditor: CreatedEditorState | null = null;
 
+	let cleanupThemeListeners: () => void = () => {};
+
 	// Wait for the modal promise
 	const result = await Modal.show<boolean>({
 		body: assetEditor,
@@ -106,6 +108,15 @@ export async function showAssetEditor(
 				attributeFilter: ["class"],
 			});
 
+			// 3. Store cleanup function
+			cleanupThemeListeners = () => {
+				mediaQuery.removeEventListener(
+					"change",
+					handleSystemThemeChange,
+				);
+				observer.disconnect();
+			};
+
 			// Safely focus editor after modal renders
 			requestAnimationFrame(() => {
 				if (!data.key) {
@@ -133,6 +144,7 @@ export async function showAssetEditor(
 	}
 
 	// Always destroy instance to prevent memory leaks
+	cleanupThemeListeners();
 	if (activeEditor) activeEditor.destroy();
 
 	return returnData;

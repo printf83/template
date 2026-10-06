@@ -31,60 +31,70 @@ export interface CreatedEditorState {
 	view: EditorView;
 }
 
-function attachUploadDownload(container: HTMLDivElement, view: EditorView) {
-	if (!container || !view) return;
+function attachUploadDownload(
+	container: HTMLDivElement,
+	view: EditorView,
+): () => void {
+	if (!container || !view) return () => {};
 
-	const formLabel = container.previousElementSibling as HTMLDivElement;
-	const fileName = formLabel.dataset.filename as string;
-	const fileType = formLabel.dataset.filetype as string;
+	const formLabel = container.previousElementSibling as HTMLDivElement | null;
+	if (!formLabel) return () => {};
+
 	const btnUpload = formLabel.querySelector(".btn-code-upload");
 	const btnDownload = formLabel.querySelector(".btn-code-download");
 
-	if (btnUpload) {
-		btnUpload.addEventListener("click", async () => {
-			const fileContent = await pickFile(fileType);
-			if (fileContent) {
-				view.dispatch({
-					changes: {
-						from: 0,
-						to: view.state.doc.length,
-						insert: fileContent.content,
-					},
-				});
-			}
-		});
-	}
-
-	if (btnDownload) {
-		btnDownload.addEventListener("click", async () => {
-			const content = view.state.doc.toString();
-
-			if (content) {
-				const { fileExt, fileMime } = getFileMetadata(content);
-				downloadFile(
-					content,
-					fileMime,
-					`${fileName || "download"}.${fileExt}`,
-				);
-			} else {
-				Toast.error("Noting to download");
-			}
-		});
-	}
-}
-
-function attachLabelClick(container: HTMLDivElement, view: EditorView) {
-	const id = container.getAttribute("id");
-	if (id) {
-		const label = document.querySelector(
-			`label[for="${id}"]`,
-		) as HTMLLabelElement;
-		if (label) {
-			label.addEventListener("click", () => {
-				view.focus();
+	const handleUpload = async () => {
+		const fileType = formLabel.dataset.filetype || "";
+		const fileContent = await pickFile(fileType);
+		if (fileContent) {
+			view.dispatch({
+				changes: {
+					from: 0,
+					to: view.state.doc.length,
+					insert: fileContent.content,
+				},
 			});
 		}
-	}
+	};
+
+	const handleDownload = async () => {
+		const fileName = formLabel.dataset.filename || "download";
+		const content = view.state.doc.toString();
+
+		if (content) {
+			const { fileExt, fileMime } = getFileMetadata(content);
+			downloadFile(content, fileMime, `${fileName}.${fileExt}`);
+		} else {
+			Toast.error("Nothing to download");
+		}
+	};
+
+	btnUpload?.addEventListener("click", handleUpload);
+	btnDownload?.addEventListener("click", handleDownload);
+
+	// Return cleanup function to detach event listeners
+	return () => {
+		btnUpload?.removeEventListener("click", handleUpload);
+		btnDownload?.removeEventListener("click", handleDownload);
+	};
+}
+
+function attachLabelClick(
+	container: HTMLDivElement,
+	view: EditorView,
+): (() => void) | null {
+	const id = container.getAttribute("id");
+	if (!id) return null;
+
+	const label = document.querySelector(
+		`label[for="${id}"]`,
+	) as HTMLLabelElement;
+	if (!label) return null;
+
+	const handleLabelClick = () => view.focus();
+	label.addEventListener("click", handleLabelClick);
+
+	return () => label.removeEventListener("click", handleLabelClick);
 }
 
 export function createCodeEditor({
@@ -163,8 +173,8 @@ export function createCodeEditor({
 		parent: container,
 	});
 
-	attachUploadDownload(container, view);
-	attachLabelClick(container, view);
+	const removeUploadDownloadListeners = attachUploadDownload(container, view);
+	const removeLabelListener = attachLabelClick(container, view);
 
 	return {
 		refresh: () => {
@@ -198,7 +208,11 @@ export function createCodeEditor({
 		},
 
 		/** Destroy editor instance */
-		destroy: () => view.destroy(),
+		destroy: () => {
+			removeUploadDownloadListeners();
+			if (removeLabelListener) removeLabelListener();
+			view.destroy();
+		},
 
 		/** Direct access to CodeMirror view instance */
 		view,

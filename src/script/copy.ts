@@ -33,17 +33,25 @@ async function ensureDocumentFocused(): Promise<void> {
 	if (document.hasFocus()) return;
 
 	return new Promise((resolve) => {
-		const handleFocus = () => {
+		let timeoutId: number;
+
+		const cleanup = () => {
 			window.removeEventListener("focus", handleFocus);
-			// Small tick to let OS surface focus register fully
+			clearTimeout(timeoutId);
+		};
+
+		const handleFocus = () => {
+			cleanup();
 			setTimeout(resolve, 50);
 		};
 
 		window.addEventListener("focus", handleFocus);
 		window.focus();
 
-		// Fallback timeout if tab is already focused
-		setTimeout(resolve, 300);
+		timeoutId = window.setTimeout(() => {
+			cleanup();
+			resolve();
+		}, 300);
 	});
 }
 

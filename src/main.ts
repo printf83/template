@@ -163,6 +163,28 @@ const setInterface = (
 	}
 };
 
+function updateUserName(
+	btnUserKey: HTMLButtonElement,
+	btnUserKeyName: HTMLSpanElement,
+) {
+	const userName = getUserName();
+	btnUserKeyName.innerText = userName;
+
+	const icon = document.createElement("i");
+	icon.dataset.icon = userName === "Guest" ? "users" : "user-shield";
+
+	const svg = btnUserKey.querySelector("svg");
+	if (svg) {
+		svg.replaceWith(icon);
+		return;
+	}
+
+	const i = btnUserKey.querySelector("i[data-icon]");
+	if (i) {
+		i.replaceWith(icon);
+	}
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
 	initIcons();
 	initEditor();
@@ -207,7 +229,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	// Initialize auth state/session first before querying storage
 	await getAuthContext();
-	btnUserKeyName.innerText = getUserName();
+	updateUserName(btnUserKey, btnUserKeyName);
 
 	const data = await initData();
 	const currentData = setCurrentData(data);
@@ -216,9 +238,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	attachBtnUserKey(btnUserKey, async () => {
 		// 1. Update the display name
-		if (btnUserKeyName) {
-			btnUserKeyName.innerText = getUserName();
-		}
+		updateUserName(btnUserKey, btnUserKeyName);
+		initIcons();
 
 		// 2. Fetch data from the newly authenticated user's database cache
 		const freshData = await initData();

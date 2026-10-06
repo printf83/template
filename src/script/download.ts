@@ -65,35 +65,31 @@ export function base64ToBlob(
 export function downloadFile(content: string, type: string, filename: string) {
 	let blob: Blob;
 
-	// Check if content is a Data URL or an image type
 	if (content.startsWith("data:") || type.startsWith("image/")) {
 		blob = base64ToBlob(content, type);
 	} else {
 		blob = new Blob([content], { type });
 	}
 
-	// Create Object URL from binary blob
 	const url = URL.createObjectURL(blob);
-
-	// Determine safe filename
 	const fn = sanitizeFilename(filename || "data");
 
-	// Create hidden download link & trigger click
 	const link = document.createElement("a");
 	link.href = url;
 	link.download = fn;
 	link.style.display = "none";
 
-	document.body.appendChild(link);
-	link.click();
-
-	// Clean up DOM and revoke Blob URL
-	setTimeout(() => {
-		if (document.body.contains(link)) {
-			link.remove();
-		}
-		URL.revokeObjectURL(url);
-	}, 100);
+	try {
+		document.body.appendChild(link);
+		link.click();
+	} finally {
+		setTimeout(() => {
+			if (document.body.contains(link)) {
+				link.remove();
+			}
+			URL.revokeObjectURL(url);
+		}, 100);
+	}
 }
 
 export function attachDownloadFile(btn: HTMLButtonElement) {

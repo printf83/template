@@ -39,7 +39,8 @@ dialog {
 
 .form-main,
 .form-edit {
-	@apply grow m-4 bg-gray-200 dark:bg-zinc-900 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs;
+	@apply grow m-4 bg-gray-200 dark:bg-zinc-900 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs
+	bg-repeat bg-center;
 }
 
 .form-edit {

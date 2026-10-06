@@ -1,14 +1,13 @@
 const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/company-logo-C2KSGp_0.js","assets/company-logo-D0_PrBOp.js"])))=>i.map(i=>d[i]);
 import{v as e}from"./vendor-jspdf-Cuymibic.js";import{t}from"./data-CyYrSiqu.js";async function n(){return(await e(()=>import(`./company-logo-C2KSGp_0.js`),__vite__mapDeps([0,1]))).default}async function r(){return(await e(()=>import(`./letter-bg-BzqBEbhL.js`),[])).default}var i=t({title:`Letter Background`,lang:`EN`,schema:[{key:`col1`,type:`string`},{key:`col2`,type:`string`},{key:`col3`,type:`string`}],data:[{col1:`row 1 col 1`,col2:`row 1 col 2`,col3:`row 1 col 3`},{col1:`row 2 col 1`,col2:`row 2 col 2`,col3:`row 2 col 3`},{col1:`row 3 col 1`,col2:`row 3 col 2`,col3:`row 3 col 3`}],template:`<div class="page a4 page-mx-[15mm] page-mt-[10mm] font-sans relative asset-[bg] bg-cover bg-center" contenteditable="true">
 	{{#asset letter-head}}
-	<div class="h-[225mm]">
+	<div class="h-[222mm]">
 		<div>Col1 : <span class="font-semibold">{{col1}}</span></div>
 		<div>Col2 : <span class="font-semibold">{{col2}}</span></div>
 		<div>Col3 : <span class="font-semibold">{{col3}}</span></div>
 	</div>
 	{{#asset letter-foot}}
-</div>
-	`,style:``,script:``,abbr:{long:`short`},asset:{"company-name":`COMPANY NAME`,"company-reg":`A10000-B`,"company-address":`No 123-130, Tech Park,
+</div>`,style:``,script:``,abbr:{long:`short`},asset:{"company-name":`COMPANY NAME`,"company-reg":`A10000-B`,"company-address":`No 123-130, Tech Park,
 Jalan Mat Salleh,
 88100 Kota Kinabalu, Sabah`,"company-phone":`+6 000 000 0000`,"company-fax":`+6 000 000 0000`,"company-email":`admin@example.com`,"letter-head":`<div class="flex flex-row justify-between gap-3 border-b pb-2 mb-5">
 	<div class="flex flex-col">
@@ -20,7 +19,7 @@ Jalan Mat Salleh,
 			Email : <b>{{#asset company-email}}</b>
 		</p>
 	</div>
-    <div class="w-32 h-32 p-2 flex">
+	<div class="w-32 h-32 p-2 flex">
 		<div class="w-full h-full bg-contain bg-center bg-no-repeat asset-[company-logo]"></div>
 	</div>
 </div>`,"letter-foot":`<div class="text-xs flex flex-col items-center justify-center border-t pt-2 mt-5">

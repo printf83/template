@@ -1,5 +1,5 @@
 .asset-list-container {
-	@apply flex flex-col inset-shadow-xs rounded-xl overflow-hidden border 
+	@apply flex flex-col inset-shadow-xs rounded-lg overflow-hidden border 
 	border-zinc-200 dark:border-zinc-800 
 	bg-neutral-50 dark:bg-zinc-950;
 }
@@ -16,7 +16,7 @@
 	@apply relative p-1 
 	overflow-hidden select-none
 	flex flex-col justify-between items-center
-	rounded-sm cursor-pointer shadow-xs
+	rounded-md cursor-pointer shadow
 	bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900
 	focus:bg-neutral-50 dark:focus:bg-zinc-900 focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10;
 }
@@ -28,7 +28,7 @@
 }
 
 .asset-list .asset-item-preview {
-	@apply w-24 h-33.75 flex justify-center items-center grow bg-center bg-no-repeat rounded-xs text-center text-[0.5rem] text-ellipsis;
+	@apply w-24 h-33.75 flex justify-center items-center grow bg-center bg-no-repeat rounded text-center text-[0.5rem] text-ellipsis;
 }
 
 .asset-list .asset-item-control {

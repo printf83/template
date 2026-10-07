@@ -4,11 +4,16 @@
 }
 
 .faq-container h3 {
-	@apply text-sm font-bold uppercase tracking-wider px-2 pt-3 pb-0 text-zinc-800 dark:text-zinc-200;
+	@apply text-sm font-bold uppercase tracking-wider px-2 pt-4 pb-0 text-zinc-800 dark:text-zinc-200;
+}
+
+.faq-container h3:first-child {
+	@apply pt-0;
 }
 
 .faq-container details {
-	@apply bg-white dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 hover:text-neutral-900 dark:hover:text-zinc-100 transition-all border border-neutral-200 dark:border-zinc-800 rounded-lg p-2 shadow-xs;
+	@apply rounded-lg p-2 shadow-xs transition-all border
+	bg-white dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 hover:text-neutral-900 dark:hover:text-zinc-100 border-neutral-200 dark:border-zinc-800;
 }
 
 /* Hide default browser summary arrow marker */

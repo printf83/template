@@ -1,0 +1,48 @@
+#data-editor {
+	@apply h-[calc(100svh-229px)] sm:h-[calc(100svh-183px)];
+}
+
+#html-editor {
+	@apply h-[calc(100svh-569px)] sm:h-[calc(100svh-523px)];
+}
+
+.asset-list-scrollbar {
+	@apply h-[calc(100svh-257px)] sm:h-[calc(100svh-211px)];
+}
+
+#abbrList {
+	@apply max-h-[calc(100svh-652px)] sm:max-h-[calc(100svh-606px)];
+}
+
+/* Main Frame */
+.form-main-frame {
+	@apply h-[calc(100svh-128px)] sm:h-[calc(100svh-78px)];
+}
+
+/* Active Tab Panel */
+.tab-radio:checked + .tab-btn + .tab-panel {
+	@apply h-[calc(100svh-175px)] sm:h-[calc(100svh-130px)];
+}
+
+/* Toast */
+#toast-container,
+#toast-container:popover-open {
+	@apply sm:max-w-sm w-[calc(100svw-40px)];
+}
+
+.toast-content {
+	@apply max-w-[calc(100svw-150px)] sm:max-w-68.75;
+}
+
+/* Inside Dialog */
+#asset-value {
+	@apply h-[calc(100svh-600px)] min-h-48;
+}
+
+.new-list {
+	@apply h-[calc(100svh-440px)];
+}
+
+.faq-container-scroll {
+	@apply max-h-[calc(100svh-590px)] min-h-75;
+}

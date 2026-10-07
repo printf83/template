@@ -1,13 +1,13 @@
 .modal {
-	@apply m-auto p-0 border-0 rounded-xl max-w-sm w-[90%] bg-white dark:bg-zinc-900 shadow-2xl backdrop:bg-black/50 transition-all;
+	@apply m-auto p-0 border-0 rounded-lg max-w-sm w-[90%] bg-white dark:bg-zinc-900 shadow-2xl backdrop:bg-black/50 transition-all;
 }
 
 .modal-content {
-	@apply flex flex-col overflow-hidden rounded-xl;
+	@apply flex flex-col overflow-hidden rounded-lg;
 }
 
 .modal-header {
-	@apply p-4;
+	@apply p-3;
 }
 
 .modal-title {
@@ -26,11 +26,11 @@
 }
 
 .modal-body {
-	@apply px-4 w-full text-gray-900 dark:text-zinc-100;
+	@apply px-3 w-full text-gray-900 dark:text-zinc-100;
 }
 
 .modal-footer {
-	@apply flex justify-between gap-3 p-4;
+	@apply flex justify-between gap-3 p-3;
 }
 
 .modal-footer button {

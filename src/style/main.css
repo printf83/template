@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "calc-height.css";
 @import "form.css";
 @import "tab.css";
 @import "modal.css";
@@ -27,11 +28,11 @@ dialog {
 }
 
 .header {
-	@apply grow-0 flex flex-col sm:flex-row gap-4 justify-between items-center px-4 pt-4;
+	@apply grow-0 flex flex-col sm:flex-row gap-4 justify-between items-center px-3 pt-3;
 }
 
 .version {
-	@apply font-mono text-[10px] px-2 py-1 border rounded-xl shadow-xs
+	@apply font-mono text-[10px] px-2 py-1 border rounded-lg shadow-xs
 	bg-zinc-50 text-zinc-800 border-zinc-200
 	dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800
 	hover:bg-blue-50 hover:text-blue-800 hover:border-blue-200
@@ -40,14 +41,15 @@ dialog {
 
 .form-main,
 .form-edit {
-	@apply grow m-4 bg-gray-200 dark:bg-zinc-950 border border-neutral-300 dark:border-zinc-800 rounded-xl overflow-hidden inset-shadow-xs
+	@apply grow m-3 bg-gray-200 dark:bg-zinc-950 border border-neutral-300 dark:border-zinc-800 
+	rounded-lg overflow-hidden inset-shadow-xs
 	bg-repeat bg-center;
 }
 
 .form-edit {
-	@apply p-3;
+	@apply p-1;
 }
 
 .form-main-frame {
-	@apply min-w-full h-[calc(100svh-142px)] sm:h-[calc(100svh-88px)] border-none;
+	@apply min-w-full border-none;
 }

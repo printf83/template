@@ -1,7 +1,7 @@
 {
 	"name": "template",
 	"private": false,
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -13,7 +13,7 @@
 	"devDependencies": {
 		"gh-pages": "^6.3.0",
 		"typescript": "~6.0.3",
-		"vite": "^8.3.2",
+		"vite": "^8.3.3",
 		"vite-plugin-html-inject": "^1.1.2",
 		"vite-plugin-pwa": "^2.0.0",
 		"workbox-window": "^7.4.1"
@@ -30,7 +30,7 @@
 		"codemirror": "^6.0.2",
 		"html-to-image": "^1.11.13",
 		"jspdf": "^4.2.1",
-		"lucide": "^1.51.0",
+		"lucide": "^1.52.0",
 		"tailwindcss": "^4.3.3",
 		"thememirror": "^2.0.1"
 	}

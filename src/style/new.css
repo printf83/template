@@ -20,14 +20,14 @@
 	@apply relative
 	justify-end p-1 
 	overflow-hidden select-none
-	flex flex-col items-center rounded-sm cursor-pointer shadow-xs
+	flex flex-col items-center rounded-md cursor-pointer shadow
 	has-checked:text-neutral-700 dark:has-checked:text-zinc-300
 	bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900 
 	has-checked:bg-neutral-50 dark:has-checked:bg-zinc-900 has-checked:border-zinc-400 dark:has-checked:border-zinc-600 has-checked:ring-4 has-checked:ring-zinc-900/5 dark:has-checked:ring-zinc-100/10;
 }
 
 .new-list .new-item-preview {
-	@apply w-24 h-33.75 bg-center bg-no-repeat rounded-xs;
+	@apply w-24 h-33.75 bg-center bg-no-repeat rounded;
 }
 
 .new-list input[type="radio"] {

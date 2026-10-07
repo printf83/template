@@ -1,5 +1,9 @@
 .modal {
-	@apply m-auto p-0 border-0 rounded-lg max-w-sm w-[90%] bg-white dark:bg-zinc-900 shadow-2xl backdrop:bg-black/50 transition-all;
+	@apply m-auto p-0 border-0 rounded-lg transition-all
+	max-w-sm w-[90%] 
+	backdrop:bg-black/50 
+	bg-white dark:bg-zinc-900 
+	shadow-2xl dark:shadow-white/10;
 }
 
 .modal-content {

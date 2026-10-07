@@ -1,6 +1,7 @@
 .new-list-container {
-	@apply overflow-hidden inset-shadow-xs
-    rounded-lg border border-zinc-200 dark:border-zinc-800 
+	@apply overflow-hidden rounded-lg border 
+	inset-shadow-xs dark:inset-shadow-white/10
+    border-zinc-200 dark:border-zinc-800 
 	bg-neutral-50 dark:bg-zinc-950;
 }
 
@@ -20,7 +21,8 @@
 	@apply relative
 	justify-end p-1 
 	overflow-hidden select-none
-	flex flex-col items-center rounded-md cursor-pointer shadow
+	flex flex-col items-center rounded-md cursor-pointer 
+	shadow dark:shadow-white/10
 	has-checked:text-neutral-700 dark:has-checked:text-zinc-300
 	bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900 
 	has-checked:bg-neutral-50 dark:has-checked:bg-zinc-900 has-checked:border-zinc-400 dark:has-checked:border-zinc-600 has-checked:ring-4 has-checked:ring-zinc-900/5 dark:has-checked:ring-zinc-100/10;

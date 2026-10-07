@@ -67,7 +67,7 @@
 
 .btn-xs [data-icon],
 .btn-xs svg {
-	@apply size-3.5 shrink-0 inline-block;
+	@apply size-3 shrink-0 inline-block;
 }
 
 .btn-lg.btn-square,
@@ -87,13 +87,16 @@
 
 /* Color Variants */
 .btn-primary {
-	@apply bg-neutral-900 dark:bg-zinc-800 text-white dark:text-zinc-100 border border-transparent dark:border-zinc-700 hover:bg-neutral-800 dark:hover:bg-zinc-700 focus-visible:outline-neutral-900 dark:focus-visible:outline-zinc-600 shadow-xs;
+	@apply bg-neutral-900 dark:bg-zinc-800 text-white dark:text-zinc-100 border border-transparent dark:border-zinc-700 hover:bg-neutral-800 dark:hover:bg-zinc-700 focus-visible:outline-neutral-900 dark:focus-visible:outline-zinc-600 
+	shadow-xs dark:shadow-white/10;
 }
 
 .btn-secondary {
-	@apply bg-white dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-300 dark:border-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-800/80 hover:text-neutral-900 dark:hover:text-zinc-100 focus-visible:outline-neutral-400 dark:focus-visible:outline-zinc-700 shadow-xs;
+	@apply bg-white dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-300 dark:border-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-800/80 hover:text-neutral-900 dark:hover:text-zinc-100 focus-visible:outline-neutral-400 dark:focus-visible:outline-zinc-700 
+	shadow-xs dark:shadow-white/10;
 }
 
 .btn-danger {
-	@apply bg-red-600 dark:bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-500 focus-visible:outline-red-600 shadow-xs;
+	@apply bg-red-600 dark:bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-500 focus-visible:outline-red-600 
+	shadow-xs dark:shadow-white/10;
 }

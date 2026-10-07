@@ -12,7 +12,7 @@ export function attachBtnFaq(btn: HTMLButtonElement) {
 				title: "Frequently Asked Questions",
 				type: "question",
 				body: `
-				<div class="bg-neutral-50 border dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 rounded-lg overflow-hidden inset-shadow-xs">
+				<div class="bg-neutral-50 border dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 rounded-lg overflow-hidden inset-shadow-xs dark:inset-shadow-white/10">
 					<div class="faq-container-scroll overflow-y-auto p-2">
 						${faqText}
 					</div>

@@ -29,14 +29,14 @@
 .abbr-list-container {
 	@apply flex flex-col gap-3 p-3 
 	rounded-lg border 
-	inset-shadow-xs dark:inset-shadow-white/10 
+	inset-shadow-xs dark:inset-shadow-zinc-100/10 
 	border-zinc-200 dark:border-zinc-800 
 	bg-neutral-50 dark:bg-zinc-950;
 }
 
 .abbr-list-container .abbr-list-scrollbar {
 	@apply border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden
-    shadow dark:shadow-white/10
+    shadow dark:shadow-zinc-100/10
 	bg-white dark:bg-zinc-950
     [&:not(:has(.abbr-list-item))]:hidden;
 }

@@ -3,7 +3,7 @@
 	max-w-sm w-[90%] 
 	backdrop:bg-black/50 
 	bg-white dark:bg-zinc-900 
-	shadow-2xl dark:shadow-white/10;
+	shadow-2xl dark:shadow-zinc-100/10;
 }
 
 .modal-content {

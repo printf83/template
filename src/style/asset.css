@@ -1,6 +1,6 @@
 .asset-list-container {
 	@apply flex flex-col rounded-lg overflow-hidden border 
-	inset-shadow-xs dark:inset-shadow-white/10
+	inset-shadow-xs dark:inset-shadow-zinc-100/10
 	border-zinc-200 dark:border-zinc-800 
 	bg-neutral-50 dark:bg-zinc-950;
 }
@@ -18,7 +18,7 @@
 	overflow-hidden select-none
 	flex flex-col justify-between items-center
 	rounded-md cursor-pointer 
-	shadow dark:shadow-white/10
+	shadow dark:shadow-zinc-100/10
 	bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 hover:bg-neutral-50 dark:hover:bg-zinc-900
 	focus:bg-neutral-50 dark:focus:bg-zinc-900 focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10;
 }

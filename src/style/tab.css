@@ -2,7 +2,7 @@
 	@apply flex flex-wrap content-start h-full rounded-lg overflow-hidden border
 	border-neutral-300 dark:border-zinc-800 
 	bg-neutral-50 dark:bg-zinc-900 
-	shadow dark:shadow-white/10;
+	shadow dark:shadow-zinc-100/10;
 }
 
 /* Hide radio inputs */

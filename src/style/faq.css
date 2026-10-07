@@ -13,7 +13,7 @@
 
 .faq-container details {
 	@apply rounded-lg p-2 transition-all border
-	shadow-xs dark:shadow-white/10
+	shadow-xs dark:shadow-zinc-100/10
 	bg-white dark:bg-zinc-900 
 	text-neutral-700 dark:text-zinc-300 
 	hover:text-neutral-900 dark:hover:text-zinc-100 

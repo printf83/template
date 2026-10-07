@@ -10,7 +10,7 @@
 
 .toast {
 	@apply pointer-events-auto overflow-hidden flex items-center justify-between gap-3 p-3 rounded-lg border 
-	shadow dark:shadow-white/10
+	shadow dark:shadow-zinc-100/10
 	transition-all duration-300 transform;
 }
 

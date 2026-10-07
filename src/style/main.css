@@ -33,7 +33,7 @@ dialog {
 
 .version {
 	@apply font-mono text-[10px] px-2 py-1 border rounded-xl 
-	shadow-xs dark:shadow-white/10
+	shadow-xs dark:shadow-zinc-100/10
 	bg-zinc-50 text-zinc-800 border-zinc-200
 	dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-800
 	hover:bg-blue-50 hover:text-blue-800 hover:border-blue-200
@@ -46,7 +46,7 @@ dialog {
 	bg-repeat bg-center
 	border border-neutral-300 dark:border-zinc-800 
 	bg-gray-200 dark:bg-zinc-950 
-	inset-shadow-xs dark:inset-shadow-white/10;
+	inset-shadow-xs dark:inset-shadow-zinc-100/10;
 }
 
 .form-edit {

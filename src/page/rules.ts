@@ -169,24 +169,24 @@ interface PageDimension {
 }
 
 // Original page size
-// const PAGE_DIMENSIONS: Record<string, PageDimension> = {
-// 	a4: { sizeName: "A4", w: "210mm", h: "297mm" },
-// 	a3: { sizeName: "A3", w: "297mm", h: "420mm" },
-// 	a5: { sizeName: "A5", w: "148mm", h: "210mm" },
-// 	letter: { sizeName: "Letter", w: "8.5in", h: "11in" },
-// 	legal: { sizeName: "Legal", w: "8.5in", h: "14in" },
-// 	tabloid: { sizeName: "Tabloid", w: "11in", h: "17in" },
-// };
-
-// Print page have 2mm padding (print safe)
 const PAGE_DIMENSIONS: Record<string, PageDimension> = {
-	a4: { sizeName: "A4", w: "206mm", h: "293mm" },
-	a3: { sizeName: "A3", w: "293mm", h: "416mm" },
-	a5: { sizeName: "A5", w: "144mm", h: "206mm" },
-	letter: { sizeName: "Letter", w: "8.34in", h: "10.84in" },
-	legal: { sizeName: "Legal", w: "8.34in", h: "13.84in" },
-	tabloid: { sizeName: "Tabloid", w: "10.84in", h: "16.84in" },
+	a4: { sizeName: "A4", w: "210mm", h: "297mm" },
+	a3: { sizeName: "A3", w: "297mm", h: "420mm" },
+	a5: { sizeName: "A5", w: "148mm", h: "210mm" },
+	letter: { sizeName: "Letter", w: "8.5in", h: "11in" },
+	legal: { sizeName: "Legal", w: "8.5in", h: "14in" },
+	tabloid: { sizeName: "Tabloid", w: "11in", h: "17in" },
 };
+
+// Print page have 2mm padding (print safe) but not original
+// const PAGE_DIMENSIONS: Record<string, PageDimension> = {
+// 	a4: { sizeName: "A4", w: "206mm", h: "293mm" },
+// 	a3: { sizeName: "A3", w: "293mm", h: "416mm" },
+// 	a5: { sizeName: "A5", w: "144mm", h: "206mm" },
+// 	letter: { sizeName: "Letter", w: "8.34in", h: "10.84in" },
+// 	legal: { sizeName: "Legal", w: "8.34in", h: "13.84in" },
+// 	tabloid: { sizeName: "Tabloid", w: "10.84in", h: "16.84in" },
+// };
 
 export function createSizingRules(): Record<string, PageRuleItem> {
 	const rules: Record<string, PageRuleItem> = {

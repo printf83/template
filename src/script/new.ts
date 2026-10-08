@@ -161,7 +161,7 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 							"user-template",
 						),
 
-						// Direct dynamic imports for System Templates
+						// Direct dynamic imports for System Templates (order preserved)
 						Promise.all([
 							import("../data/template_letter").then(
 								(m) => ["letter", m.data] as const,
@@ -169,10 +169,9 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 							import("../data/template_letter_bg").then(
 								(m) => ["letter_bg", m.data] as const,
 							),
-							// Add any additional system template paths here
 						]),
 
-						// Direct dynamic imports for Test Templates
+						// Direct dynamic imports for Test Templates (order preserved)
 						Promise.all([
 							import("../data/template_csv").then(
 								(m) => ["csv", m.data] as const,
@@ -210,35 +209,29 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 							import("../data/template_1K").then(
 								(m) => ["1K", m.data] as const,
 							),
-							// Add any additional test template paths here
 						]),
 					]);
-
-				const templateMap: Record<
-					string,
-					Data<SchemaItem[]>
-				> = Object.fromEntries(systemEntries);
-				const testMap: Record<
-					string,
-					Data<SchemaItem[]>
-				> = Object.fromEntries(testEntries);
 
 				const userMap = userMapRaw || {};
 				const userEntries = Object.entries(userMap);
 				const hasUserTemplates = userEntries.length > 0;
 
-				// Merge into single lookup map
-				allTemplatesMap = { ...userMap, ...templateMap, ...testMap };
+				// Combine all entries to construct the lookup map without breaking render order
+				allTemplatesMap = Object.fromEntries([
+					...userEntries,
+					...systemEntries,
+					...testEntries,
+				]);
 
-				// Render User Templates (Check the 1st user item if available)
+				// 1. Render User Templates
 				const userItems = userEntries
 					.map(([key, d], index) =>
 						renderItem(d, key, true, index === 0),
 					)
 					.join("");
 
-				// Render System Templates (Check the 1st template item ONLY if no user templates exist)
-				const templateItems = Object.entries(templateMap)
+				// 2. Render System Templates (Iterate directly over systemEntries array to preserve order)
+				const templateItems = systemEntries
 					.map(([key, d], index) =>
 						renderItem(
 							d,
@@ -249,8 +242,8 @@ export function attachEditorNew(btn: HTMLButtonElement) {
 					)
 					.join("");
 
-				// Render Test Templates
-				const testItems = Object.entries(testMap)
+				// 3. Render Test Templates (Iterate directly over testEntries array to preserve order)
+				const testItems = testEntries
 					.map(([key, d]) => renderItem(d, key))
 					.join("");
 

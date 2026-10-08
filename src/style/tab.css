@@ -45,5 +45,5 @@
 
 /* Active Tab Panel */
 .tab-radio:checked + .tab-btn + .tab-panel {
-	@apply flex flex-col w-full grow basis-full overflow-hidden;
+	@apply flex flex-col w-full grow basis-full overflow-auto;
 }

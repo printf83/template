@@ -1,17 +1,21 @@
 #data-editor {
-	@apply h-[calc(100svh-229px)] sm:h-[calc(100svh-183px)];
+	@apply h-[calc(100svh-230px)] sm:h-[calc(100svh-185px)]
+	min-h-32;
 }
 
 #html-editor {
-	@apply h-[calc(100svh-569px)] sm:h-[calc(100svh-523px)];
+	@apply h-[calc(100svh-570px)] sm:h-[calc(100svh-525px)]
+	min-h-32;
 }
 
 .asset-list-scrollbar {
-	@apply h-[calc(100svh-257px)] sm:h-[calc(100svh-211px)];
+	@apply h-[calc(100svh-258px)] sm:h-[calc(100svh-213px)]
+	min-h-32;
 }
 
 #abbrList {
-	@apply max-h-[calc(100svh-652px)] sm:max-h-[calc(100svh-606px)];
+	@apply max-h-[calc(100svh-653px)] sm:max-h-[calc(100svh-608px)]
+	min-h-10;
 }
 
 /* Main Frame */
@@ -36,13 +40,16 @@
 
 /* Inside Dialog */
 #asset-value {
-	@apply h-[calc(100svh-650px)] min-h-48;
+	@apply h-[calc(100svh-230px)] sm:h-[calc(100svh-630px)] 
+	min-h-32;
 }
 
 .new-list {
-	@apply h-[calc(100svh-440px)];
+	@apply h-[calc(100svh-130px)] sm:h-[calc(100svh-330px)] 
+	min-h-52;
 }
 
 .faq-container-scroll {
-	@apply max-h-[calc(100svh-590px)] min-h-75;
+	@apply max-h-[calc(100svh-220px)] sm:h-[calc(100svh-420px)]
+	min-h-44;
 }

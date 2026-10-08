@@ -2,6 +2,7 @@ import { copyTextToSystemClipboard, readTextFromSystemClipboard } from "./copy";
 import { Toast } from "./toast";
 import { initIcons, renderTemplate } from "./utils";
 import abbrListItem from "../html/editor/abbr-item.html?raw";
+import { Modal } from "./modal";
 
 function addItem(
 	list: HTMLDivElement,
@@ -41,8 +42,9 @@ export function attachCopyAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 
 	btn.addEventListener("click", async () => {
 		const result = getAbbrData(list);
+		const resultLength = Object.keys(result).length;
 
-		if (Object.keys(result).length === 0) {
+		if (resultLength === 0) {
 			Toast.warning("The abbreviation list is empty.");
 			return;
 		}
@@ -53,7 +55,7 @@ export function attachCopyAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 			);
 			if (success) {
 				Toast.success(
-					`Successfully copied abbreviation list to your clipboard.`,
+					`Successfully copied ${resultLength} abbreviation list to your clipboard.`,
 				);
 			}
 		} catch (error) {
@@ -78,7 +80,7 @@ export function attachPasteAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 		}
 
 		try {
-			const data = JSON.parse(value);
+			const data = JSON.parse(value) as Record<string, string>;
 
 			// 2. Validate that parsed data is a valid key-value object (and not an array/primitive)
 			if (
@@ -89,6 +91,38 @@ export function attachPasteAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {
 				throw new Error(
 					"Clipboard content is not a valid dictionary object.",
 				);
+			}
+
+			// 3. Count replacements vs new items
+			const currentData = getAbbrData(list) || {};
+			const pastedKeys = Object.keys(data);
+
+			let replaceCount = 0;
+			let newCount = 0;
+
+			for (const key of pastedKeys) {
+				if (key in currentData) {
+					replaceCount++;
+				} else {
+					newCount++;
+				}
+			}
+
+			// Prompt user only if there are existing items to replace
+			if (replaceCount > 0) {
+				const replaceText = `<b>${replaceCount}</b> existing ${replaceCount === 1 ? "abbreviation" : "abbreviations"}`;
+				const newText =
+					newCount > 0
+						? ` and add <b>${newCount}</b> new ${newCount === 1 ? "abbreviation" : "abbreviations"}`
+						: "";
+
+				const confirmed = await Modal.confirm(
+					`Pasting will overwrite ${replaceText}${newText}. Are you sure you want to continue?`,
+					"Overwrite Abbreviations",
+					"warning",
+				);
+
+				if (!confirmed) return;
 			}
 
 			// 4. Update dictionary items
@@ -114,7 +148,7 @@ export function setAbbrData(
 ) {
 	if (!list) return;
 
-	// Clear existing items
+	// Clear existing items if not appending
 	if (!append) {
 		list.querySelectorAll("div.abbr-list-item").forEach((el) =>
 			el.remove(),
@@ -123,6 +157,23 @@ export function setAbbrData(
 
 	if (data) {
 		Object.entries(data).forEach(([key, value]) => {
+			if (append) {
+				// Search existing items and remove any match before appending
+				const existingItems =
+					list.querySelectorAll<HTMLDivElement>("div.abbr-list-item");
+
+				existingItems.forEach((item) => {
+					const shortInput =
+						item.querySelector<HTMLInputElement>(".abbr-short");
+					const longInput =
+						item.querySelector<HTMLInputElement>(".abbr-long");
+
+					if (shortInput?.value === key || longInput?.value === key) {
+						item.remove();
+					}
+				});
+			}
+
 			addItem(list, { key, value });
 		});
 

@@ -37,6 +37,16 @@ export interface AssetData {
 	value: string;
 }
 
+function disableBtnConfirm(input: HTMLInputElement) {
+	const modal = input.closest(".modal") as HTMLDivElement;
+	if (!modal) return;
+
+	const btnConfirm = modal.querySelector(".btn-confirm") as HTMLButtonElement;
+	if (!btnConfirm) return;
+
+	btnConfirm.disabled = input.value.trim() === "";
+}
+
 export async function showAssetEditor(
 	data: AssetData,
 ): Promise<AssetData | null> {
@@ -49,6 +59,15 @@ export async function showAssetEditor(
 		assetEditor.querySelector<HTMLDivElement>("#asset-value");
 
 	if (!assetEditorKey || !assetEditorValue) return null;
+
+	const assetEditorKeyContainer = assetEditorKey.closest(
+		".form-field",
+	) as HTMLDivElement;
+	if (assetEditorKeyContainer) {
+		assetEditorKey.addEventListener("keyup", () => {
+			disableBtnConfirm(assetEditorKey);
+		});
+	}
 
 	const assetEditorValueContainer =
 		assetEditorValue.previousElementSibling as HTMLDivElement;
@@ -119,6 +138,8 @@ export async function showAssetEditor(
 
 			// Safely focus editor after modal renders
 			requestAnimationFrame(() => {
+				disableBtnConfirm(assetEditorKey);
+
 				if (!data.key) {
 					assetEditorKey.focus();
 				} else {
@@ -288,8 +309,8 @@ export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 
 	btn.addEventListener("click", async () => {
 		const result = getAssetData(list);
-
-		if (Object.keys(result).length === 0) {
+		const resultLength = Object.keys(result).length;
+		if (resultLength === 0) {
 			Toast.warning("The asset list is empty.");
 			return;
 		}
@@ -300,7 +321,7 @@ export function attachCopyAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 			);
 			if (success) {
 				Toast.success(
-					`Successfully copied asset list to your clipboard.`,
+					`Successfully copied ${resultLength} asset list to your clipboard.`,
 				);
 			}
 		} catch (error) {
@@ -324,7 +345,7 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 		}
 
 		try {
-			const data = JSON.parse(value);
+			const data = JSON.parse(value) as Record<string, string>;
 
 			if (
 				typeof data !== "object" ||
@@ -336,6 +357,39 @@ export function attachPasteAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
 				);
 			}
 
+			// 1. Get existing asset data from the current DOM list
+			const currentData = getAssetData(list) || {};
+			const pastedKeys = Object.keys(data);
+
+			let replaceCount = 0;
+			let newCount = 0;
+
+			for (const key of pastedKeys) {
+				if (key in currentData) {
+					replaceCount++;
+				} else {
+					newCount++;
+				}
+			}
+
+			// 2. Prompt user only if there are items to replace
+			if (replaceCount > 0) {
+				const replaceText = `<b>${replaceCount}</b> existing ${replaceCount === 1 ? "asset" : "assets"}`;
+				const newText =
+					newCount > 0
+						? ` and add <b>${newCount}</b> new ${newCount === 1 ? "asset" : "assets"}`
+						: "";
+
+				const confirmed = await Modal.confirm(
+					`Pasting will overwrite ${replaceText}${newText}. Are you sure you want to continue?`,
+					"Overwrite Assets",
+					"warning",
+				);
+
+				if (!confirmed) return;
+			}
+
+			// 3. Apply assets to list
 			setAssetData(list, data, true);
 
 			Toast.success(
@@ -358,6 +412,7 @@ export function setAssetData(
 ) {
 	if (!list) return;
 
+	// Clear the entire list if not appending
 	if (!append) {
 		list.querySelectorAll("div.asset-list-item").forEach((el) =>
 			el.remove(),
@@ -366,6 +421,15 @@ export function setAssetData(
 
 	if (data) {
 		Object.entries(data).forEach(([key, value]) => {
+			if (append) {
+				// Instantly locate and remove any existing item with the same data-key
+				const existingItem = list.querySelector<HTMLDivElement>(
+					`div.asset-list-item[data-key="${CSS.escape(key)}"]`,
+				);
+				existingItem?.remove();
+			}
+
+			// Append the new item
 			addItem(list, { key, value });
 		});
 

@@ -153,10 +153,20 @@ export class Modal {
 			);
 
 			// Close when clicking native backdrop area
+			let isMouseDownOnBackdrop = false;
+			// 1. Track where the click initiated
+			dialog.addEventListener("mousedown", (e) => {
+				isMouseDownOnBackdrop = e.target === dialog;
+			});
+
+			// 2. Only close if both the press AND release occurred directly on the backdrop
 			dialog.addEventListener("click", (e) => {
-				if (e.target === dialog) {
+				if (e.target === dialog && isMouseDownOnBackdrop) {
 					cleanup(null);
 				}
+
+				// Reset state
+				isMouseDownOnBackdrop = false;
 			});
 
 			// Handle ESC key press natively

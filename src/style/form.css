@@ -11,7 +11,9 @@
 }
 
 .form-label {
-	@apply text-xs font-medium text-zinc-700 dark:text-zinc-300 select-none flex items-center justify-between;
+	@apply text-xs font-medium 
+	flex flex-row justify-between select-none items-center
+	text-zinc-700 dark:text-zinc-300;
 }
 
 .form-label span {
@@ -26,8 +28,9 @@
 	@apply text-[11px] leading-normal text-zinc-500 dark:text-zinc-400 font-normal;
 }
 
-.form-error {
-	@apply text-[11px] font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1;
+.form-error,
+.form-error .form-label {
+	@apply text-rose-600 dark:text-rose-400;
 }
 
 /* ==========================================================================

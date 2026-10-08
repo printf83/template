@@ -4,28 +4,76 @@ import { initIcons, renderTemplate } from "./utils";
 import abbrListItem from "../html/editor/abbr-item.html?raw";
 import { Modal } from "./modal";
 
+const ERROR_CLASS = "is-duplicate";
+
+function validateAbbr(list: HTMLDivElement) {
+	if (!list) return;
+
+	const items = Array.from(
+		list.querySelectorAll<HTMLDivElement>("div.abbr-list-item"),
+	);
+
+	// 1. Reset error class on all item wrappers
+	items.forEach((item) => item.classList.remove(ERROR_CLASS));
+
+	// 2. Group item containers by trimmed value (including empty strings "")
+	const valueGroups = new Map<string, HTMLDivElement[]>();
+
+	items.forEach((item) => {
+		const inputLong =
+			item.querySelector<HTMLInputElement>("input.abbr-long");
+		const val = inputLong ? inputLong.value.trim() : "";
+
+		if (!valueGroups.has(val)) {
+			valueGroups.set(val, []);
+		}
+		valueGroups.get(val)!.push(item);
+	});
+
+	// 3. Mark duplicate containers (all except the last instance in DOM order)
+	valueGroups.forEach((matchedItems) => {
+		if (matchedItems.length > 1) {
+			const duplicatesToMark = matchedItems.slice(0, -1);
+			duplicatesToMark.forEach((item) => {
+				item.classList.add(ERROR_CLASS);
+			});
+		}
+	});
+}
+
 function addItem(
 	list: HTMLDivElement,
 	data?: { key?: string; value?: string },
 ) {
 	if (!list) return;
 
-	// Append directly to the container
+	// Append item to DOM
 	list.insertAdjacentHTML("beforeend", renderTemplate(abbrListItem, data));
 
 	const item = list.lastElementChild as HTMLDivElement;
 	if (!item) return;
 
+	// Delete handler: remove DOM node and re-validate remaining list
 	const btnDelete = item.querySelector("button.btn-delete");
-	if (!btnDelete) return;
-
-	btnDelete.addEventListener(
+	btnDelete?.addEventListener(
 		"click",
 		() => {
 			item.remove();
+			validateAbbr(list); // Re-validate so remaining duplicates un-highlight
 		},
 		{ once: true },
 	);
+
+	// Input handler: re-validate real-time on input/change
+	const inputLong = item.querySelector("input.abbr-long") as HTMLInputElement;
+	if (inputLong) {
+		const handleInput = () => validateAbbr(list);
+		inputLong.addEventListener("input", handleInput);
+		inputLong.addEventListener("change", handleInput);
+	}
+
+	// Validate on addition (marks empty or duplicate new rows immediately)
+	validateAbbr(list);
 }
 
 export function attachAddAbbr(btn: HTMLButtonElement, list: HTMLDivElement) {

@@ -61,3 +61,17 @@
 .asset-list .asset-item-control i[data-icon] {
 	@apply size-4;
 }
+
+.asset-list .asset-list-item.is-duplicate {
+	@apply text-red-600 bg-red-100 dark:bg-red-950/50 dark:text-red-400
+	border-red-200 dark:border-red-900/50
+	shadow-red-200 dark:shadow-red-300/20;
+}
+
+.asset-list .asset-list-item.is-duplicate .asset-item-title {
+	@apply mix-blend-normal text-red-600 dark:text-red-400;
+}
+
+.asset-list .asset-list-item.is-duplicate .asset-item-icon {
+	@apply mix-blend-normal text-red-600 dark:text-red-400;
+}

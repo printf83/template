@@ -5,6 +5,7 @@ import { createCodeEditor, type EditorLanguage } from "./editor";
 import { getAbbrData, setAbbrData } from "./abbr";
 import { getElementById } from "./utils";
 import { isDarkModeActive } from "./dark";
+import { Modal } from "./modal";
 
 type CodeEditor = ReturnType<typeof createCodeEditor>;
 
@@ -438,6 +439,49 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 		// Auto-detects and converts JSON or CSV data
 		data: parseDataContent(dataValue),
 	} as Data<T>;
+}
+
+export async function validateEditData(): Promise<boolean> {
+	// 1. Query all marked duplicate items across assets and abbreviations
+	const assetDuplicates = document.querySelectorAll<HTMLElement>(
+		".asset-list-item.is-duplicate",
+	).length;
+
+	const abbrDuplicates = document.querySelectorAll<HTMLElement>(
+		".abbr-list-item.is-duplicate",
+	).length;
+
+	const totalDuplicates = assetDuplicates + abbrDuplicates;
+
+	// 2. If no duplicates are found, validation passes immediately
+	if (totalDuplicates === 0) {
+		return true;
+	}
+
+	// 3. Build a clear warning message detailing where duplicates exist
+	const parts: string[] = [];
+	if (assetDuplicates > 0) {
+		parts.push(
+			`<b>${assetDuplicates}</b> duplicate ${assetDuplicates === 1 ? "asset" : "assets"}`,
+		);
+	}
+	if (abbrDuplicates > 0) {
+		parts.push(
+			`<b>${abbrDuplicates}</b> duplicate ${abbrDuplicates === 1 ? "abbreviation" : "abbreviations"}`,
+		);
+	}
+
+	const duplicateText = parts.join(" and ");
+	const message = `Found ${duplicateText}. The duplicate keys will overwrite earlier entries upon saving. Do you still want to proceed?`;
+
+	// 4. Prompt user for confirmation
+	const confirmed = await Modal.confirm(
+		message,
+		"Duplicate Entries Detected",
+		"warning",
+	);
+
+	return confirmed;
 }
 
 export { editorState };

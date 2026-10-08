@@ -4,7 +4,12 @@ import "./style/main.css";
 import { render, minifies } from "./page/render";
 import { attachBtnPrintAll } from "./script/print";
 import { attachBtnDownloadPdf } from "./script/pdf";
-import { getEditData, initEditor, setEditData } from "./script/edit";
+import {
+	getEditData,
+	initEditor,
+	setEditData,
+	validateEditData,
+} from "./script/edit";
 import { attachCopyFile, attachUploadThumb } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
@@ -303,11 +308,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 			setEditData(getCurrentData());
 		});
 
-		btnEditorCancel.addEventListener("click", () => {
+		btnEditorCancel.addEventListener("click", async () => {
+			const confirmed = await Modal.confirm(
+				"Are you sure you want to leave? Any unsaved changes will be lost.",
+				"Discard Unsaved Changes",
+				"warning",
+			);
+			if (!confirmed) return;
+
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 		});
 
 		btnEditorGenerate.addEventListener("click", async () => {
+			const confirmed = await validateEditData();
+			if (!confirmed) return;
+
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			const editedData = getEditData();
 			if (editedData) {

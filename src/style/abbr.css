@@ -22,6 +22,11 @@
            focus:ring-0 focus:border-zinc-200 dark:focus:border-zinc-700;
 }
 
+.abbr-list .abbr-list-item.is-duplicate input,
+.abbr-list .abbr-list-item.is-duplicate button {
+	@apply text-red-600 bg-red-100 dark:bg-red-950/50 dark:text-red-400;
+}
+
 .abbr-list {
 	@apply overflow-y-auto;
 }

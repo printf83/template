@@ -1,5 +1,5 @@
 import type { Data, SchemaItem } from "../type/data";
-import { getEditData } from "./edit";
+import { getEditData, validateEditData } from "./edit";
 
 /**
  * Sanitizes a string so it can be safely used as a system filename.
@@ -95,10 +95,14 @@ export function downloadFile(content: string, type: string, filename: string) {
 export function attachDownloadFile(btn: HTMLButtonElement) {
 	if (!btn) return;
 
-	btn.addEventListener("click", () => {
+	btn.addEventListener("click", async () => {
+		const confirmed = await validateEditData();
+		if (!confirmed) return;
+
 		const data = getEditData();
+
 		if (data) {
-			downloadData(data, data.title);
+			downloadData(data, data.title || "template");
 		}
 	});
 }

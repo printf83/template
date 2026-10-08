@@ -32,6 +32,41 @@ function genPreview(value?: string): string {
 	return escapeSymbol(trimAll(value).slice(0, 80));
 }
 
+const ERROR_CLASS = "is-duplicate";
+
+export function validateAsset(list: HTMLDivElement) {
+	if (!list) return;
+
+	const items = Array.from(
+		list.querySelectorAll<HTMLDivElement>("div.asset-list-item"),
+	);
+
+	// 1. Reset error class on all item containers
+	items.forEach((item) => item.classList.remove(ERROR_CLASS));
+
+	// 2. Group items by dataset key (trimmed)
+	const keyGroups = new Map<string, HTMLDivElement[]>();
+
+	items.forEach((item) => {
+		const key = item.dataset.key?.trim() || "";
+
+		if (!keyGroups.has(key)) {
+			keyGroups.set(key, []);
+		}
+		keyGroups.get(key)!.push(item);
+	});
+
+	// 3. Mark duplicates (all instances except the last one in DOM order)
+	keyGroups.forEach((matchedItems) => {
+		if (matchedItems.length > 1) {
+			const duplicatesToMark = matchedItems.slice(0, -1);
+			duplicatesToMark.forEach((item) => {
+				item.classList.add(ERROR_CLASS);
+			});
+		}
+	});
+}
+
 export interface AssetData {
 	key: string;
 	value: string;
@@ -195,8 +230,11 @@ function attachAssetEditor(item: HTMLDivElement) {
 			});
 
 			initIcons();
-			// Re-bind delete listener to newly created DOM elements
 			attachAssetDelete(item);
+
+			// Re-validate list when key is modified in the modal
+			const parent = item.parentElement as HTMLDivElement;
+			if (parent) validateAsset(parent);
 		}
 	});
 }
@@ -220,7 +258,11 @@ function attachAssetDelete(item: HTMLDivElement) {
 			"Remove Asset",
 		);
 		if (result) {
+			const parent = item.parentElement as HTMLDivElement;
 			item.remove();
+
+			// Re-validate remaining list after deletion
+			if (parent) validateAsset(parent);
 		}
 	});
 }
@@ -262,6 +304,9 @@ function addItem(
 		attachAssetEditor(item);
 		attachAssetDelete(item);
 	}
+
+	// Validate duplicate keys on new additions
+	validateAsset(list);
 }
 
 export function attachAddAsset(btn: HTMLButtonElement, list: HTMLDivElement) {
@@ -434,6 +479,7 @@ export function setAssetData(
 		});
 
 		initIcons();
+		validateAsset(list);
 	}
 }
 

@@ -1,6 +1,6 @@
 import type { Data, SchemaItem } from "../type/data";
 import { db } from "./db"; // Ensure db is imported
-import { getEditData, setEditData } from "./edit";
+import { getEditData, setEditData, validateEditData } from "./edit";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
 import newList from "../html/editor/new-list.html?raw";
@@ -301,12 +301,17 @@ export function attachEditorSave(btn: HTMLButtonElement) {
 	if (!btn) return;
 
 	btn.addEventListener("click", async () => {
+		const confirmedValidate = await validateEditData();
+		if (!confirmedValidate) return;
+
 		const data = getEditData();
 
 		// Guard: Ensure there is valid data and a title
 		if (!data || !data.title?.trim()) {
-			Toast.warning(
+			Modal.alert(
 				"Please provide a valid template title before saving.",
+				"Save Template",
+				"error",
 			);
 			return;
 		}

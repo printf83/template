@@ -1,0 +1,26 @@
+.ͼ1 .cm-textfield {
+	@apply rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 
+           placeholder:text-zinc-400 dark:placeholder:text-zinc-500
+           hover:border-zinc-300 dark:hover:border-zinc-700
+           focus:border-zinc-400 dark:focus:border-zinc-600 focus:ring-4 focus:ring-zinc-900/5 dark:focus:ring-zinc-100/10 focus:outline-none
+           disabled:cursor-not-allowed disabled:bg-zinc-50 dark:disabled:bg-zinc-950 disabled:text-zinc-400 dark:disabled:text-zinc-600 disabled:border-zinc-200 dark:disabled:border-zinc-800
+           transition-all duration-150 ease-in-out;
+}
+
+.ͼ1 .cm-button {
+	@apply inline-flex items-center justify-center gap-2 h-10 min-h-10 px-4 py-2 text-sm font-medium 
+         rounded-lg transition-colors duration-150 cursor-pointer select-none
+         focus-visible:outline-2 focus-visible:outline-offset-2
+         disabled:opacity-50 disabled:cursor-not-allowed
+         bg-white dark:bg-zinc-900 text-neutral-700 dark:text-zinc-300 border border-neutral-300 dark:border-zinc-800 hover:bg-neutral-100 dark:hover:bg-zinc-800/80 hover:text-neutral-900 dark:hover:text-zinc-100 focus-visible:outline-neutral-400 dark:focus-visible:outline-zinc-700 
+	     shadow-xs dark:shadow-zinc-100/10
+         bg-linear-0;
+}
+
+.ͼ1 label {
+	@apply inline-block h-5 align-middle pr-3 text-xs!;
+}
+
+.ͼ1 label input[type="checkbox"] {
+	@apply mr-2! mt-1! -mb-1!;
+}

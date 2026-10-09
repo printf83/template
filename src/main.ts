@@ -8,7 +8,7 @@ import {
 	getEditData,
 	initEditor,
 	setEditData,
-	validateEditData,
+	validateDuplicate,
 } from "./script/edit";
 import { attachCopyFile, attachUploadThumb } from "./script/copy";
 import { attachDownloadFile } from "./script/download";
@@ -320,16 +320,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 
 		btnEditorGenerate.addEventListener("click", async () => {
-			const confirmed = await validateEditData();
+			const confirmed = await validateDuplicate();
 			if (!confirmed) return;
 
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
-			const editedData = getEditData();
-			if (editedData) {
-				setCurrentData(editedData);
-				await db.write("current-data", editedData);
-				genPage(editedData, iframe);
-			}
+			const editedData = await getEditData();
+			if (!editedData) return;
+
+			setCurrentData(editedData);
+			await db.write("current-data", editedData);
+			genPage(editedData, iframe);
 		});
 	}
 

@@ -163,56 +163,125 @@ function getValue<
 }
 
 /**
- * Smartly parses a string that could be JSON or CSV.
- * 1. Tries JSON.parse first.
- * 2. Fallbacks to CSV parsing (using first row as keys).
+ * Tries to parse JSON text.
+ * Returns the parsed object/array if valid, or null if invalid.
  */
-function parseDataContent(raw: string | undefined): any {
-	if (!raw || !raw.trim()) return [];
+export function tryParseJSON(raw: string): any | null {
+	if (!raw || !raw.trim()) return null;
 
-	const trimmed = raw.trim();
-
-	// 1. Attempt JSON parse
 	try {
-		return JSON.parse(trimmed);
-	} catch (ex) {
-		// csv file must fail this
-		// so no need to report the fail
-		// console.warn("Failed attempt to parse JSON string:", trimmed, ex);
+		const parsed = JSON.parse(raw.trim());
+		// Require object or array (ignore plain primitives like numbers or booleans)
+		if (typeof parsed === "object" && parsed !== null) {
+			return parsed;
+		}
+		return null;
+	} catch {
+		return null;
 	}
+}
 
-	// 2. CSV Parser
-	const lines = trimmed
+/**
+ * Tries to parse CSV text into an array of objects using the header row for keys.
+ * Returns Record<string, string>[] if valid, or null if invalid.
+ */
+export function tryParseCSV(raw: string): Record<string, string>[] | null {
+	if (!raw || !raw.trim()) return null;
+
+	const lines = raw
+		.trim()
 		.split(/\r?\n/)
 		.filter((line) => line.trim().length > 0);
-	if (lines.length < 2) return []; // Needs at least 1 header row + 1 data row
 
-	// Splits CSV line handling quoted values (e.g. "Doe, John")
-	const parseCsvRow = (row: string): string[] => {
-		const regex = /(?:^|,)(?:"([^"]*)"|'([^']*)'|([^,]*))/g;
+	// Must have at least 2 lines (1 header + at least 1 data row)
+	if (lines.length < 2) return null;
+
+	// Auto-detect delimiter from the header
+	const headerLine = lines[0];
+	const delimiter =
+		[",", ";", "\t"].find((d) => headerLine.includes(d)) || ",";
+
+	// Robust character scanner that respects quoted strings
+	const parseRow = (line: string): string[] => {
 		const values: string[] = [];
-		let match: RegExpExecArray | null;
+		let current = "";
+		let inQuotes = false;
 
-		while ((match = regex.exec(row)) !== null) {
-			const val = match[1] ?? match[2] ?? match[3] ?? "";
-			values.push(val.trim());
+		for (let i = 0; i < line.length; i++) {
+			const char = line[i];
+
+			if (char === '"') {
+				inQuotes = !inQuotes;
+			} else if (char === delimiter && !inQuotes) {
+				values.push(current.trim().replace(/^"|"$/g, "")); // Strip outer quotes
+				current = "";
+			} else {
+				current += char;
+			}
 		}
+		values.push(current.trim().replace(/^"|"$/g, ""));
 		return values;
 	};
 
-	const headers = parseCsvRow(lines[0]);
-	if (headers.length === 0) return [];
+	const headers = parseRow(headerLine);
 
-	return lines.slice(1).map((line) => {
-		const values = parseCsvRow(line);
+	// Must have at least 2 columns in the header
+	if (headers.length < 2 || headers.some((h) => !h)) return null;
+
+	const result: Record<string, string>[] = [];
+
+	for (let i = 1; i < lines.length; i++) {
+		const values = parseRow(lines[i]);
+
+		// Fail validation if row column count does not match header column count
+		if (values.length !== headers.length) {
+			return null;
+		}
+
 		const rowObj: Record<string, string> = {};
-
 		headers.forEach((header, idx) => {
 			rowObj[header] = values[idx] ?? "";
 		});
 
-		return rowObj;
-	});
+		result.push(rowObj);
+	}
+
+	return result;
+}
+
+/**
+ * Smartly parses string content as JSON first, falling back to CSV.
+ * Displays a Modal alert if both formats fail validation.
+ */
+export async function parseDataContent(
+	raw: string | undefined,
+): Promise<any | null> {
+	if (!raw || !raw.trim()) {
+		await Modal.alert("The provided content is empty.", "Invalid Data");
+		return null;
+	}
+
+	const trimmed = raw.trim();
+
+	// 1. Attempt JSON parse
+	const jsonData = tryParseJSON(trimmed);
+	if (jsonData !== null) {
+		return jsonData;
+	}
+
+	// 2. Attempt CSV parse
+	const csvData = tryParseCSV(trimmed);
+	if (csvData !== null) {
+		return csvData;
+	}
+
+	// 3. Fallback: Both formats failed
+	await Modal.alert(
+		"The content could not be parsed. Please ensure it is valid <b>JSON</b> or <b>CSV</b> with a header row.",
+		"Unsupported Data Format",
+	);
+
+	return null;
 }
 
 /**
@@ -407,11 +476,27 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	setValue("sex-unknown-editor", data.sex?.unknown);
 }
 
-export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
+export async function getEditData<
+	T extends readonly SchemaItem[],
+>(): Promise<Data<T> | null> {
 	const dataValue = editorState.data?.getValue();
 
 	const abbrList = getElementById<HTMLDivElement>("abbrList");
 	const assetList = getElementById<HTMLDivElement>("assetList");
+
+	// 1. Attempt parsing (parseDataContent triggers Modal.alert on failure)
+	const parsedData = await parseDataContent(dataValue);
+
+	console.log(parsedData);
+
+	// 2. Abort if data parsing failed
+	if (dataValue && parsedData === null) {
+		return null;
+	}
+
+	// 3. Extract lists safety checks
+	const abbr = abbrList ? getAbbrData(abbrList) : {};
+	const asset = assetList ? getAssetData(assetList) : {};
 
 	return {
 		title: getValue("title-editor"),
@@ -427,21 +512,21 @@ export function getEditData<T extends readonly SchemaItem[]>(): Data<T> {
 			female: getValue("sex-female-editor"),
 			unknown: getValue("sex-unknown-editor"),
 		},
-		// Raw text fields (NOT JSON parsed)
+		// Raw text fields
 		template: editorState.html?.getValue() ?? "",
 		style: editorState.style?.getValue() ?? "",
 		script: editorState.script?.getValue() ?? "",
 
-		// JSON parsed fields
-		abbr: getAbbrData(abbrList),
-		asset: getAssetData(assetList),
+		// Key-Value dictionary fields
+		abbr,
+		asset,
 
-		// Auto-detects and converts JSON or CSV data
-		data: parseDataContent(dataValue),
+		// Parsed data store
+		data: parsedData ?? [],
 	} as Data<T>;
 }
 
-export async function validateEditData(): Promise<boolean> {
+export async function validateDuplicate(): Promise<boolean> {
 	// 1. Query all marked duplicate items across assets and abbreviations
 	const assetDuplicates = document.querySelectorAll<HTMLElement>(
 		".asset-list-item.is-duplicate",
@@ -482,6 +567,20 @@ export async function validateEditData(): Promise<boolean> {
 	);
 
 	return confirmed;
+}
+
+/**
+ * Validates if a string is valid JSON object/array.
+ */
+export function validateJSON(raw: string): boolean {
+	return tryParseJSON(raw) !== null;
+}
+
+/**
+ * Validates if a string is valid CSV with a header row and matching column counts.
+ */
+export function validateCSV(raw: string): boolean {
+	return tryParseCSV(raw) !== null;
 }
 
 export { editorState };

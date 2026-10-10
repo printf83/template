@@ -493,8 +493,8 @@ export function getAssetData(list: HTMLDivElement): Record<string, string> {
 		const key = item.dataset.key?.trim();
 		const value = item.dataset.value?.trim();
 
-		if (key && value) {
-			result[key] = value;
+		if (key) {
+			result[key] = value || "";
 		}
 	});
 

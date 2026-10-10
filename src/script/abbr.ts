@@ -241,10 +241,10 @@ export function getAbbrData(list: HTMLDivElement): Record<string, string> {
 		)?.value.trim();
 		const value = (
 			item.querySelector("input.abbr-short") as HTMLInputElement
-		)?.value;
+		)?.value.trim();
 
 		if (key) {
-			result[key] = value;
+			result[key] = value || "";
 		}
 	});
 

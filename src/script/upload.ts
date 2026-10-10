@@ -1,5 +1,5 @@
 import type { Data, SchemaItem } from "../type/data";
-import { setEditData } from "./edit";
+import { parseDataContent, setEditData, tryParseJSON } from "./edit";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
 import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
@@ -105,22 +105,50 @@ export async function uploadData<
 	const isJsonMime = file.type === "application/json" || file.type === "";
 
 	if (!isJsonExt && !isJsonMime) {
-		throw new Error("Invalid file type. Please upload a .json file.");
+		await Modal.alert(
+			"Invalid file type. Please upload a valid <b>.json</b> configuration file.",
+			"Unsupported File Type",
+			"error",
+		);
+		return null;
 	}
 
 	try {
-		// 3. Read and parse JSON content
+		// 3. Read raw text content
 		const rawText = await file.text();
-		const parsed = JSON.parse(rawText);
 
-		// 4. Structural validation check
-		if (!isValidDataPayload<T>(parsed)) {
-			throw new Error(
-				"Invalid file structure. Required fields (title, lang, template, data) are missing or improperly formatted.",
+		// 4. Safely parse JSON file structure using tryParseJSON
+		const parsed = tryParseJSON(rawText);
+		if (!parsed || typeof parsed !== "object") {
+			await Modal.alert(
+				"The file contains malformed or invalid JSON syntax.",
+				"Parse Error",
+				"error",
 			);
+			return null;
 		}
 
-		// 4. Optionally strip 'schema' key if present
+		// 5. Structural validation check
+		if (!isValidDataPayload<T>(parsed)) {
+			await Modal.alert(
+				"Invalid file structure. Required fields (title, lang, template, data) are missing or improperly formatted.",
+				"Invalid Configuration",
+				"error",
+			);
+			return null;
+		}
+
+		// 6. Smartly parse the internal 'data' property if it was passed as a raw string (e.g. CSV or JSON string)
+		if (typeof parsed.data === "string") {
+			const normalizedData = await parseDataContent(parsed.data);
+			if (normalizedData === null) {
+				// parseDataContent already triggers a Modal.alert on failure
+				return null;
+			}
+			parsed.data = normalizedData;
+		}
+
+		// 7. Strip 'schema' key if present
 		if ("schema" in parsed) {
 			delete (parsed as Record<string, unknown>).schema;
 		}
@@ -131,7 +159,12 @@ export async function uploadData<
 			content: parsed as Data<T>,
 		};
 	} catch (error) {
-		throw error;
+		const message =
+			error instanceof Error
+				? error.message
+				: "An unexpected error occurred while reading the file.";
+		await Modal.alert(message, "Upload Error", "error");
+		return null;
 	}
 }
 export function attachUploadFile(btn: HTMLButtonElement) {

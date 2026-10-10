@@ -238,7 +238,7 @@ export async function initData() {
 		getUserName() === "Guest" && import.meta.env.DEV;
 	if (!IS_UNDER_DEVELOPMENT && cacheData) return cacheData;
 
-	const { data } = await import("../data/template_letter_bg");
+	const { data } = await import("../data/template_csv");
 	return data;
 }
 
@@ -278,3 +278,44 @@ export function formatDuration(totalSeconds: number): string {
 }
 
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
+
+/**
+ * Recursively sorts object keys and normalizes empty/undefined fields for comparison.
+ */
+export function normalizeData(obj: any): any {
+	if (obj === null || typeof obj !== "object") {
+		return obj;
+	}
+
+	if (Array.isArray(obj)) {
+		return obj.map(normalizeData).filter((v) => v !== undefined);
+	}
+
+	const sortedObj: Record<string, any> = {};
+	const keys = Object.keys(obj).sort();
+
+	for (const key of keys) {
+		const val = normalizeData(obj[key]);
+
+		// Check if the processed value is "empty" (null, undefined, empty string, or empty object/array)
+		const isEmptyObject =
+			typeof val === "object" &&
+			val !== null &&
+			!Array.isArray(val) &&
+			Object.keys(val).length === 0;
+		const isEmptyArray = Array.isArray(val) && val.length === 0;
+
+		// Skip adding the key if its value is effectively empty
+		if (
+			val !== undefined &&
+			val !== null &&
+			val !== "" &&
+			!isEmptyObject &&
+			!isEmptyArray
+		) {
+			sortedObj[key] = val;
+		}
+	}
+
+	return sortedObj;
+}

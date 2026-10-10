@@ -487,8 +487,6 @@ export async function getEditData<
 	// 1. Attempt parsing (parseDataContent triggers Modal.alert on failure)
 	const parsedData = await parseDataContent(dataValue);
 
-	console.log(parsedData);
-
 	// 2. Abort if data parsing failed
 	if (dataValue && parsedData === null) {
 		return null;

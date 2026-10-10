@@ -308,7 +308,7 @@ export function attachEditorSave(btn: HTMLButtonElement) {
 		if (!data) return;
 
 		// Guard: Ensure there is valid data and a title
-		if (data.title?.trim()) {
+		if (!data.title?.trim()) {
 			Modal.alert(
 				"Please provide a valid template title before saving.",
 				"Save Template",

@@ -15,7 +15,12 @@ import { attachDownloadFile } from "./script/download";
 import { attachUploadFile } from "./script/upload";
 import { attachEditorNew, attachEditorSave } from "./script/new";
 import { getCurrentData, setCurrentData } from "./data/data";
-import { getElementById, initData, initIcons } from "./script/utils";
+import {
+	getElementById,
+	initData,
+	initIcons,
+	normalizeData,
+} from "./script/utils";
 import { attachBtnFaq } from "./script/faq";
 import type { Data, SchemaItem } from "./type/data";
 import { attachAddAbbr, attachCopyAbbr, attachPasteAbbr } from "./script/abbr";
@@ -309,12 +314,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 
 		btnEditorCancel.addEventListener("click", async () => {
-			const confirmed = await Modal.confirm(
-				"Are you sure you want to leave? Any unsaved changes will be lost.",
-				"Discard Unsaved Changes",
-				"warning",
-			);
-			if (!confirmed) return;
+			const editedData = await getEditData();
+
+			// If parsing fails (returns null), the user still might want to discard.
+			// We can either let them exit immediately or handle it gracefully.
+			if (!editedData) {
+				setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
+				return;
+			}
+
+			// 1. Clean and strip schema
+			const currentRaw = { ...getCurrentData() };
+			delete (currentRaw as any).schema;
+
+			const editedRaw = { ...editedData };
+			delete (editedRaw as any).schema;
+
+			// 2. Normalize both objects (sort keys recursively)
+			const normalizedCurrent = JSON.stringify(normalizeData(currentRaw));
+			const normalizedEdited = JSON.stringify(normalizeData(editedRaw));
+
+			// 3. Compare normalized strings
+			if (normalizedEdited !== normalizedCurrent) {
+				const confirmed = await Modal.confirm(
+					"Are you sure you want to leave? Any unsaved changes will be lost.",
+					"Discard Unsaved Changes",
+					"warning",
+				);
+				if (!confirmed) return;
+			}
 
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 		});
@@ -323,10 +351,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const confirmed = await validateDuplicate();
 			if (!confirmed) return;
 
-			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			const editedData = await getEditData();
 			if (!editedData) return;
 
+			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			setCurrentData(editedData);
 			await db.write("current-data", editedData);
 			genPage(editedData, iframe);

@@ -279,6 +279,7 @@ export async function parseDataContent(
 	await Modal.alert(
 		"The content could not be parsed. Please ensure it is valid <b>JSON</b> or <b>CSV</b> with a header row.",
 		"Unsupported Data Format",
+		"error",
 	);
 
 	return null;

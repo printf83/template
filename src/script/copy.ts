@@ -9,22 +9,6 @@ export interface PickedFileResult {
 	content: string; // Base64 for images, text for code/data
 }
 
-/** Helper to detect images even if file.type is empty */
-function isImageFile(file: File): boolean {
-	if (file.type.startsWith("image/")) return true;
-	return /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)$/i.test(file.name);
-}
-
-/** Converts image file to Base64 (Data URL) */
-function readAsBase64(file: File): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = () => resolve(reader.result as string);
-		reader.onerror = (err) => reject(err);
-		reader.readAsDataURL(file);
-	});
-}
-
 /**
  * Waits until the browser document has active OS focus.
  * Prevents Chromium from silently suppressing OS-level clipboard broadcast.
@@ -123,12 +107,90 @@ export async function readTextFromSystemClipboard(): Promise<string | null> {
 	}
 }
 
+/** Helper to detect images even if file.type is empty */
+function isImageFile(file: File): boolean {
+	if (file.type.startsWith("image/")) return true;
+	return /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)$/i.test(file.name);
+}
+
+/** Converts image file to Base64 (Data URL) */
+function readAsBase64(file: File): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = (err) => reject(err);
+		reader.readAsDataURL(file);
+	});
+}
+
+/** Resizes and compresses an image file using a Canvas */
+function resizeAndCompressImage(
+	file: File,
+	maxWidth: number,
+	quality: number = 0.95,
+): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const img = new Image();
+			img.onload = () => {
+				let width = img.width;
+				let height = img.height;
+
+				// Scale down dimensions only if the image is wider than maxWidth
+				if (width > maxWidth) {
+					height = Math.round((height * maxWidth) / width);
+					width = maxWidth;
+				}
+
+				const canvas = document.createElement("canvas");
+				canvas.width = width;
+				canvas.height = height;
+
+				const ctx = canvas.getContext("2d");
+				if (!ctx) {
+					reject(new Error("Failed to get canvas 2D context."));
+					return;
+				}
+
+				// Smooth scaling interpolation for better quality
+				ctx.imageSmoothingEnabled = true;
+				ctx.imageSmoothingQuality = "high";
+
+				// Draw resized image onto canvas
+				ctx.drawImage(img, 0, 0, width, height);
+
+				// Use WebP for superior quality-to-size ratio, fallback to PNG for SVG/icons
+				let mimeType = file.type;
+				if (
+					mimeType === "image/svg+xml" ||
+					mimeType === "image/x-icon"
+				) {
+					mimeType = "image/png";
+				} else {
+					// Default to webp for clean compression and transparency support
+					mimeType = "image/webp";
+				}
+
+				// Export to Base64 data URL
+				const compressedDataUrl = canvas.toDataURL(mimeType, quality);
+				resolve(compressedDataUrl);
+			};
+			img.onerror = (err) => reject(err);
+			img.src = e.target?.result as string;
+		};
+		reader.onerror = (err) => reject(err);
+		reader.readAsDataURL(file);
+	});
+}
+
 /**
- * Async file picker that reads file content (Base64 for images, plain text for code/data),
+ * Async file picker that reads file content (Base64 for images with optional resize, plain text for code/data),
  * copies it directly to the clipboard, and returns the metadata.
  */
 export async function pickFile(
 	fileFormat = ".html,.htm,.csv,.json,.css,.txt,.js,image/*",
+	width: number | null = null,
 ): Promise<PickedFileResult | null> {
 	const file = await selectFile(fileFormat);
 	if (!file) return null;
@@ -163,8 +225,17 @@ export async function pickFile(
 
 	const isImage = isImageFile(file);
 
-	// 3. Read content safely
-	const content = isImage ? await readAsBase64(file) : await file.text();
+	// 3. Read content safely (with optional width resize & compression if specified)
+	let content: string;
+	if (isImage) {
+		if (width !== null && width > 0) {
+			content = await resizeAndCompressImage(file, width); // 85% quality compression
+		} else {
+			content = await readAsBase64(file);
+		}
+	} else {
+		content = await file.text();
+	}
 
 	return {
 		fileName: fileNameWithoutExt, // Base name without extension
@@ -213,7 +284,7 @@ export function attachUploadThumb(
 
 	target.addEventListener("click", async () => {
 		try {
-			const fileContent = await pickFile("image/*");
+			const fileContent = await pickFile("image/*", 85);
 
 			// User cancelled file selection dialog -> exit silently
 			if (!fileContent) return;

@@ -50,6 +50,18 @@ dialog {
 	inset-shadow-xs dark:inset-shadow-zinc-100/10;
 }
 
+.checker {
+	@apply /* Base Sizing and Positions */
+    bg-size-[40px_40px]
+    bg-position-[0_0,0_20px,20px_-20px,-20px_0px]
+
+	/* Light Mode Alternative: Darker gray at 15% opacity */
+	bg-[linear-gradient(45deg,rgba(71_85_105/0.15)_25%,transparent_25%),linear-gradient(-45deg,rgba(71_85_105/0.15)_25%,transparent_25%),linear-gradient(45deg,transparent_75%,rgba(71_85_105/0.15)_75%),linear-gradient(-45deg,transparent_75%,rgba(71_85_105/0.15)_75%)]
+
+    /* Dark Mode Pattern Blocks (Clean Alpha Syntax) */
+    dark:bg-[linear-gradient(45deg,rgba(30_41_59/0.5)_25%,transparent_25%),linear-gradient(-45deg,rgba(30_41_59/0.5)_25%,transparent_25%),linear-gradient(45deg,transparent_75%,rgba(30_41_59/0.5)_75%),linear-gradient(-45deg,transparent_75%,rgba(30_41_59/0.5)_75%)];
+}
+
 .form-edit {
 	@apply p-1;
 }

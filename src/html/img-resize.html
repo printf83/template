@@ -1,15 +1,10 @@
 <div class="form-container mt-3">
 	<div class="form-field">
-		<label
-			class="form-label text-start"
-			id="prompt-preview-label"
-			for="prompt-preview"
-			><span>
-				Old <b>{{oriLength}}</b>, New <b>{{newLength}}</b>
-			</span></label
-		>
+		<div class="form-label text-start" id="prompt-preview-label">
+			<span> Old <b>{{oriLength}}</b>, New <b>{{newLength}}</b> </span>
+		</div>
 		<div
-			class="p-1 rounded-lg border border-neutral-300 dark:border-zinc-800 bg-gray-200 dark:bg-zinc-950 inset-shadow-xs dark:inset-shadow-zinc-100/10;"
+			class="checker p-1 rounded-lg border border-neutral-300 dark:border-zinc-800 bg-gray-200 dark:bg-zinc-950 inset-shadow-xs dark:inset-shadow-zinc-100/10"
 		>
 			<div
 				id="prompt-preview"

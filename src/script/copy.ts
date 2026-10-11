@@ -7,6 +7,7 @@ import {
 	selectFile,
 } from "./utils";
 import imgResize from "../html/img-resize.html?raw";
+
 import { db } from "./db";
 
 export interface PickedFileResult {

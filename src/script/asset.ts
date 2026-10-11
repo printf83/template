@@ -256,6 +256,7 @@ function attachAssetDelete(item: HTMLDivElement) {
 		const result = await Modal.confirm(
 			`Are you sure you want to remove the <b>${title}</b> asset?`,
 			"Remove Asset",
+			"delete",
 		);
 		if (result) {
 			const parent = item.parentElement as HTMLDivElement;

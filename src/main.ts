@@ -395,7 +395,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const confirm = await Modal.confirm(
 				"Are you sure you want to clear all data and reload the page?",
 				"Clear Data",
-				"warning",
+				"delete",
 			);
 
 			if (confirm) {

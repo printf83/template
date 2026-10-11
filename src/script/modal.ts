@@ -1,6 +1,12 @@
 import { initIcons } from "./utils";
 
-export type ModalType = "info" | "warning" | "error" | "success" | "question";
+export type ModalType =
+	| "info"
+	| "warning"
+	| "error"
+	| "success"
+	| "question"
+	| "delete";
 
 export interface ModalOptions {
 	type?: ModalType;
@@ -22,33 +28,44 @@ export class Modal {
 		return new Promise((resolve) => {
 			let modalIconData: string | null = null;
 			let modalIconClass: string | null = null;
+			let modalConfirmClass: string | null = "btn-primary";
+
 			if (options.type) {
 				switch (options.type) {
 					case "error":
 						modalIconData = "circle-x";
 						modalIconClass =
-							"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-950/60 rounded-full";
+							"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-950/60 rounded-full p-px";
 						break;
 					case "success":
 						modalIconData = "circle-check";
 						modalIconClass =
-							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full";
+							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full p-px";
+						modalConfirmClass = "btn-primary";
 						break;
 					case "question":
 						modalIconData = "circle-question-mark";
 						modalIconClass =
-							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full";
+							"text-emerald-500 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 rounded-full p-px";
+						modalConfirmClass = "btn-primary";
 						break;
 					case "info":
 						modalIconData = "info";
 						modalIconClass =
-							"text-blue-500 dark:text-blue-400 bg-blue-100 dark:bg-blue-950/60 rounded-full";
+							"text-blue-500 dark:text-blue-400 bg-blue-100 dark:bg-blue-950/60 rounded-full p-px";
+						modalConfirmClass = "btn-primary";
 						break;
 					case "warning":
 						modalIconData = "circle-alert";
 						modalIconClass =
-							"text-amber-500 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 rounded-full";
+							"text-amber-500 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 rounded-full p-px";
+						modalConfirmClass = "btn-primary";
 						break;
+					case "delete":
+						modalIconData = "trash";
+						modalIconClass =
+							"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-950/60 rounded p-2";
+						modalConfirmClass = "btn-danger";
 				}
 			}
 
@@ -80,7 +97,7 @@ export class Modal {
 									}</button>`
 								: ""
 						}
-                        <button type="button" class="btn-lg btn-confirm btn-primary">${
+                        <button type="button" class="btn-lg btn-confirm ${modalConfirmClass}">${
 							options.confirmText ?? "Confirm"
 						}</button>
                     </footer>

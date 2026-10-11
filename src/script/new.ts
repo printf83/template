@@ -58,6 +58,7 @@ function attachDeleteItem(
 			const confirmed = await Modal.confirm(
 				`Are you sure you want to remove the <b>${title}</b> template?`,
 				"Remove Template",
+				"delete",
 			);
 
 			if (!confirmed) return;

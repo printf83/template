@@ -45,7 +45,10 @@ function attachUploadDownload(
 
 	const handleUpload = async () => {
 		const fileType = formLabel.dataset.filetype || "";
-		const fileContent = await pickFile(fileType);
+		const fileContent = await pickFile({
+			fileFormat: fileType,
+			askWidth: true,
+		});
 		if (fileContent) {
 			view.dispatch({
 				changes: {

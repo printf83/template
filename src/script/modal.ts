@@ -29,6 +29,7 @@ export class Modal {
 			let modalIconData: string | null = null;
 			let modalIconClass: string | null = null;
 			let modalConfirmClass: string | null = "btn-primary";
+			let modalTitleClass: string | null = null;
 
 			if (options.type) {
 				switch (options.type) {
@@ -66,6 +67,7 @@ export class Modal {
 						modalIconClass =
 							"text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-950/60 rounded p-2";
 						modalConfirmClass = "btn-danger";
+						modalTitleClass = "text-red-600 dark:text-red-400";
 				}
 			}
 
@@ -77,7 +79,7 @@ export class Modal {
 					? `<header class="modal-header">
                         <h3 class="modal-title">
 							${modalIcon}
-							<span>${options.title}</span>
+							<span class="${modalTitleClass}">${options.title}</span>
 						</h3>
                         <button type="button" class="modal-close " aria-label="Close">&times;</button>
                     </header>`

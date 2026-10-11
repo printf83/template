@@ -1,0 +1,47 @@
+<div class="form-container mt-3">
+	<div class="form-field">
+		<label
+			class="form-label text-start"
+			id="prompt-preview-label"
+			for="prompt-preview"
+			><span>
+				Old <b>{{oriLength}}</b>, New <b>{{newLength}}</b>
+			</span></label
+		>
+		<div
+			class="p-1 rounded-lg border border-neutral-300 dark:border-zinc-800 bg-gray-200 dark:bg-zinc-950 inset-shadow-xs dark:inset-shadow-zinc-100/10;"
+		>
+			<div
+				id="prompt-preview"
+				class="w-full h-64 rounded-md bg-no-repeat bg-contain bg-center"
+				{{{preview}}}
+			></div>
+		</div>
+	</div>
+	<div class="grid grid-cols-2 gap-3">
+		<div class="form-field">
+			<label class="form-label" for="prompt-width-input">Width </label>
+			<input
+				type="number"
+				id="prompt-width-input"
+				class="form-input"
+				value="{{width}}"
+				min="1"
+				max="5000"
+			/>
+		</div>
+		<div class="form-field">
+			<label class="form-label" for="prompt-quality-input"
+				>Quality
+			</label>
+			<input
+				type="number"
+				id="prompt-quality-input"
+				class="form-input"
+				value="{{quality}}"
+				min="1"
+				max="100"
+			/>
+		</div>
+	</div>
+</div>

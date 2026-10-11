@@ -277,6 +277,22 @@ export function formatDuration(totalSeconds: number): string {
 	return `${minText} ${secText}`;
 }
 
+/** Formats bytes into a human-readable size string (e.g. "512 B", "1.5 KB", "45.2 MB") */
+export function formatFileSize(bytes: number, decimals: number = 2): string {
+	if (bytes <= 0) return "0 B";
+
+	const k = 1024;
+	const sizes = ["B", "KB", "MB", "GB", "TB", "PB"];
+
+	// Determine the appropriate unit index (0 for B, 1 for KB, 2 for MB, etc.)
+	const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+	// Convert and round to the specified decimal places, removing trailing zeros
+	const value = parseFloat((bytes / Math.pow(k, i)).toFixed(decimals));
+
+	return `${value} ${sizes[i]}`;
+}
+
 export const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB limit
 
 /**

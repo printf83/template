@@ -331,7 +331,7 @@ export function attachUploadAsset(
 
 	btn.addEventListener("click", async () => {
 		try {
-			const fileContent = await pickFile();
+			const fileContent = await pickFile({ askWidth: true });
 			if (!fileContent) return;
 
 			addItem(list, {

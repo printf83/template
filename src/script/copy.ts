@@ -1,6 +1,13 @@
 import { Modal } from "./modal";
 import { Toast } from "./toast";
-import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
+import {
+	formatFileSize,
+	MAX_FILE_SIZE_BYTES,
+	renderTemplate,
+	selectFile,
+} from "./utils";
+import imgResize from "../html/img-resize.html?raw";
+import { db } from "./db";
 
 export interface PickedFileResult {
 	fileName: string;
@@ -126,8 +133,8 @@ function readAsBase64(file: File): Promise<string> {
 /** Resizes and compresses an image file using a Canvas */
 function resizeAndCompressImage(
 	file: File,
-	maxWidth: number,
-	quality: number = 0.95,
+	maxWidth: number | null,
+	quality: number | null,
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -138,7 +145,7 @@ function resizeAndCompressImage(
 				let height = img.height;
 
 				// Scale down dimensions only if the image is wider than maxWidth
-				if (width > maxWidth) {
+				if (maxWidth && width > maxWidth) {
 					height = Math.round((height * maxWidth) / width);
 					width = maxWidth;
 				}
@@ -173,7 +180,10 @@ function resizeAndCompressImage(
 				}
 
 				// Export to Base64 data URL
-				const compressedDataUrl = canvas.toDataURL(mimeType, quality);
+				const compressedDataUrl = canvas.toDataURL(
+					mimeType,
+					quality || 0.95,
+				);
 				resolve(compressedDataUrl);
 			};
 			img.onerror = (err) => reject(err);
@@ -185,13 +195,20 @@ function resizeAndCompressImage(
 }
 
 /**
- * Async file picker that reads file content (Base64 for images with optional resize, plain text for code/data),
- * copies it directly to the clipboard, and returns the metadata.
+ * Async file picker that reads file content (Base64 for images with optional resize/prompt, plain text for code/data),
+ * and returns the metadata and content.
  */
-export async function pickFile(
+export async function pickFile({
 	fileFormat = ".html,.htm,.csv,.json,.css,.txt,.js,image/*",
-	width: number | null = null,
-): Promise<PickedFileResult | null> {
+	width,
+	quality = 0.95,
+	askWidth = false,
+}: {
+	fileFormat?: string;
+	width?: number;
+	quality?: number;
+	askWidth?: boolean;
+} = {}): Promise<PickedFileResult | null> {
 	const file = await selectFile(fileFormat);
 	if (!file) return null;
 
@@ -225,11 +242,95 @@ export async function pickFile(
 
 	const isImage = isImageFile(file);
 
-	// 3. Read content safely (with optional width resize & compression if specified)
+	let targetWidth = width;
+	let targetQuality = quality;
+
+	// 3. Optional interactive width prompt for images if requested
+	if (isImage && askWidth && (!targetWidth || targetWidth <= 0)) {
+		const historyResize: { width: number; quality: number } =
+			(await db.read("img-resize")) || { width: 100, quality: 95 };
+
+		const oldBase64 = await readAsBase64(file);
+		const newBase64 = await resizeAndCompressImage(
+			file,
+			historyResize.width,
+			historyResize.quality,
+		);
+
+		const bodyDiv = document.createElement("div");
+
+		bodyDiv.className = "text-center";
+		bodyDiv.innerHTML = renderTemplate(imgResize, {
+			oriLength: formatFileSize(oldBase64.length),
+			newLength: formatFileSize(newBase64.length),
+			preview: `style="background-image:url('${newBase64}');"`,
+			width: historyResize.width,
+			quality: historyResize.quality,
+		});
+
+		const widthEl = bodyDiv.querySelector(
+			"#prompt-width-input",
+		)! as HTMLInputElement;
+		const qualityEl = bodyDiv.querySelector(
+			"#prompt-quality-input",
+		)! as HTMLInputElement;
+
+		const prevEl = bodyDiv.querySelector(
+			"#prompt-preview",
+		)! as HTMLDivElement;
+		const prevLabel = bodyDiv.querySelector(
+			"#prompt-preview-label span",
+		)! as HTMLSpanElement;
+
+		const updatePreview = async () => {
+			const w = parseInt(widthEl.value, 10);
+			const q = parseInt(qualityEl.value, 10) / 100;
+
+			if (w > 0 && q > 0) {
+				await db.write("img-resize", { width: w, quality: q * 100 });
+				const currentBase64 = await resizeAndCompressImage(file, w, q);
+				prevEl.style.backgroundImage = `url('${currentBase64}')`;
+				prevLabel.innerHTML = `Original <b>${formatFileSize(oldBase64.length)}</b>, New <b>${formatFileSize(currentBase64.length)}</b>`;
+			}
+		};
+
+		widthEl.addEventListener("input", updatePreview);
+		qualityEl.addEventListener("input", updatePreview);
+
+		const confirmed = await Modal.show({
+			body: bodyDiv,
+			confirmText: "Resize",
+			cancelText: "Keep Original",
+			showCancel: true,
+		});
+
+		if (confirmed) {
+			// Capture user-defined width
+			if (widthEl) {
+				const parsedWidth = parseInt(widthEl.value, 10);
+				if (!isNaN(parsedWidth) && parsedWidth > 0) {
+					targetWidth = parsedWidth;
+				}
+			}
+			// Capture user-defined quality
+			if (qualityEl) {
+				const parsedQuality = parseInt(qualityEl.value, 10);
+				if (!isNaN(parsedQuality)) {
+					targetQuality = parsedQuality / 100;
+				}
+			}
+		}
+	}
+
+	// 4. Read content safely using the captured user settings
 	let content: string;
 	if (isImage) {
-		if (width !== null && width > 0) {
-			content = await resizeAndCompressImage(file, width); // 85% quality compression
+		if (targetWidth !== undefined && targetWidth > 0) {
+			content = await resizeAndCompressImage(
+				file,
+				targetWidth,
+				targetQuality,
+			);
 		} else {
 			content = await readAsBase64(file);
 		}
@@ -238,9 +339,9 @@ export async function pickFile(
 	}
 
 	return {
-		fileName: fileNameWithoutExt, // Base name without extension
+		fileName: fileNameWithoutExt,
 		fileType: file.type || (isImage ? "image" : "text/plain"),
-		extention: extension, // Extracted extension (e.g. "json")
+		extention: extension,
 		content,
 	};
 }
@@ -250,7 +351,9 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 
 	btn.addEventListener("click", async () => {
 		try {
-			const fileContent = await pickFile();
+			const fileContent = await pickFile({
+				askWidth: true,
+			});
 
 			// User cancelled file selection dialog -> exit silently
 			if (!fileContent) return;
@@ -284,7 +387,11 @@ export function attachUploadThumb(
 
 	target.addEventListener("click", async () => {
 		try {
-			const fileContent = await pickFile("image/*", 85);
+			const fileContent = await pickFile({
+				fileFormat: "image/*",
+				width: 85,
+				quality: 0.95,
+			});
 
 			// User cancelled file selection dialog -> exit silently
 			if (!fileContent) return;

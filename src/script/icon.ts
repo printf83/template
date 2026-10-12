@@ -41,6 +41,7 @@ import {
 	Moon,
 	Users,
 	UserShield,
+	FolderOpen,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -89,6 +90,7 @@ export const renderIcons = () => {
 			Moon,
 			Users,
 			UserShield,
+			FolderOpen,
 		},
 	});
 };

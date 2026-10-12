@@ -3,7 +3,7 @@ import type { Data, SchemaItem } from "../type/data";
 import { getAssetData, setAssetData } from "./asset";
 import { createCodeEditor, type EditorLanguage } from "./editor";
 import { getAbbrData, setAbbrData } from "./abbr";
-import { getElementById } from "./utils";
+import { base64SvgToSvg, getElementById } from "./utils";
 import { isDarkModeActive } from "./dark";
 import { Modal } from "./modal";
 
@@ -460,9 +460,18 @@ export function setEditData<T extends readonly SchemaItem[]>(
 	// Thumbnail
 	const elem = getElementById<HTMLDivElement>("thumb-prev-editor");
 	if (elem) {
-		elem.style =
-			`background-image:url("${data.thumb}");${!data.thumb?.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
-			"";
+		elem.style = "";
+		elem.innerHTML = "";
+
+		if (data.thumb) {
+			if (data.thumb.startsWith("data:image/svg")) {
+				elem.innerHTML = base64SvgToSvg(data.thumb);
+			} else {
+				elem.style =
+					`background-image:url("${data.thumb}");${!data.thumb?.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
+					"";
+			}
+		}
 	}
 
 	// Input Fields

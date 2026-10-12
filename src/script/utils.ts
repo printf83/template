@@ -230,6 +230,25 @@ export function detectValueType(value?: string): ValueType {
 	return "text";
 }
 
+/**
+ * Converts a Base64-encoded SVG data URL or raw Base64 string back into raw SVG text.
+ */
+export function base64SvgToSvg(base64DataUrl: string): string {
+	// 1. Strip the data URL prefix if present (e.g., "data:image/svg+xml;base64,")
+	const base64Content = base64DataUrl.includes(",")
+		? base64DataUrl.split(",")[1]
+		: base64DataUrl;
+
+	// 2. Decode Base64 into a binary string
+	const binaryString = atob(base64Content);
+
+	// 3. Convert binary string to a UTF-8 byte array to prevent character corruption
+	const bytes = Uint8Array.from(binaryString, (char) => char.charCodeAt(0));
+	const decoder = new TextDecoder("utf-8");
+
+	return decoder.decode(bytes);
+}
+
 // Dynamic load default data
 export async function initData() {
 	const cacheData = await db.read<Data<SchemaItem[]>>("current-data");

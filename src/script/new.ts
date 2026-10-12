@@ -6,7 +6,7 @@ import { Toast } from "./toast";
 import newList from "../html/editor/new-list.html?raw";
 import newListItem from "../html/editor/new-item.html?raw";
 import newListItemDelete from "../html/editor/new-item-delete.html?raw";
-import { initIcons, renderTemplate } from "./utils";
+import { base64SvgToSvg, initIcons, renderTemplate } from "./utils";
 
 function renderItem(
 	d: Data<SchemaItem[]>,
@@ -16,9 +16,14 @@ function renderItem(
 ) {
 	return renderTemplate(newListItem, {
 		del: allowDelete ? newListItemDelete : "",
-		bgStyle: d.thumb
-			? `style="background-image: url('${d.thumb}');${!d.thumb.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
-			: "",
+		bgSvg:
+			d.thumb && d.thumb.startsWith("data:image/svg")
+				? base64SvgToSvg(d.thumb)
+				: "",
+		bgStyle:
+			d.thumb && !d.thumb.startsWith("data:image/svg")
+				? `style="background-image: url('${d.thumb}');${!d.thumb.startsWith("data:image/svg") ? "background-size:cover;" : ""}"`
+				: "",
 		title: d.title,
 		key: key,
 		isChecked: isChecked ? "checked" : "",

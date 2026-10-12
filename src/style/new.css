@@ -29,7 +29,7 @@
 }
 
 .new-list .new-item-preview {
-	@apply w-24 h-33.75 bg-center bg-no-repeat rounded;
+	@apply w-24 h-33.75 bg-center bg-no-repeat rounded flex justify-center items-center;
 }
 
 .new-list input[type="radio"] {

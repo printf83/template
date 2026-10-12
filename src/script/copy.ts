@@ -1,6 +1,7 @@
 import { Modal } from "./modal";
 import { Toast } from "./toast";
 import {
+	base64SvgToSvg,
 	formatFileSize,
 	MAX_FILE_SIZE_BYTES,
 	renderTemplate,
@@ -398,9 +399,19 @@ export function attachUploadThumb(
 			if (!fileContent) return;
 
 			input.value = fileContent.content;
-			target.style =
-				`background-image:url("${fileContent.content}");${!fileContent.content.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
-				"";
+
+			target.innerHTML = "";
+			target.style = "";
+
+			if (fileContent.content) {
+				if (fileContent.content.startsWith("data:image/svg")) {
+					target.innerHTML = base64SvgToSvg(fileContent.content);
+				} else {
+					target.style =
+						`background-image:url("${fileContent.content}");${!fileContent.content.startsWith("data:image/svg") ? "background-size:cover;" : ""}` ||
+						"";
+				}
+			}
 		} catch (error) {
 			const message =
 				error instanceof Error

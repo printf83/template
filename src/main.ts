@@ -121,11 +121,26 @@ const getAllElement = () => {
 	};
 };
 
-const genPage = <const T extends readonly SchemaItem[]>(
+const genPage = async <const T extends readonly SchemaItem[]>(
 	data: Data<T> | null,
 	iframe: HTMLIFrameElement,
 ) => {
-	if (iframe) {
+	if (!iframe) return;
+
+	// 1. Show loading state (assuming you have a loading element or overlay)
+	const loadingElem = getElementById<HTMLDivElement>(
+		"form-main-frame-loading",
+	);
+	if (loadingElem) {
+		loadingElem.style.display = "flex"; // Make sure it's visible
+	}
+
+	iframe.style.display = "none";
+
+	// 2. Yield to the event loop so the browser can paint the loading state
+	await new Promise((resolve) => setTimeout(resolve, 0));
+
+	try {
 		console.time("Build Template");
 
 		const { html, style, script } = render(data);
@@ -133,19 +148,26 @@ const genPage = <const T extends readonly SchemaItem[]>(
 
 		iframe.srcdoc = minifies(
 			`<!DOCTYPE html>
-				<html>
-					<head>
-						<title>${data?.title}</title>
-						${style ? `<style>${style}</style>` : ``}
-					</head>
-					<body>
-						${html}
-						${script ? `<script>${script}</script>` : ``}
-					</body>
-				</html>`,
+                <html>
+                    <head>
+                        <title>${data?.title}</title>
+                        ${style ? `<style>${style}</style>` : ``}
+                    </head>
+                    <body>
+                        ${html}
+                        ${script ? `<script>${script}</script>` : ``}
+                    </body>
+                </html>`,
 		);
 
 		console.timeEnd("Build Template");
+	} finally {
+		// 3. Hide loading state once rendering is complete
+		if (loadingElem) {
+			loadingElem.style.display = "none";
+		}
+
+		iframe.style.display = "block";
 	}
 };
 
@@ -354,10 +376,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const editedData = await getEditData();
 			if (!editedData) return;
 
+			genPage(editedData, iframe);
 			setInterface("main", ctlMain, ctlEditor, formMain, formEditor);
 			setCurrentData(editedData);
 			await db.write("current-data", editedData);
-			genPage(editedData, iframe);
 		});
 	}
 

@@ -12,12 +12,20 @@
 		<title>template</title>
 	</head>
 	<body class="print:hidden">
-		<load src="src/html/loading.html" />
+		<div id="loading">
+			<load src="src/html/loading.html" />
+		</div>
 		<div class="main" id="main" style="display: none">
 			<div class="header">
 				<load src="src/html/header.html" />
 			</div>
 			<div class="form-main" id="formMain">
+				<div
+					id="form-main-frame-loading"
+					class="w-full justify-center items-center"
+				>
+					<div class="spinner"></div>
+				</div>
 				<iframe id="iframe" class="form-main-frame"></iframe>
 			</div>
 			<div class="form-edit hidden" id="formEditor">

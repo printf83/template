@@ -23,6 +23,10 @@
 	@apply h-[calc(100svh-128px)] sm:h-[calc(100svh-78px)];
 }
 
+#form-main-frame-loading {
+	@apply h-[calc(100svh-128px)] sm:h-[calc(100svh-78px)];
+}
+
 /* Active Tab Panel */
 .tab-radio:checked + .tab-btn + .tab-panel {
 	@apply h-[calc(100svh-175px)] sm:h-[calc(100svh-130px)];

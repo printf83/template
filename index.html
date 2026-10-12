@@ -472,19 +472,21 @@
 />
 
 		<title>template</title>
-		<script type="module" crossorigin src="/template/assets/index-DEb1FfPd.js"></script>
+		<script type="module" crossorigin src="/template/assets/index-BwsOv1xY.js"></script>
 		<link rel="modulepreload" crossorigin href="/template/assets/rolldown-runtime-CbXtAM7H.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-jspdf-BoJr6Bg9.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/vendor-codemirror-CkhF4H6w.js">
 		<link rel="modulepreload" crossorigin href="/template/assets/data-CyYrSiqu.js">
-		<link rel="stylesheet" crossorigin href="/template/assets/index-DGr7gFsG.css">
+		<link rel="stylesheet" crossorigin href="/template/assets/index-DYGoq4-B.css">
 	<link rel="manifest" href="/template/manifest.webmanifest"></head>
 	<body class="print:hidden">
 		<div id="loading">
-	<style>#loading{z-index:9999;background-color:#fff;justify-content:center;align-items:center;transition:opacity .3s,visibility .3s;display:flex;position:fixed;inset:0}.spinner{box-sizing:border-box;border:4px solid #f3f3f3;border-top-color:#000;border-radius:50%;width:48px;height:48px;animation:.8s linear infinite spin}@keyframes spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}</style>
+			<div id="loading" class="spinner-container">
+	<style>.spinner-container{z-index:9999;background-color:#fff;justify-content:center;align-items:center;transition:opacity .3s,visibility .3s;display:flex;position:fixed;inset:0}.spinner{box-sizing:border-box;border:4px solid #f3f3f3;border-top-color:#000;border-radius:50%;width:48px;height:48px;animation:.8s linear infinite spin}@keyframes spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}</style>
 	<div class="spinner"></div>
 </div>
 
+		</div>
 		<div class="main" id="main" style="display: none">
 			<div class="header">
 				<div class="flex gap-2">
@@ -601,6 +603,12 @@
 
 			</div>
 			<div class="form-main" id="formMain">
+				<div
+					id="form-main-frame-loading"
+					class="w-full justify-center items-center"
+				>
+					<div class="spinner"></div>
+				</div>
 				<iframe id="iframe" class="form-main-frame"></iframe>
 			</div>
 			<div class="form-edit hidden" id="formEditor">

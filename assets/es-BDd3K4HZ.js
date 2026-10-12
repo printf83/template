@@ -1,0 +1,1 @@
+export{t as getFontEmbedCSS,n as toBlob,r as toCanvas,i as toJpeg,a as toPixelData,o as toPng,s as toSvg}from"./vendor-html-to-image-DE4Kac5z.js";

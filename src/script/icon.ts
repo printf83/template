@@ -42,6 +42,8 @@ import {
 	Users,
 	UserShield,
 	FolderOpen,
+	BookTemplate,
+	Book,
 } from "lucide";
 
 // Replace <i data-icon="..."> elements with actual SVGs
@@ -91,6 +93,8 @@ export const renderIcons = () => {
 			Users,
 			UserShield,
 			FolderOpen,
+			BookTemplate,
+			Book,
 		},
 	});
 };

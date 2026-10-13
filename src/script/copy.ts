@@ -361,7 +361,10 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 			});
 
 			// User cancelled file selection dialog -> exit silently
-			if (!fileContent) return;
+			if (!fileContent) {
+				setButtonLoading(btn, false);
+				return;
+			}
 
 			// Copy content with explicit focus restoration
 			const copySuccess = await copyTextToSystemClipboard(

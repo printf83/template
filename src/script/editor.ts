@@ -44,27 +44,29 @@ function attachUploadDownload(
 	const btnDownload = formLabel.querySelector(".btn-code-download");
 
 	const handleUpload = async (e: Event) => {
-		const btn = (e.target as HTMLElement).closest(
-			"button",
-		) as HTMLButtonElement;
+		const btn = e.currentTarget as HTMLButtonElement;
 
 		try {
-			setButtonLoading(btn, true);
+			setButtonLoading(btn, true, "spinner-xs");
 
 			const fileType = formLabel.dataset.filetype || "";
 			const fileContent = await pickFile({
 				fileFormat: fileType,
 				askWidth: true,
 			});
-			if (fileContent) {
-				view.dispatch({
-					changes: {
-						from: 0,
-						to: view.state.doc.length,
-						insert: fileContent.content,
-					},
-				});
+
+			if (!fileContent) {
+				setButtonLoading(btn, false);
+				return;
 			}
+
+			view.dispatch({
+				changes: {
+					from: 0,
+					to: view.state.doc.length,
+					insert: fileContent.content,
+				},
+			});
 		} finally {
 			setButtonLoading(btn, false);
 		}
@@ -77,9 +79,7 @@ function attachUploadDownload(
 		if (content) {
 			const { fileExt, fileMime } = getFileMetadata(content);
 
-			const btn = (e.target as HTMLElement).closest(
-				"button",
-			) as HTMLButtonElement;
+			const btn = e.currentTarget as HTMLButtonElement;
 
 			try {
 				setButtonLoading(btn, true);

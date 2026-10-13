@@ -114,7 +114,7 @@ export function attachBtnPrintAll(
 		);
 		if (!shouldProceed) return;
 
-		const btn = e.target as HTMLButtonElement;
+		const btn = e.currentTarget as HTMLButtonElement;
 		try {
 			setButtonLoading(btn, true);
 			// 2. Proceed with print execution

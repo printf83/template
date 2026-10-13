@@ -355,7 +355,13 @@ export function normalizeData(obj: any): any {
 	return sortedObj;
 }
 
-export function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
+export function setButtonLoading(
+	btn: HTMLButtonElement,
+	isLoading: boolean,
+	size: string = "spinner-sm",
+) {
+	if (!btn) return;
+
 	const iconEl = btn.querySelector("[data-icon]") as HTMLElement;
 	if (!iconEl) return;
 
@@ -368,7 +374,7 @@ export function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
 		iconEl.style.display = "none";
 
 		const spinner = document.createElement("div");
-		spinner.classList.add("spinner", "spinner-xs");
+		spinner.classList.add("spinner", size);
 
 		// Insert the spinner right before the icon element using its parent
 		iconEl.parentNode?.insertBefore(spinner, iconEl);

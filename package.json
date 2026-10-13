@@ -1,7 +1,7 @@
 {
 	"name": "template",
 	"private": false,
-	"version": "1.0.24",
+	"version": "1.0.26",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",

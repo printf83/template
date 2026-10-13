@@ -1,5 +1,5 @@
 import type { jsPDF } from "jspdf";
-import { initIcons } from "./utils";
+import { setButtonDisabled, setButtonLoading } from "./utils";
 import { savePrintSpeed, warningLargePrint } from "./print";
 import { Toast } from "./toast";
 
@@ -121,27 +121,6 @@ async function generatePDF(pages: HTMLDivElement[], filename = "document.pdf") {
 	}
 }
 
-function setButtonLoading(
-	btn: HTMLButtonElement,
-	btns: HTMLButtonElement[],
-	isLoading: boolean,
-) {
-	const iconEl = btn.querySelector("[data-icon]");
-	if (!iconEl) return;
-
-	btn.disabled = isLoading;
-	iconEl.setAttribute("data-icon", isLoading ? "loader-circle" : "download");
-
-	if (btns && btns.length > 0) {
-		btns.forEach((i) => {
-			i.disabled = isLoading;
-		});
-	}
-
-	// Re-render Lucide icons to swap SVG
-	initIcons();
-}
-
 export function attachBtnDownloadPdf(
 	btn: HTMLButtonElement,
 	btns: HTMLButtonElement[],
@@ -176,7 +155,9 @@ export function attachBtnDownloadPdf(
 		}
 		const filename = iframe.dataset["filename"];
 
-		setButtonLoading(btn, btns, true);
+		setButtonLoading(btn, true);
+		setButtonDisabled(btns, true);
+
 		if (estimatedPrintSpeed > 0)
 			Toast.info(
 				"Please wait. Generating PDF file.",
@@ -189,7 +170,8 @@ export function attachBtnDownloadPdf(
 			Toast.error("PDF generation failed.");
 			console.error("PDF generation failed:", error);
 		} finally {
-			setButtonLoading(btn, btns, false);
+			setButtonLoading(btn, false);
+			setButtonDisabled(btns, false);
 		}
 	});
 }

@@ -6,6 +6,7 @@ import {
 	MAX_FILE_SIZE_BYTES,
 	renderTemplate,
 	selectFile,
+	setButtonLoading,
 } from "./utils";
 import imgResize from "../html/img-resize.html?raw";
 
@@ -353,6 +354,8 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 
 	btn.addEventListener("click", async () => {
 		try {
+			setButtonLoading(btn, true);
+
 			const fileContent = await pickFile({
 				askWidth: true,
 			});
@@ -377,6 +380,8 @@ export function attachCopyFile(btn: HTMLButtonElement) {
 					? error.message
 					: "An unexpected error occurred.";
 			Toast.error(`Failed to process file: ${message}`);
+		} finally {
+			setButtonLoading(btn, false);
 		}
 	});
 }

@@ -2,7 +2,7 @@ import type { Data, SchemaItem } from "../type/data";
 import { parseDataContent, setEditData, tryParseJSON } from "./edit";
 import { Modal } from "./modal";
 import { Toast } from "./toast";
-import { MAX_FILE_SIZE_BYTES, selectFile } from "./utils";
+import { MAX_FILE_SIZE_BYTES, selectFile, setButtonLoading } from "./utils";
 
 export interface UploadFileResult<T extends readonly SchemaItem[]> {
 	fileName: string;
@@ -172,6 +172,7 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 
 	btn.addEventListener("click", async () => {
 		try {
+			setButtonLoading(btn, true);
 			const result = await uploadData();
 
 			// User cancelled file selection dialog -> exit silently
@@ -190,6 +191,8 @@ export function attachUploadFile(btn: HTMLButtonElement) {
 					? error.message
 					: "An unexpected error occurred.";
 			Toast.error(`Failed to process file: ${message}`);
+		} finally {
+			setButtonLoading(btn, false);
 		}
 	});
 }

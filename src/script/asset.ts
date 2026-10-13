@@ -9,6 +9,7 @@ import {
 	escapeSymbol,
 	initIcons,
 	renderTemplate,
+	setButtonLoading,
 	trimAll,
 } from "./utils";
 import assetListItem from "../html/editor/asset-item.html?raw";
@@ -329,8 +330,10 @@ export function attachUploadAsset(
 ) {
 	if (!btn || !list) return;
 
-	btn.addEventListener("click", async () => {
+	btn.addEventListener("click", async (e: Event) => {
+		const btn = e.target as HTMLButtonElement;
 		try {
+			setButtonLoading(btn, true);
 			const fileContent = await pickFile({ askWidth: true });
 			if (!fileContent) return;
 
@@ -346,6 +349,8 @@ export function attachUploadAsset(
 					? error.message
 					: "Failed to upload file.";
 			Toast.error(message);
+		} finally {
+			setButtonLoading(btn, false);
 		}
 	});
 }

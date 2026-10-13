@@ -354,3 +354,43 @@ export function normalizeData(obj: any): any {
 
 	return sortedObj;
 }
+
+export function setButtonLoading(btn: HTMLButtonElement, isLoading: boolean) {
+	const iconEl = btn.querySelector("[data-icon]") as HTMLElement;
+	if (!iconEl) return;
+
+	btn.disabled = isLoading;
+
+	if (isLoading) {
+		// Prevent adding multiple spinners if already loading
+		if (btn.querySelector(".spinner")) return;
+
+		iconEl.style.display = "none";
+
+		const spinner = document.createElement("div");
+		spinner.classList.add("spinner", "spinner-xs");
+
+		// Insert the spinner right before the icon element using its parent
+		iconEl.parentNode?.insertBefore(spinner, iconEl);
+	} else {
+		// Restore icon display (clear inline style to let CSS take over)
+		iconEl.style.display = "";
+
+		// Safely remove the spinner element by class
+		btn.querySelector(".spinner")?.remove();
+	}
+
+	// Re-render Lucide icons to swap SVG
+	initIcons();
+}
+
+export function setButtonDisabled(
+	btns: HTMLButtonElement[],
+	isDisabled: boolean,
+) {
+	if (btns && btns.length > 0) {
+		btns.forEach((i) => {
+			i.disabled = isDisabled;
+		});
+	}
+}

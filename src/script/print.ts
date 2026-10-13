@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { Modal } from "./modal";
-import { formatDuration, formatNumber } from "./utils";
+import { formatDuration, formatNumber, setButtonLoading } from "./utils";
 
 // Define constant threshold in milliseconds (e.g., 5 seconds = 5000ms)
 const WARNING_LARGE_PRINT_TIME = 5000;
@@ -106,7 +106,7 @@ export function attachBtnPrintAll(
 ) {
 	if (!btn || !iframe) return;
 
-	btn.addEventListener("click", async () => {
+	btn.addEventListener("click", async (e: Event) => {
 		// 1. Check for warning threshold before triggering print
 		const { shouldProceed } = await warningLargePrint(
 			iframe,
@@ -114,11 +114,17 @@ export function attachBtnPrintAll(
 		);
 		if (!shouldProceed) return;
 
-		// 2. Proceed with print execution
-		const iframeWindow = iframe.contentWindow;
-		if (iframeWindow) {
-			iframeWindow.focus();
-			iframeWindow.print();
+		const btn = e.target as HTMLButtonElement;
+		try {
+			setButtonLoading(btn, true);
+			// 2. Proceed with print execution
+			const iframeWindow = iframe.contentWindow;
+			if (iframeWindow) {
+				iframeWindow.focus();
+				iframeWindow.print();
+			}
+		} finally {
+			setButtonLoading(btn, false);
 		}
 	});
 }

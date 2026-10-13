@@ -131,14 +131,12 @@ const genPage = async <const T extends readonly SchemaItem[]>(
 	const loadingElem = getElementById<HTMLDivElement>(
 		"form-main-frame-loading",
 	);
-	if (loadingElem) {
-		loadingElem.style.display = "flex"; // Make sure it's visible
-	}
 
+	loadingElem.style.display = "flex";
 	iframe.style.display = "none";
 
 	// 2. Yield to the event loop so the browser can paint the loading state
-	await new Promise((resolve) => setTimeout(resolve, 0));
+	await new Promise((resolve) => setTimeout(resolve, 300));
 
 	try {
 		console.time("Build Template");
@@ -163,10 +161,7 @@ const genPage = async <const T extends readonly SchemaItem[]>(
 		console.timeEnd("Build Template");
 	} finally {
 		// 3. Hide loading state once rendering is complete
-		if (loadingElem) {
-			loadingElem.style.display = "none";
-		}
-
+		loadingElem.style.display = "none";
 		iframe.style.display = "block";
 	}
 };

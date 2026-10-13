@@ -6,7 +6,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { ayuLight } from "thememirror";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { getFileMetadata, type ValueType } from "./utils";
+import { getFileMetadata, setButtonLoading, type ValueType } from "./utils";
 import { pickFile } from "./copy";
 import { downloadFile } from "./download";
 import { Toast } from "./toast";
@@ -43,30 +43,50 @@ function attachUploadDownload(
 	const btnUpload = formLabel.querySelector(".btn-code-upload");
 	const btnDownload = formLabel.querySelector(".btn-code-download");
 
-	const handleUpload = async () => {
-		const fileType = formLabel.dataset.filetype || "";
-		const fileContent = await pickFile({
-			fileFormat: fileType,
-			askWidth: true,
-		});
-		if (fileContent) {
-			view.dispatch({
-				changes: {
-					from: 0,
-					to: view.state.doc.length,
-					insert: fileContent.content,
-				},
+	const handleUpload = async (e: Event) => {
+		const btn = (e.target as HTMLElement).closest(
+			"button",
+		) as HTMLButtonElement;
+
+		try {
+			setButtonLoading(btn, true);
+
+			const fileType = formLabel.dataset.filetype || "";
+			const fileContent = await pickFile({
+				fileFormat: fileType,
+				askWidth: true,
 			});
+			if (fileContent) {
+				view.dispatch({
+					changes: {
+						from: 0,
+						to: view.state.doc.length,
+						insert: fileContent.content,
+					},
+				});
+			}
+		} finally {
+			setButtonLoading(btn, false);
 		}
 	};
 
-	const handleDownload = async () => {
+	const handleDownload = async (e: Event) => {
 		const fileName = formLabel.dataset.filename || "download";
 		const content = view.state.doc.toString();
 
 		if (content) {
 			const { fileExt, fileMime } = getFileMetadata(content);
-			downloadFile(content, fileMime, `${fileName}.${fileExt}`);
+
+			const btn = (e.target as HTMLElement).closest(
+				"button",
+			) as HTMLButtonElement;
+
+			try {
+				setButtonLoading(btn, true);
+				downloadFile(content, fileMime, `${fileName}.${fileExt}`);
+			} finally {
+				setButtonLoading(btn, false);
+			}
 		} else {
 			Toast.error("Nothing to download");
 		}

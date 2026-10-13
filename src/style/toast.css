@@ -57,7 +57,7 @@
 }
 
 .toast-content {
-	@apply text-sm font-medium text-inherit;
+	@apply text-sm font-medium text-inherit overflow-hidden text-ellipsis;
 }
 
 .toast-close {

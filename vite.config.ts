@@ -10,7 +10,12 @@ export default defineConfig({
 		tailwindcss(),
 		injectHTML(),
 		VitePWA({
-			registerType: "autoUpdate",
+			devOptions: {
+				enabled: true,
+				type: "module",
+				suppressWarnings: true,
+			},
+			registerType: "prompt",
 			includeAssets: [
 				"favicon/favicon.ico",
 				"favicon/*.png",

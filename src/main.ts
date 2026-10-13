@@ -35,6 +35,7 @@ import { attachBtnUserKey } from "./script/user";
 import { getAuthContext, getUserName } from "./script/auth";
 import { Modal } from "./script/modal";
 import { attachBtnTheme } from "./script/dark";
+import { Toast } from "./script/toast";
 
 const getAllElement = () => {
 	const loadingElem = getElementById<HTMLDivElement>("loading");
@@ -428,13 +429,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 			const result = await Modal.confirm(
 				"New content available. Reload to update?",
 				"Update Found!",
+				"question",
 			);
 			if (result) {
 				updateSW(true);
 			}
 		},
 		onOfflineReady() {
-			console.log("App is ready to work offline.");
+			Toast.info("App is ready to work offline.");
 		},
 	});
 });

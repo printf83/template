@@ -290,7 +290,6 @@ export async function pickFile({
 			const q = parseInt(qualityEl.value, 10) / 100;
 
 			if (w > 0 && q > 0) {
-				await db.write("img-resize", { width: w, quality: q * 100 });
 				const currentBase64 = await resizeAndCompressImage(file, w, q);
 				prevEl.style.backgroundImage = `url('${currentBase64}')`;
 				prevLabel.innerHTML = `Original <b>${formatFileSize(oldBase64.length)}</b>, New <b>${formatFileSize(currentBase64.length)}</b>`;
@@ -322,6 +321,11 @@ export async function pickFile({
 					targetQuality = parsedQuality / 100;
 				}
 			}
+
+			await db.write("img-resize", {
+				width: targetWidth,
+				quality: targetQuality * 100,
+			});
 		}
 	}
 
